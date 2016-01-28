@@ -1,4 +1,4 @@
-package org.cmucreatelab.mfm_android;
+package org.cmucreatelab.mfm_android.activities;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+
+import org.cmucreatelab.mfm_android.R;
 
 
 public class MainActivity extends ActionBarActivity {

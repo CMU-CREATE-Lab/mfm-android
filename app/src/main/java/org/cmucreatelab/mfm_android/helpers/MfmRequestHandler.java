@@ -1,5 +1,11 @@
 package org.cmucreatelab.mfm_android.helpers;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+
+import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
+import org.json.JSONObject;
+
 /**
  * Created by mike on 2/3/16.
  */
@@ -14,7 +20,20 @@ public class MfmRequestHandler {
 
 
     public void requestListStudents() {
-        // TODO /api/v2/students?kiosk_uid=$KIOSK_UID
+        int requestMethod;
+        String requestUrl;
+        Response.Listener<JSONObject> response;
+
+        requestMethod = Request.Method.GET;
+        requestUrl = Constants.MFM_API_URL + "/api/v2/students?kiosk_uid="+globalHandler.kiosk.getKioskUid();
+        response = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                // TODO response handling
+            }
+        };
+
+        globalHandler.httpRequestHandler.sendJsonRequest(requestMethod, requestUrl, null, response);
     }
 
 

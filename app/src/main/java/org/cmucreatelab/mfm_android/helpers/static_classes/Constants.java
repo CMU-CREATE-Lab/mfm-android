@@ -9,4 +9,6 @@ public class Constants {
 
     public static final String APP_VERSION = "1.0";
 
+    public static final String MFM_API_URL = "dev.messagefromme.org";
+
 }

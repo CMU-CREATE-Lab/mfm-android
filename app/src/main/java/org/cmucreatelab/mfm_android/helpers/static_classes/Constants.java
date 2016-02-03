@@ -5,6 +5,8 @@ package org.cmucreatelab.mfm_android.helpers.static_classes;
  */
 public class Constants {
 
+    public static final String LOG_TAG = "MfmAndroid";
+
     public static final String APP_VERSION = "1.0";
 
 }

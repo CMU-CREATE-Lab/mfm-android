@@ -5,7 +5,7 @@ package org.cmucreatelab.mfm_android.classes;
  */
 public class User {
     int id;
-    String firstName,lastName;
+    String firstName,lastName,studentUserRole;
     String updatedAt;
 
 }

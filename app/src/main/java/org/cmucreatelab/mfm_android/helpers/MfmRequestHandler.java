@@ -11,6 +11,11 @@ import org.json.JSONObject;
 
 /**
  * Created by mike on 2/3/16.
+ *
+ * MfmRequestHandler
+ *
+ * Helper class for http requests to the Message from Me API
+ *
  */
 public class MfmRequestHandler {
 

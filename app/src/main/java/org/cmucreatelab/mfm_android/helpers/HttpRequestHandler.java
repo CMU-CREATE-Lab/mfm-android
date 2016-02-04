@@ -14,6 +14,11 @@ import org.json.JSONObject;
 
 /**
  * Created by mike on 2/3/16.
+ *
+ * HttpRequestHandler
+ *
+ * Helper class for calls to the Volley library.
+ *
  */
 public class HttpRequestHandler implements Response.ErrorListener {
 

@@ -130,7 +130,7 @@ public class MfmRequestHandler {
         String requestUrl;
         Response.Listener<JSONObject> response;
 
-        requestMethod = Request.Method.GET;
+        requestMethod = Request.Method.POST;
         requestUrl = Constants.MFM_API_URL +
                 "/api/v2/schools?username=" + username +
                 "&password=" + password +
@@ -154,7 +154,7 @@ public class MfmRequestHandler {
         String requestUrl;
         Response.Listener<JSONObject> response;
 
-        requestMethod = Request.Method.GET;
+        requestMethod = Request.Method.DELETE;
         requestUrl = Constants.MFM_API_URL + "/api/v2/logout?kiosk_uid="+globalHandler.kiosk.getKioskUid();
         response = new Response.Listener<JSONObject>() {
             @Override

@@ -6,8 +6,12 @@ package org.cmucreatelab.mfm_android.classes;
 public class User {
 
     private int id;
-    private String firstName,lastName,studentUserRole;
+    private String firstName;
+    private String lastName;
+    private String photoUrl;
     private String updatedAt;
+    private Student student;
+    private String studentUserRole;
 
     public int getId() {
         return id;
@@ -24,6 +28,12 @@ public class User {
     public String getUpdatedAt() {
         return updatedAt;
     }
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+    public Student getStudent() {
+        return student;
+    }
     public void setId(int id) {
         this.id = id;
     }
@@ -38,6 +48,12 @@ public class User {
     }
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
 }

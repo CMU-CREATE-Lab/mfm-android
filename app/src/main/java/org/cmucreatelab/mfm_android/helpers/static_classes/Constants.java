@@ -7,6 +7,8 @@ public class Constants {
 
     public static final String LOG_TAG = "MfmAndroid";
 
+    public static final String APP_PACKAGE_NAME = "org.cmucreatelab.mfm_android";
+
     public static final String APP_VERSION = "1.0";
 
     public static final String MFM_API_URL = "http://dev.messagefromme.org";

@@ -7,11 +7,12 @@ import java.util.ArrayList;
  */
 public class Student implements Sender {
 
-    int id;
-    String firstName,lastName;
-    String photoUrl;
-    String udpatedAt;
-    ArrayList<User> users;
+    private int id;
+    private String firstName,lastName;
+    private String photoUrl;
+    private String udpatedAt;
+    // users connected to the student (message recipients)
+    private ArrayList<User> users;
 
     public String getFirstName() {
         return firstName;
@@ -27,6 +28,24 @@ public class Student implements Sender {
     }
     public ArrayList<User> getUsers() {
         return users;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+    public void setUdpatedAt(String udpatedAt) {
+        this.udpatedAt = udpatedAt;
+    }
+    public void setUsers(ArrayList<User> users) {
+        this.users = users;
     }
 
 

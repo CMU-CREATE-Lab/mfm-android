@@ -4,6 +4,11 @@ import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 
 /**
  * Created by mike on 2/2/16.
+ *
+ * Kiosk
+ *
+ * Object that represents the android app from within the MFM server. A Kiosk uses its uid to access data from its school.
+ *
  */
 public class Kiosk {
 

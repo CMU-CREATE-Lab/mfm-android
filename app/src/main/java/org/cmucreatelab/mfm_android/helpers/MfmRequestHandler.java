@@ -1,10 +1,8 @@
 package org.cmucreatelab.mfm_android.helpers;
 
 import android.util.Log;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
-
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.json.JSONObject;

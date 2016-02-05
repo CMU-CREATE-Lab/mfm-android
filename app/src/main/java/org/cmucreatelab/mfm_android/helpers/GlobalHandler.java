@@ -1,7 +1,6 @@
 package org.cmucreatelab.mfm_android.helpers;
 
 import android.content.Context;
-
 import org.cmucreatelab.mfm_android.classes.Kiosk;
 
 /**

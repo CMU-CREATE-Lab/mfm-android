@@ -1,14 +1,11 @@
 package org.cmucreatelab.mfm_android.helpers;
 
-import android.content.Context;
 import android.util.Log;
-
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.json.JSONObject;
 

@@ -8,11 +8,15 @@ import java.util.ArrayList;
 public class Group implements Sender {
 
     private int id;
+    private long databaseId;
     private String name;
     private String photoUrl;
     private String updatedAt;
     private ArrayList<Student> students;
 
+    public long getDatabaseId() {
+        return databaseId;
+    }
     public String getPhotoUrl() {
         return photoUrl;
     }
@@ -21,6 +25,9 @@ public class Group implements Sender {
     }
     public ArrayList<Student> getStudents() {
         return students;
+    }
+    public void setDatabaseId(long databaseId) {
+        this.databaseId = databaseId;
     }
     public void setId(int id) {
         this.id = id;

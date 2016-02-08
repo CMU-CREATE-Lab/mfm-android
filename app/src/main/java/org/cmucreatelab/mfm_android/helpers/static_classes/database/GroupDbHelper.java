@@ -15,6 +15,7 @@ public class GroupDbHelper {
         boolean result = false;
 
         // TODO destroy Group in database
+        // TODO destroy relational StudentGroup
 
         return result;
     }

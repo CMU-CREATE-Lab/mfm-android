@@ -6,6 +6,7 @@ package org.cmucreatelab.mfm_android.classes;
 public class User {
 
     private int id;
+    private long databaseId;
     private String firstName;
     private String lastName;
     private String photoUrl;
@@ -13,6 +14,9 @@ public class User {
     private Student student;
     private String studentUserRole;
 
+    public long getDatabaseId() {
+        return databaseId;
+    }
     public int getId() {
         return id;
     }
@@ -33,6 +37,9 @@ public class User {
     }
     public Student getStudent() {
         return student;
+    }
+    public void setDatabaseId(long databaseId) {
+        this.databaseId = databaseId;
     }
     public void setId(int id) {
         this.id = id;

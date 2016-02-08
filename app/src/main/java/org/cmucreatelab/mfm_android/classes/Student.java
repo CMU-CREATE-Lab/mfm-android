@@ -8,12 +8,16 @@ import java.util.ArrayList;
 public class Student implements Sender {
 
     private int id;
+    private long databaseId;
     private String firstName,lastName;
     private String photoUrl;
     private String udpatedAt;
     // users connected to the student (message recipients)
     private ArrayList<User> users;
 
+    public long getDatabaseId() {
+        return databaseId;
+    }
     public String getFirstName() {
         return firstName;
     }
@@ -28,6 +32,9 @@ public class Student implements Sender {
     }
     public ArrayList<User> getUsers() {
         return users;
+    }
+    public void setDatabaseId(long databaseId) {
+        this.databaseId = databaseId;
     }
     public void setId(int id) {
         this.id = id;

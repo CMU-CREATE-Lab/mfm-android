@@ -17,6 +17,7 @@ public class GlobalHandler {
     protected Context appContext;
     // managed global instances
     public HttpRequestHandler httpRequestHandler;
+    public SharedPreferencesHandler sharedPreferencesHandler;
     // the "kiosk" that this application represents
     final public Kiosk kiosk;
 
@@ -34,6 +35,7 @@ public class GlobalHandler {
     private GlobalHandler(Context ctx) {
         this.appContext = ctx;
         this.httpRequestHandler = new HttpRequestHandler(this);
+        this.sharedPreferencesHandler = new SharedPreferencesHandler(this);
         this.kiosk = new Kiosk();
     }
 

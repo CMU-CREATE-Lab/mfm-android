@@ -8,7 +8,7 @@ public class StudentGroupContract {
     public static final String TABLE_NAME = "student_groups";
 
     public static final String COLUMN_STUDENT_ID = "student_id";
-    public static final String COLUMN_GROUP_ID = "first_name";
+    public static final String COLUMN_GROUP_ID = "group_id";
 
     public static final String SQL_CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
             " (" + "_id INTEGER PRIMARY KEY AUTOINCREMENT" +

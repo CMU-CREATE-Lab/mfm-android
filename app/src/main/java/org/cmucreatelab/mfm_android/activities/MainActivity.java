@@ -13,6 +13,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -42,9 +44,7 @@ public class MainActivity extends AppCompatActivity {
         String groupURL = "http://dev.messagefromme.org/api/v2/students?kiosk_uid=" + kioskID;
 
 
-        Log.v(TAG, "before if statement");
         if (isNetworkAvailable()) {
-            Log.v(TAG, "inside if conditional");
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(studentsURL).build();
@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
             Call call = client.newCall(request);
             Call call1 = client.newCall(request1);
 
-            Log.v(TAG, "api call made");
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -118,13 +117,23 @@ public class MainActivity extends AppCompatActivity {
         JSONArray studentList = students.optJSONArray("rows");
         Student student = new Student();
 
+        LinearLayout linearlayout = new LinearLayout(this);
+        setContentView(linearlayout);
+        linearlayout.setOrientation(LinearLayout.VERTICAL);
+
         for (int i =0; i < studentList.length(); i++){
+
             JSONObject studentNode = studentList.getJSONObject(i);
             long ID = student.getDatabaseId(studentNode);
-            Log.d(TAG, "Student ID is "+ Long.toString(ID+1));
-        }
+            String photoUrl = student.getPhotoUrl(studentNode);
+            student.setDatabaseId(ID);
+            student.setPhotoUrl(photoUrl);
+            student.setUdpatedAt(student.getUdpatedAt(studentNode));
 
-        Log.i(TAG, "From JSON: " + studentList);
+            TextView textview = new TextView(this);
+            textview.setText(Long.toString(ID));
+            linearlayout.addView(textview);
+        }
 
         return new Student();
     }

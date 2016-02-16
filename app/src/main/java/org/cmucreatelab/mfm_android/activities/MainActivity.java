@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Student;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,6 +16,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -30,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Student[] mStudent = new Student[1];
+        final Student[] mStudents = new Student[1];
         Group mGroup;
 
         String kioskID = "f6321b67d68cd8092806094f1d1f16c5";
@@ -64,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.v(TAG, jsonStudentData);
                         if (response.isSuccessful()) {
                             Log.v(TAG, "Students: ");
-                            mStudent[0] = getStudentDetails(jsonStudentData);
+                            mStudents[0] = getStudentsDetails(jsonStudentData);
                         } else {
                             alertUserAboutError();
                         }
@@ -108,13 +112,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private Student getStudentDetails(String jsonStudentData) throws JSONException {
-        JSONObject student = new JSONObject(jsonStudentData);
-        String studentList = student.getString("rows");
+    private Student getStudentsDetails(String jsonStudentData) throws JSONException {
+
+        JSONObject students = new JSONObject(jsonStudentData);
+        JSONArray studentList = students.optJSONArray("rows");
+        Student student = new Student();
+
+        for (int i =0; i < studentList.length(); i++){
+            JSONObject studentNode = studentList.getJSONObject(i);
+            long ID = student.getDatabaseId(studentNode);
+            Log.d(TAG, "Student ID is "+ Long.toString(ID+1));
+        }
+
         Log.i(TAG, "From JSON: " + studentList);
 
         return new Student();
-
     }
 
     //to handle cases when there is no network available

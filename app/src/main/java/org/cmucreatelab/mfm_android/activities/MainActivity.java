@@ -8,11 +8,14 @@ import org.cmucreatelab.mfm_android.classes.Student;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,20 +26,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-//import okhttp3.Call;
-//import okhttp3.Callback;
-//import okhttp3.OkHttpClient;
-//import okhttp3.Request;
-//import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
+
     public static final String TAG = MainActivity.class.getSimpleName();
+    private Bundle mSavedInstanceState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,14 +100,18 @@ public class MainActivity extends AppCompatActivity {
             });
             queue.add(groupRequest);
 
+//            ImageView imageView = (ImageView) findViewById(R.id.imageView);
+//
+//            Picasso.with(this)
+//                    .load("https://cms-assets.tutsplus.com/uploads/users/21/posts/19431/featured_image/CodeFeature.jpg")
+//                    .into(imageView);
+//
+
         }
 
         else {
             Toast.makeText(this, "Network Is Unavailable!", Toast.LENGTH_LONG).show();
         }
-
-        Log.d(TAG, "Main UI code is running!");
-
     }
 
     private Student getStudentsDetails(String jsonStudentData) throws JSONException {
@@ -116,9 +121,10 @@ public class MainActivity extends AppCompatActivity {
         Student student = new Student();
 
         //setup for layout
-        LinearLayout linearlayout = new LinearLayout(this);
-        setContentView(linearlayout);
-        linearlayout.setOrientation(LinearLayout.VERTICAL);
+//        LinearLayout linearlayout = new LinearLayout(this);
+//        setContentView(linearlayout);
+//        linearlayout.setOrientation(LinearLayout.VERTICAL);
+
 
         for (int i =0; i < studentList.length(); i++){
 
@@ -126,11 +132,15 @@ public class MainActivity extends AppCompatActivity {
             student.setId(Integer.valueOf(studentNode.optString("id")));
             student.setPhotoUrl(studentNode.optString("thumb_photo_url"));
             student.setUdpatedAt(studentNode.optString("updated_at"));
+
+
             //UI
-            TextView textview = new TextView(this);
-            textview.setText(Integer.toString(student.getId()));
-            linearlayout.addView(textview);
+//            TextView textview = new TextView(this);
+//            textview.setText(Integer.toString(student.getId()));
+//            linearlayout.addView(textview);
+
         }
+
 
         return new Student();
     }

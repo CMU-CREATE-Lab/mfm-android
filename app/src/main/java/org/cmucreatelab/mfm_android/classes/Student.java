@@ -1,5 +1,9 @@
 package org.cmucreatelab.mfm_android.classes;
 
+import android.util.Log;
+
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -12,30 +16,36 @@ public class Student implements Sender {
     private String firstName,lastName;
     private String photoUrl;
     private String udpatedAt;
+    private String thumb_photoUrl;
     // users connected to the student (message recipients)
     private ArrayList<User> users;
+    public static final String STUDENT_TAG = Student.class.getSimpleName();
 
-    public long getDatabaseId() {
-        return databaseId;
-    }
-    public String getFirstName() {
-        return firstName;
-    }
+    //change databaseId to Id
+    public long getDatabaseId() { return databaseId; }
+
+    public String getFirstName() { return firstName; }
     public String getLastName() {
         return lastName;
     }
-    public String getPhotoUrl() {
-        return photoUrl;
+
+    public String getThumbPhotoUrl() {
+        return thumb_photoUrl;
     }
-    public String getUdpatedAt() {
-        return udpatedAt;
-    }
+
+    public String getPhotoUrl() { return photoUrl; }
+
+    public String getUdpatedAt(JSONObject studentNode) { return udpatedAt; }
+
     public ArrayList<User> getUsers() {
         return users;
     }
+
     public void setDatabaseId(long databaseId) {
+
         this.databaseId = databaseId;
     }
+
     public void setId(int id) {
         this.id = id;
     }

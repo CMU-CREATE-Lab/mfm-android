@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         JSONArray studentList = students.optJSONArray("rows");
         Student student = new Student();
 
+        //setup for layout
         LinearLayout linearlayout = new LinearLayout(this);
         setContentView(linearlayout);
         linearlayout.setOrientation(LinearLayout.VERTICAL);
@@ -124,14 +125,12 @@ public class MainActivity extends AppCompatActivity {
         for (int i =0; i < studentList.length(); i++){
 
             JSONObject studentNode = studentList.getJSONObject(i);
-            long ID = student.getDatabaseId(studentNode);
-            String photoUrl = student.getPhotoUrl(studentNode);
-            student.setDatabaseId(ID);
-            student.setPhotoUrl(photoUrl);
-            student.setUdpatedAt(student.getUdpatedAt(studentNode));
-
+            student.setId(Integer.valueOf(studentNode.optString("id")));
+            student.setPhotoUrl(studentNode.optString("thumb_photo_url"));
+            student.setUdpatedAt(studentNode.optString("updated_at"));
+            //UI
             TextView textview = new TextView(this);
-            textview.setText(Long.toString(ID));
+            textview.setText(Integer.toString(student.getId()));
             linearlayout.addView(textview);
         }
 

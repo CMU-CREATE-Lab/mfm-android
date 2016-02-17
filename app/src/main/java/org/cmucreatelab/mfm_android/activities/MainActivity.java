@@ -17,16 +17,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+//import okhttp3.Call;
+//import okhttp3.Callback;
+//import okhttp3.OkHttpClient;
+//import okhttp3.Request;
+//import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
@@ -41,68 +48,59 @@ public class MainActivity extends AppCompatActivity {
 
         String kioskID = "f6321b67d68cd8092806094f1d1f16c5";
         String studentsURL = "http://dev.messagefromme.org/api/v2/students?kiosk_uid=" + kioskID;
-        String groupURL = "http://dev.messagefromme.org/api/v2/students?kiosk_uid=" + kioskID;
+        String groupURL = "http://dev.messagefromme.org/api/v2/groups?kiosk_uid=" + kioskID;
 
 
         if (isNetworkAvailable()) {
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url(studentsURL).build();
-            Request request1 = new Request.Builder()
-                    .url(groupURL).build();
 
-            Call call = client.newCall(request);
-            Call call1 = client.newCall(request1);
-
-            call.enqueue(new Callback() {
+            RequestQueue queue = Volley.newRequestQueue(this);
+            //Call for students
+            StringRequest studentRequest = new StringRequest(Request.Method.GET, studentsURL, new Response.Listener<String>() {
                 @Override
-                public void onFailure(Call call, IOException e) {
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-
+                public void onResponse(String response) throws IOException {
                     try {
-                        String jsonStudentData = response.body().string();
+                        String jsonStudentData = response.toString();
+                        Log.v(TAG, "Students: ");
                         Log.v(TAG, jsonStudentData);
-                        if (response.isSuccessful()) {
-                            Log.v(TAG, "Students: ");
-                            mStudents[0] = getStudentsDetails(jsonStudentData);
-                        } else {
-                            alertUserAboutError();
-                        }
-                    } catch (IOException e) {
-                        Log.e(TAG, "Exception caught: ", e);
-                    } catch (JSONException e) {
+
+                        mStudents[0] = getStudentsDetails(jsonStudentData);
+                    }
+                    catch (Exception e){
                         Log.e(TAG, "Exception caught: ", e);
                     }
-
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
                 }
             });
 
-            call1.enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call1, IOException e) {
-                }
+            queue.add(studentRequest);
 
+            //Call for Groups
+            StringRequest groupRequest = new StringRequest(Request.Method.GET, groupURL, new Response.Listener<String>() {
                 @Override
-                public void onResponse(Call call1, Response response) throws IOException {
-
+                public void onResponse(String response) throws IOException {
                     try {
-
-                        if (response.isSuccessful()) {
-                            Log.v(TAG, "Groups: ");
-                            Log.v(TAG, response.body().string());
-                        } else {
-                            alertUserAboutError();
-                        }
+                        String jsonGroupData = response.toString();
+                        Log.v(TAG, "Groups: ");
+                        Log.v(TAG, jsonGroupData);
                     }
-                    catch (IOException e) {
+                    catch (Exception e){
                         Log.e(TAG, "Exception caught: ", e);
                     }
                 }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                }
             });
+            queue.add(groupRequest);
+
         }
+
         else {
             Toast.makeText(this, "Network Is Unavailable!", Toast.LENGTH_LONG).show();
         }

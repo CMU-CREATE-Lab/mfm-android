@@ -1,22 +1,14 @@
 package org.cmucreatelab.mfm_android.activities;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import org.cmucreatelab.mfm_android.R;
-import org.cmucreatelab.mfm_android.classes.Group;
-import org.cmucreatelab.mfm_android.classes.Student;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import android.view.Menu;
-import android.view.MenuItem;
-
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,12 +18,20 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.squareup.picasso.Picasso;
+
+import org.cmucreatelab.mfm_android.R;
+import org.cmucreatelab.mfm_android.classes.Group;
+import org.cmucreatelab.mfm_android.classes.Student;
+import org.cmucreatelab.mfm_android.classes.StudentList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -39,12 +39,21 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
     private Bundle mSavedInstanceState;
 
+//    @Bind(R.id.timeLabel) TextView mTimeLabel;
+//    @Bind(R.id.temperatureLabel) TextView mTemperatureLabel;
+//    @Bind(R.id.humidityValue) TextView mHumidityValue;
+//    @Bind(R.id.precipValue) TextView mPrecipValue;
+//    @Bind(R.id.summaryLabel) TextView mSummaryLabel;
+//    @Bind(R.id.iconImageView) ImageView mIconImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        final Student[] mStudents = new Student[1];
+//        final Student[] mStudents = new Student[1];
+        final StudentList[] mStudentList = new StudentList[1];
         Group mGroup;
 
         String kioskID = "f6321b67d68cd8092806094f1d1f16c5";
@@ -64,7 +73,8 @@ public class MainActivity extends AppCompatActivity {
                         Log.v(TAG, "Students: ");
                         Log.v(TAG, jsonStudentData);
 
-                        mStudents[0] = getStudentsDetails(jsonStudentData);
+                        mStudentList[0] = parseStudentDetails(jsonStudentData);
+                                //getStudentsDetails(jsonStudentData);
                     }
                     catch (Exception e){
                         Log.e(TAG, "Exception caught: ", e);
@@ -101,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
             queue.add(groupRequest);
 
 //            ImageView imageView = (ImageView) findViewById(R.id.imageView);
-//
 //            Picasso.with(this)
 //                    .load("https://cms-assets.tutsplus.com/uploads/users/21/posts/19431/featured_image/CodeFeature.jpg")
 //                    .into(imageView);
@@ -114,35 +123,43 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private Student getStudentsDetails(String jsonStudentData) throws JSONException {
+    private StudentList parseStudentDetails(String jsonStudentData) throws JSONException {
+        StudentList studentList = new StudentList();
+        studentList.setStudentList(getStudentsDetails(jsonStudentData));
+        return studentList;
+    }
 
-        JSONObject students = new JSONObject(jsonStudentData);
-        JSONArray studentList = students.optJSONArray("rows");
-        Student student = new Student();
+    private Student[] getStudentsDetails(String jsonData) throws JSONException {
+
+        JSONObject data = new JSONObject(jsonData);
+        JSONArray studentData = data.optJSONArray("rows");
+
+        Student[] allStudents = new Student[studentData.length()];
 
         //setup for layout
 //        LinearLayout linearlayout = new LinearLayout(this);
 //        setContentView(linearlayout);
 //        linearlayout.setOrientation(LinearLayout.VERTICAL);
 
+        for (int i =0; i < studentData.length(); i++){
 
-        for (int i =0; i < studentList.length(); i++){
+            JSONObject jsonStudent = studentData.getJSONObject(i);
+            Student student = new Student();
 
-            JSONObject studentNode = studentList.getJSONObject(i);
-            student.setId(Integer.valueOf(studentNode.optString("id")));
-            student.setPhotoUrl(studentNode.optString("thumb_photo_url"));
-            student.setUdpatedAt(studentNode.optString("updated_at"));
+            student.setId(Integer.valueOf(jsonStudent.optString("id")));
+            student.setPhotoUrl(jsonStudent.optString("thumb_photo_url"));
+            student.setUdpatedAt(jsonStudent.optString("updated_at"));
 
+            allStudents[i] = student;
 
+//            Log.d(TAG, "Student ID is " + Integer.toString(Integer.valueOf(jsonStudent.optString("id"))));
             //UI
 //            TextView textview = new TextView(this);
 //            textview.setText(Integer.toString(student.getId()));
 //            linearlayout.addView(textview);
-
         }
 
-
-        return new Student();
+        return allStudents;
     }
 
     //to handle cases when there is no network available
@@ -160,5 +177,11 @@ public class MainActivity extends AppCompatActivity {
     private void alertUserAboutError() {
         AlertDialogFragment dialog = new AlertDialogFragment();
         dialog.show(getFragmentManager(), "error_dialog");
+    }
+
+    @OnClick(R.id.studentListButton)
+    public void startStudentActivity(View view){
+        Intent intent = new Intent(this, ViewStudentsActivity.class);
+        startActivity(intent);
     }
 }

@@ -23,11 +23,13 @@ import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.StudentList;
+import org.cmucreatelab.mfm_android.classes.User;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
     private Bundle mSavedInstanceState;
+    private StudentList mStudentList;
 
 //    @Bind(R.id.timeLabel) TextView mTimeLabel;
 //    @Bind(R.id.temperatureLabel) TextView mTemperatureLabel;
@@ -53,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
 //        final Student[] mStudents = new Student[1];
-        final StudentList[] mStudentList = new StudentList[1];
+
         Group mGroup;
 
         String kioskID = "f6321b67d68cd8092806094f1d1f16c5";
@@ -73,10 +76,21 @@ public class MainActivity extends AppCompatActivity {
                         Log.v(TAG, "Students: ");
                         Log.v(TAG, jsonStudentData);
 
-                        mStudentList[0] = parseStudentDetails(jsonStudentData);
-                                //getStudentsDetails(jsonStudentData);
-                    }
-                    catch (Exception e){
+                        mStudentList = parseStudentDetails(jsonStudentData);
+                        /*
+                        parseStudentDetails
+                             |
+                         StudentList[] list of Students
+                               |
+                               getStudentDetails - updates detail of each student
+                               and populates StudentList
+                                   |
+                                   getAdditionalStudentDetails gets more details like name
+                                      |
+                                      getUsers() parses and updates the Userlist in Student class
+                        */
+
+                    } catch (Exception e) {
                         Log.e(TAG, "Exception caught: ", e);
                     }
                 }
@@ -97,8 +111,7 @@ public class MainActivity extends AppCompatActivity {
                         String jsonGroupData = response.toString();
                         Log.v(TAG, "Groups: ");
                         Log.v(TAG, jsonGroupData);
-                    }
-                    catch (Exception e){
+                    } catch (Exception e) {
                         Log.e(TAG, "Exception caught: ", e);
                     }
                 }
@@ -115,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
 //                    .load("https://cms-assets.tutsplus.com/uploads/users/21/posts/19431/featured_image/CodeFeature.jpg")
 //                    .into(imageView);
 //
-
         }
 
         else {
@@ -123,9 +135,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //StudentList is a list of students. Each item in the list contains a Student (see Student class
+    //for more details).
     private StudentList parseStudentDetails(String jsonStudentData) throws JSONException {
         StudentList studentList = new StudentList();
         studentList.setStudentList(getStudentsDetails(jsonStudentData));
+
         return studentList;
     }
 
@@ -133,13 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
         JSONObject data = new JSONObject(jsonData);
         JSONArray studentData = data.optJSONArray("rows");
-
         Student[] allStudents = new Student[studentData.length()];
-
-        //setup for layout
-//        LinearLayout linearlayout = new LinearLayout(this);
-//        setContentView(linearlayout);
-//        linearlayout.setOrientation(LinearLayout.VERTICAL);
 
         for (int i =0; i < studentData.length(); i++){
 
@@ -148,18 +157,70 @@ public class MainActivity extends AppCompatActivity {
 
             student.setId(Integer.valueOf(jsonStudent.optString("id")));
             student.setPhotoUrl(jsonStudent.optString("thumb_photo_url"));
-            student.setUdpatedAt(jsonStudent.optString("updated_at"));
-
+            student.setUpdatedAt(jsonStudent.optString("updated_at"));
+            getAdditionalStudentDetails(student);
             allStudents[i] = student;
-
-//            Log.d(TAG, "Student ID is " + Integer.toString(Integer.valueOf(jsonStudent.optString("id"))));
-            //UI
-//            TextView textview = new TextView(this);
-//            textview.setText(Integer.toString(student.getId()));
-//            linearlayout.addView(textview);
         }
 
         return allStudents;
+    }
+
+    //Call for getting student names and additional details
+    private void getAdditionalStudentDetails(final Student student) throws JSONException {
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        //will change when login screen implemented to have dynamic kiosk_id
+        String studentDetailsURL = "http://dev.messagefromme.org/api/v2/students/" +
+                Integer.toString(student.getId()) +
+                "?kiosk_uid=f6321b67d68cd8092806094f1d1f16c5";
+
+        StringRequest studentAddDetailsRequest = new StringRequest(Request.Method.GET,
+                    studentDetailsURL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) throws IOException {
+                    try {
+                        String jsonData = response.toString();
+                        parseAdditionalStudentDetails(student, jsonData);
+
+                    } catch (Exception e) {
+                        Log.e(TAG, "Exception caught: ", e);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                }
+            });
+
+        queue.add(studentAddDetailsRequest);
+    }
+
+    private void parseAdditionalStudentDetails(Student student, String jsonData) throws JSONException {
+        JSONObject data = new JSONObject(jsonData);
+        JSONObject studentData = data.optJSONObject("student");
+        student.setFirstName(studentData.optString("first_name"));
+        student.setLastName(studentData.optString("last_name"));
+        JSONArray jsonUsers = studentData.optJSONArray("users");
+        student.setUsers(getUsers(jsonUsers));
+    }
+
+    private User[] getUsers(JSONArray jsonUsers) throws JSONException {
+        User[] userArrayList = new User[jsonUsers.length()];
+
+        for (int i = 0; i<jsonUsers.length(); i++){
+            JSONObject jsonUser  = jsonUsers.getJSONObject(i);
+            User user = new User();
+            user.setId(Integer.valueOf(jsonUser.optString("id")));
+            user.setFirstName(jsonUser.optString("first_name"));
+            user.setLastName(jsonUser.optString("last_name"));
+            user.setUpdatedAt(jsonUser.optString("updated_at"));
+            user.setStudentUserRole(jsonUser.optString("student_user_role"));
+            user.setPhotoUrl(jsonUser.optString("medium_photo_url")); //MN: Note that setting medium photo here in photo url
+            userArrayList[i] = user;
+        }
+        return userArrayList;
     }
 
     //to handle cases when there is no network available

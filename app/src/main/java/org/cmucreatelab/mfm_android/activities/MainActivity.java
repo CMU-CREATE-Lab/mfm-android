@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
     private Bundle mSavedInstanceState;
     private StudentList mStudentList;
+    Group mGroup;
+    public static final String STUDENT_LIST = "STUDENT_FORECAST";
 
 //    @Bind(R.id.timeLabel) TextView mTimeLabel;
 //    @Bind(R.id.temperatureLabel) TextView mTemperatureLabel;
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        final Student[] mStudents = new Student[1];
 
-        Group mGroup;
+
 
         String kioskID = "f6321b67d68cd8092806094f1d1f16c5";
         String studentsURL = "http://dev.messagefromme.org/api/v2/students?kiosk_uid=" + kioskID;
@@ -243,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.studentListButton)
     public void startStudentActivity(View view){
         Intent intent = new Intent(this, ViewStudentsActivity.class);
+        intent.putExtra(STUDENT_LIST, mStudentList.getStudentList());
         startActivity(intent);
     }
 }

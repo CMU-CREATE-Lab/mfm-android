@@ -205,11 +205,16 @@ public class MainActivity extends AppCompatActivity {
         student.setFirstName(studentData.optString("first_name"));
         student.setLastName(studentData.optString("last_name"));
         JSONArray jsonUsers = studentData.optJSONArray("users");
-        student.setUsers(getUsers(jsonUsers));
+//        student.setUsers(getUsers(jsonUsers));
+        //#############################################################################
+        //Change to get and set Users instead of test
+        student.setTest(getUsers(jsonUsers));
+//        Log.v(TAG, "testing array type " + getUsers(jsonUsers));
     }
 
-    private User[] getUsers(JSONArray jsonUsers) throws JSONException {
-        User[] userArrayList = new User[jsonUsers.length()];
+
+    private ArrayList<User> getUsers(JSONArray jsonUsers) throws JSONException {
+       ArrayList<User> userArrayList = new ArrayList<>(jsonUsers.length());
 
         for (int i = 0; i<jsonUsers.length(); i++){
             JSONObject jsonUser  = jsonUsers.getJSONObject(i);
@@ -220,10 +225,27 @@ public class MainActivity extends AppCompatActivity {
             user.setUpdatedAt(jsonUser.optString("updated_at"));
             user.setStudentUserRole(jsonUser.optString("student_user_role"));
             user.setPhotoUrl(jsonUser.optString("medium_photo_url")); //MN: Note that setting medium photo here in photo url
-            userArrayList[i] = user;
+
+            userArrayList.add(i, user);
         }
         return userArrayList;
     }
+//    private User[] getUsers(JSONArray jsonUsers) throws JSONException {
+//        User[] userArrayList = new User[jsonUsers.length()];
+//
+//        for (int i = 0; i<jsonUsers.length(); i++){
+//            JSONObject jsonUser  = jsonUsers.getJSONObject(i);
+//            User user = new User();
+//            user.setId(Integer.valueOf(jsonUser.optString("id")));
+//            user.setFirstName(jsonUser.optString("first_name"));
+//            user.setLastName(jsonUser.optString("last_name"));
+//            user.setUpdatedAt(jsonUser.optString("updated_at"));
+//            user.setStudentUserRole(jsonUser.optString("student_user_role"));
+//            user.setPhotoUrl(jsonUser.optString("medium_photo_url")); //MN: Note that setting medium photo here in photo url
+//            userArrayList[i] = user;
+//        }
+//        return userArrayList;
+//    }
 
     //to handle cases when there is no network available
     private boolean isNetworkAvailable() {

@@ -19,7 +19,12 @@
         android:layout_height="wrap_content"
         android:id="@android:id/list"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/studentTitleLabel"
+        android:layout_marginTop="8dp"
+        android:divider="@null"
+        android:dividerHeight="0dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,4 +34,14 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:textColor="#ffffffff"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Students"
+        android:id="@+id/studentTitleLabel"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ffffffff"
+        android:textSize="30sp"/>
 </RelativeLayout>

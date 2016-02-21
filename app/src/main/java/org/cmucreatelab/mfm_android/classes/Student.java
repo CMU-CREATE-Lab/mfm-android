@@ -20,6 +20,15 @@ public class Student implements Parcelable {
     private String updatedAt;
     // users connected to the student (message recipients)
     private User[] users;
+    private ArrayList<User> test;
+
+    //temporary
+    public ArrayList<User> getTest() {
+        return test;
+    }
+    public void setTest(ArrayList<User> test) {
+        this.test = test;
+    }
 
     //change databaseId to Id
     public long getDatabaseId() { return databaseId; }
@@ -53,23 +62,6 @@ public class Student implements Parcelable {
     }
 
 
-    // methods for Sender interface
-
-    //@Override
-////    public Type getSenderType() {
-////        return Type.Student;
-////    }
-//
-//    @Override
-//    public int getId() {
-//        return this.id;
-//    }
-//
-//    @Override
-//    public String getName() {
-//        return this.firstName+" "+this.lastName;
-//    }
-//
     @Override
     public int describeContents() {return 0;}
 
@@ -81,17 +73,46 @@ public class Student implements Parcelable {
         dest.writeString(lastName);
         dest.writeString(photoUrl);
         dest.writeString(updatedAt);
+        dest.writeTypedList(test);
+
+
+//        dest.writeList(test);
+
+//        dest.writeList(test);
+//        dest.writeList(test);
+//        dest.writeList(test);
+//        dest.writeArray(users);
+//        dest.writeParcelableArray(test,flags);
+//        dest.writeTypedArray(users, flags);
 //        dest.writeArray(users);
     }
 
-    private Student(Parcel in){
+
+    private Student(Parcel in)  {
         databaseId = in.readLong();
         id = in.readInt();
         firstName = in.readString();
         lastName = in.readString();
         photoUrl = in.readString();
         updatedAt = in.readString();
-//        users = (User[]) in.readArray(getClass().getClassLoader());
+//        in.readTypedList(test, );
+//        test = new ArrayList<User>();
+//        in.readTypedList(test, User.CREATOR);
+//
+//        test = in.readParcelableArray(User.class.getClassLoader());
+
+//        test = in.readList(test, User.class.getClassLoader());
+
+//        test = in.createArrayList
+//        test = in.readList(test, User.class.getClassLoader());
+//        test = in.readArrayList(User.class.getClassLoader());
+
+//        users = in.readList(usertest, getClass().getClassLoader());
+//        usertest = in.readList(usertest, getClass().getClassLoader());
+//        users = in.readArray(getClass().getClassLoader().loadClass("User"));
+//        users = (User[]) in.readParcelableArray(User.class.getClassLoader());
+//        users = in.readTypedArray(User);
+//        users = (User[]) in.readArray(User.class.getClassLoader());
     }
 
     public Student() { }

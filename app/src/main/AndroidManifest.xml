@@ -28,6 +28,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.cmucreatelab.mfm_android.activities.MainActivity"/>
         </activity>
+        <activity
+            android:name=".activities.RecordMessageActivity"
+            android:label="@string/title_activity_record_message"
+            android:parentActivityName=".activities.ViewStudentsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.cmucreatelab.mfm_android.activities.ViewStudentsActivity"/>
+        </activity>
     </application>
 
 </manifest>

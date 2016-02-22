@@ -29,7 +29,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':volley')
-    //compile 'com.squareup.okhttp3:mockwebserver:3.0.1'
 
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.squareup.picasso:picasso:2.5.2'

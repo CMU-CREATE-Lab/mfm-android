@@ -40,7 +40,7 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
-    public static final String STUDENT_LIST = "STUDENT_FORECAST";
+    public static final String STUDENT_LIST = "STUDENT_LIST";
     private Bundle mSavedInstanceState;
     StudentList mStudentList;
     Group mGroup;
@@ -225,7 +225,6 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.studentListButton)
     public void startStudentActivity(View view){
         Intent intent = new Intent(this, ViewStudentsActivity.class);
-        intent.putExtra(STUDENT_LIST, mStudentList.getStudentList());
         startActivity(intent);
     }
 }

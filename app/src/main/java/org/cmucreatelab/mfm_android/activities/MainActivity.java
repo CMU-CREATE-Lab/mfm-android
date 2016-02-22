@@ -24,6 +24,7 @@ import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.StudentList;
 import org.cmucreatelab.mfm_android.classes.User;
+import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,35 +40,23 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
-    private Bundle mSavedInstanceState;
-    private StudentList mStudentList;
-    Group mGroup;
     public static final String STUDENT_LIST = "STUDENT_FORECAST";
-
-//    @Bind(R.id.timeLabel) TextView mTimeLabel;
-//    @Bind(R.id.temperatureLabel) TextView mTemperatureLabel;
-//    @Bind(R.id.humidityValue) TextView mHumidityValue;
-//    @Bind(R.id.precipValue) TextView mPrecipValue;
-//    @Bind(R.id.summaryLabel) TextView mSummaryLabel;
-//    @Bind(R.id.iconImageView) ImageView mIconImageView;
+    private Bundle mSavedInstanceState;
+    StudentList mStudentList;
+    Group mGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-//        final Student[] mStudents = new Student[1];
-
-
+        final GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
 
         String kioskID = "f6321b67d68cd8092806094f1d1f16c5";
         String studentsURL = "http://dev.messagefromme.org/api/v2/students?kiosk_uid=" + kioskID;
         String groupURL = "http://dev.messagefromme.org/api/v2/groups?kiosk_uid=" + kioskID;
 
-
         if (isNetworkAvailable()) {
-
             RequestQueue queue = Volley.newRequestQueue(this);
             //Call for students
             StringRequest studentRequest = new StringRequest(Request.Method.GET, studentsURL, new Response.Listener<String>() {
@@ -75,10 +64,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(String response) throws IOException {
                     try {
                         String jsonStudentData = response.toString();
-                        Log.v(TAG, "Students: ");
-                        Log.v(TAG, jsonStudentData);
-
                         mStudentList = parseStudentDetails(jsonStudentData);
+                        globalHandler.setStudentData(mStudentList.getStudentList());
                         /*
                         parseStudentDetails
                              |
@@ -111,8 +98,6 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(String response) throws IOException {
                     try {
                         String jsonGroupData = response.toString();
-                        Log.v(TAG, "Groups: ");
-                        Log.v(TAG, jsonGroupData);
                     } catch (Exception e) {
                         Log.e(TAG, "Exception caught: ", e);
                     }
@@ -124,12 +109,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             queue.add(groupRequest);
-
-//            ImageView imageView = (ImageView) findViewById(R.id.imageView);
-//            Picasso.with(this)
-//                    .load("https://cms-assets.tutsplus.com/uploads/users/21/posts/19431/featured_image/CodeFeature.jpg")
-//                    .into(imageView);
-//
         }
 
         else {
@@ -184,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         String jsonData = response.toString();
                         parseAdditionalStudentDetails(student, jsonData);
-
                     } catch (Exception e) {
                         Log.e(TAG, "Exception caught: ", e);
                     }
@@ -205,11 +183,7 @@ public class MainActivity extends AppCompatActivity {
         student.setFirstName(studentData.optString("first_name"));
         student.setLastName(studentData.optString("last_name"));
         JSONArray jsonUsers = studentData.optJSONArray("users");
-//        student.setUsers(getUsers(jsonUsers));
-        //#############################################################################
-        //Change to get and set Users instead of test
-        student.setTest(getUsers(jsonUsers));
-//        Log.v(TAG, "testing array type " + getUsers(jsonUsers));
+        student.setUsers(getUsers(jsonUsers));
     }
 
 
@@ -230,22 +204,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return userArrayList;
     }
-//    private User[] getUsers(JSONArray jsonUsers) throws JSONException {
-//        User[] userArrayList = new User[jsonUsers.length()];
-//
-//        for (int i = 0; i<jsonUsers.length(); i++){
-//            JSONObject jsonUser  = jsonUsers.getJSONObject(i);
-//            User user = new User();
-//            user.setId(Integer.valueOf(jsonUser.optString("id")));
-//            user.setFirstName(jsonUser.optString("first_name"));
-//            user.setLastName(jsonUser.optString("last_name"));
-//            user.setUpdatedAt(jsonUser.optString("updated_at"));
-//            user.setStudentUserRole(jsonUser.optString("student_user_role"));
-//            user.setPhotoUrl(jsonUser.optString("medium_photo_url")); //MN: Note that setting medium photo here in photo url
-//            userArrayList[i] = user;
-//        }
-//        return userArrayList;
-//    }
 
     //to handle cases when there is no network available
     private boolean isNetworkAvailable() {

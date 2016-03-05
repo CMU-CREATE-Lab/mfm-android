@@ -13,6 +13,7 @@ public class Group implements Sender {
     private String photoUrl;
     private String updatedAt;
     private ArrayList<Student> students;
+    private ArrayList<Integer> studentIds;
 
     public long getDatabaseId() {
         return databaseId;
@@ -26,6 +27,11 @@ public class Group implements Sender {
     public ArrayList<Student> getStudents() {
         return students;
     }
+
+    public ArrayList<Integer> getStudentIds() {
+        return studentIds;
+    }
+
     public void setDatabaseId(long databaseId) {
         this.databaseId = databaseId;
     }
@@ -45,7 +51,9 @@ public class Group implements Sender {
         this.students = students;
     }
 
-
+    public void setStudentIds(ArrayList<Integer> studentIds) {
+        this.studentIds = studentIds;
+    }
     // methods for Sender interface
 
 

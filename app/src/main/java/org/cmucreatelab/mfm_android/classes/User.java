@@ -1,8 +1,5 @@
 package org.cmucreatelab.mfm_android.classes;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.io.Serializable;
 
 /**

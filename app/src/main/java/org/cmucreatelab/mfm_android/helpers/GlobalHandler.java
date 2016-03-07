@@ -32,11 +32,9 @@ public class GlobalHandler {
     public ArrayList<Student> getStudentData(){
         return this.mStudents;
     }
-
     public void setIndividualStudentData(Student st){
         this.mIndividualStudent = st;
     }
-
     public Student getIndividualStudentData() {
         return this.mIndividualStudent;
     }

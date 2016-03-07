@@ -5,14 +5,14 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
-
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
-
 
 /**
  * Created by mohaknahta on 1/30/16.
  */
 public class AlertDialogFragment extends DialogFragment {
+
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Context context = getActivity();
@@ -24,6 +24,5 @@ public class AlertDialogFragment extends DialogFragment {
         AlertDialog dialog = builder.create();
         return dialog;
     }
-
 
 }

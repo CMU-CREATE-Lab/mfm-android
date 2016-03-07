@@ -48,6 +48,7 @@ public class Group implements Sender {
 
     // methods for Sender interface
 
+
     @Override
     public Type getSenderType() {
         return Type.Group;

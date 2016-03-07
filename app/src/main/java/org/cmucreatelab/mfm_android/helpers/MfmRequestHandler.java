@@ -9,7 +9,6 @@ import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.JSONParser;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 /**

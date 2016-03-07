@@ -37,12 +37,14 @@ public class Kiosk {
         return appVersion;
     }
 
+
     public void login(int schoolId, String schoolName, String kioskUid) {
         this.isLoggedIn = true;
         this.schoolId = schoolId;
         this.schoolName = schoolName;
         this.kioskUid = kioskUid;
     }
+
 
     public void logout() {
         this.isLoggedIn = false;

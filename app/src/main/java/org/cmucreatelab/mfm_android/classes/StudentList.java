@@ -12,8 +12,8 @@ public class StudentList implements Serializable {
     public Student[] getStudentList() {
         return mStudent;
     }
-
     public void setStudentList(Student[] studentList) {
         mStudent = studentList;
     }
+
 }

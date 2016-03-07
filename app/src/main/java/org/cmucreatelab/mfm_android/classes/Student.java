@@ -59,6 +59,7 @@ public class Student implements Sender, Serializable {
 
     // methods for Sender interface
 
+
     @Override
     public Type getSenderType() {
         return Type.Student;

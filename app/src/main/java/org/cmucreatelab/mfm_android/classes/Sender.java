@@ -9,10 +9,11 @@ package org.cmucreatelab.mfm_android.classes;
  *
  */
 public interface Sender {
+
     enum Type {
         Student,
         Group
-    };
+    }
 
     public Type getSenderType();
 

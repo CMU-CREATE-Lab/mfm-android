@@ -1,16 +1,12 @@
 package org.cmucreatelab.mfm_android.classes;
 
-import android.util.Log;
-
-import org.json.JSONObject;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by mike on 1/28/16.
  */
-public class Student implements Serializable {
+public class Student implements Sender, Serializable {
 
     private int id;
     private long databaseId;
@@ -20,16 +16,27 @@ public class Student implements Serializable {
     // users connected to the student (message recipients)
     private ArrayList<User> users;
 
-    //change databaseId to Id
-    public long getDatabaseId() { return databaseId; }
-    public int getId() { return id; }
-    public String getFirstName() { return firstName; }
-    public String getLastName() { return lastName;}
-    public String getPhotoUrl() { return photoUrl; }
-    public String getUpdatedAt() { return updatedAt; }
-    public ArrayList<User> getUsers() { return users; }
-
-    public void setDatabaseId(long databaseId) { this.databaseId = databaseId; }
+    public long getDatabaseId() {
+        return databaseId;
+    }
+    public String getFirstName() {
+        return firstName;
+    }
+    public String getLastName() {
+        return lastName;
+    }
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+    public void setDatabaseId(long databaseId) {
+        this.databaseId = databaseId;
+    }
     public void setId(int id) {
         this.id = id;
     }
@@ -47,6 +54,24 @@ public class Student implements Serializable {
     }
     public void setUsers(ArrayList<User> users) {
         this.users = users;
+    }
+
+
+    // methods for Sender interface
+
+    @Override
+    public Type getSenderType() {
+        return Type.Student;
+    }
+
+    @Override
+    public int getId() {
+        return this.id;
+    }
+
+    @Override
+    public String getName() {
+        return this.firstName+" "+this.lastName;
     }
 
 }

@@ -15,15 +15,17 @@ import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.activities.ViewStudentsActivity;
 import org.cmucreatelab.mfm_android.classes.Student;
 
+import java.util.ArrayList;
+
 /**
  * Created by mohaknahta on 2/20/16.
  */
 public class StudentAdapter extends BaseAdapter {
 
     private Context mContext;
-    private Student[] mStudents;
+    private ArrayList<Student> mStudents;
 
-    public StudentAdapter(Context context, Student[] students) {
+    public StudentAdapter(Context context, ArrayList<Student> students) {
         mContext = context;
         mStudents = students;
     }
@@ -31,12 +33,12 @@ public class StudentAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mStudents.length;
+        return mStudents.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return mStudents[i];
+        return mStudents.get(i);
     }
 
     @Override
@@ -61,7 +63,7 @@ public class StudentAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
 
-        Student student  = mStudents[i];
+        Student student  = mStudents.get(i);
         String photoUrl = student.getPhotoUrl();
         String url = "http://dev.messagefromme.org" + photoUrl;
 

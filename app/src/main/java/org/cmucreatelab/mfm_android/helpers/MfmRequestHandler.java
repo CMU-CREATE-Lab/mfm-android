@@ -4,8 +4,13 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import org.cmucreatelab.mfm_android.classes.Student;
+import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
+import org.cmucreatelab.mfm_android.helpers.static_classes.JSONParser;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by mike on 2/3/16.
@@ -35,8 +40,12 @@ public class MfmRequestHandler {
         response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                // TODO response handling
-                Log.i(Constants.LOG_TAG, "requestListStudents onResponse");
+                try {
+                    ArrayList<Student> students = JSONParser.parseStudentsFromJson(response);
+                    globalHandler.checkAndUpdateStudents(students);
+                } catch (JSONException e) {
+                    Log.e(Constants.LOG_TAG, "JSONException in response for requestListStudents");
+                }
             }
         };
 
@@ -44,7 +53,7 @@ public class MfmRequestHandler {
     }
 
 
-    public void requestStudent(Student student) {
+    public void updateStudent(final Student student) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;
@@ -54,8 +63,25 @@ public class MfmRequestHandler {
         response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                // TODO response handling
-                Log.i(Constants.LOG_TAG, "requestStudent onResponse");
+                try {
+                    // parse values
+                    JSONObject studentJson = response.getJSONObject("student");
+                    String firstName = studentJson.getString("first_name");
+                    String lastName = studentJson.getString("last_name");
+                    String updatedAt = studentJson.getString("updated_at");
+                    String thumbPhotoUrl = studentJson.getString("thumb_photo_url");
+                    ArrayList<User> users = JSONParser.parseUsersFromJson(studentJson.getJSONArray("users"));
+
+                    // update object
+                    student.setFirstName(firstName);
+                    student.setLastName(lastName);
+                    student.setUpdatedAt(updatedAt);
+                    student.setPhotoUrl(thumbPhotoUrl);
+                    student.setUsers(users);
+                } catch (JSONException e) {
+                    Log.e(Constants.LOG_TAG, "JSONException in response for updateStudent");
+                }
+                Log.i(Constants.LOG_TAG, "updateStudent onResponse");
             }
         };
 

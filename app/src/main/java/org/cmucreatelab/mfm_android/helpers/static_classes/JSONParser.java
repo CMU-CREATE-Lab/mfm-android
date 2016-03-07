@@ -30,31 +30,47 @@ public class JSONParser {
 
 
     private static User parseUserFromJson(JSONObject row) throws JSONException {
+        // parse values
+        Integer id = row.getInt("id");
+        String firstName = row.getString("first_name");
+        String lastName = row.getString("last_name");
+        String updatedAt = row.getString("updated_at");
+        String studentUserRole = row.getString("student_user_role");
+        String thumbPhotoUrl = row.getString("thumb_photo_url");
+
+        // create object
         User user = new User();
-
-        // TODO parse fields: id, first_name, last_name, updated_at, student_user_role, medium_photo_url, thumb_photo_url
-
+        user.setId(id);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setUpdatedAt(updatedAt);
+        user.setStudentUserRole(studentUserRole);
+        user.setPhotoUrl(thumbPhotoUrl);
         return user;
     }
 
 
-    public static Student parseStudentFromJson(JSONObject row) throws JSONException {
-        Student student = new Student();
-
-        // TODO parse fields: id, first_name, last_name, updated_at, medium_photo_url, thumb_photo_url, users
-
-        return student;
-    }
-
-
-    public static ArrayList<Integer> parseStudentIdsFromJson(JSONObject response) throws JSONException {
-        ArrayList<Integer> results = new ArrayList<>();
+    public static ArrayList<Student> parseStudentsFromJson(JSONObject response) throws JSONException {
+        ArrayList<Student> results = new ArrayList<>();
 
         try {
             JSONArray rows = response.getJSONArray("rows");
             int size = rows.length();
             for (int i = 0; i < size; i++) {
-                results.add(rows.getJSONObject(i).getInt("id"));
+                // parse values
+                JSONObject row = rows.getJSONObject(i);
+                Integer id = row.getInt("id");
+                String thumbPhotoUrl = row.getString("thumb_photo_url");
+                String updatedAt = row.getString("updated_at");
+
+                // create object
+                Student student = new Student();
+                student.setId(id);
+                student.setPhotoUrl(thumbPhotoUrl);
+                student.setUpdatedAt(updatedAt);
+
+                // add to results
+                results.add(student);
             }
         } catch (JSONException e) {
             throw e;
@@ -78,6 +94,19 @@ public class JSONParser {
         }
 
         return groups;
+    }
+
+
+    public static ArrayList<User> parseUsersFromJson(JSONArray users) throws JSONException {
+        ArrayList<User> results = new ArrayList<>();
+
+        int size = users.length();
+        for (int i = 0; i < size; i++) {
+            JSONObject row = users.getJSONObject(i);
+            results.add(parseUserFromJson(row));
+        }
+
+        return results;
     }
 
 }

@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             //Call for students
             StringRequest studentRequest = new StringRequest(Request.Method.GET, studentsURL, new Response.Listener<String>() {
                 @Override
-                public void onResponse(String response) throws IOException {
+                public void onResponse(String response) {
                     try {
                         String jsonStudentData = response.toString();
                         mStudentList = parseStudentDetails(jsonStudentData);
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             //Call for Groups
             StringRequest groupRequest = new StringRequest(Request.Method.GET, groupURL, new Response.Listener<String>() {
                 @Override
-                public void onResponse(String response) throws IOException {
+                public void onResponse(String response) {
                     try {
                         String jsonGroupData = response.toString();
                     } catch (Exception e) {
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
         StringRequest studentAddDetailsRequest = new StringRequest(Request.Method.GET,
                     studentDetailsURL, new Response.Listener<String>() {
                 @Override
-                public void onResponse(String response) throws IOException {
+                public void onResponse(String response) {
                     try {
                         String jsonData = response.toString();
                         parseAdditionalStudentDetails(student, jsonData);

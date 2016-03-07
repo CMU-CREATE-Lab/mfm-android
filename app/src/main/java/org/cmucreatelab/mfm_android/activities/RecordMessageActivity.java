@@ -17,6 +17,7 @@ import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 public class RecordMessageActivity extends AppCompatActivity {
 
     Student mStudent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

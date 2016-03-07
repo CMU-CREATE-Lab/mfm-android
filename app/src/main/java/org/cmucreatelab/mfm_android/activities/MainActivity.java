@@ -25,6 +25,7 @@ import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.StudentList;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
+import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,10 +41,7 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
-    public static final String STUDENT_LIST = "STUDENT_LIST";
-    private Bundle mSavedInstanceState;
     StudentList mStudentList;
-    Group mGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,14 +50,10 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         final GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
 
-        String kioskID = "f6321b67d68cd8092806094f1d1f16c5";
-        String studentsURL = "http://dev.messagefromme.org/api/v2/students?kiosk_uid=" + kioskID;
-        String groupURL = "http://dev.messagefromme.org/api/v2/groups?kiosk_uid=" + kioskID;
-
         if (isNetworkAvailable()) {
             RequestQueue queue = Volley.newRequestQueue(this);
             //Call for students
-            StringRequest studentRequest = new StringRequest(Request.Method.GET, studentsURL, new Response.Listener<String>() {
+            StringRequest studentRequest = new StringRequest(Request.Method.GET, Constants.studentsURL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
@@ -93,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             queue.add(studentRequest);
 
             //Call for Groups
-            StringRequest groupRequest = new StringRequest(Request.Method.GET, groupURL, new Response.Listener<String>() {
+            StringRequest groupRequest = new StringRequest(Request.Method.GET, Constants.groupURL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
@@ -152,9 +146,9 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         //will change when login screen implemented to have dynamic kiosk_id
-        String studentDetailsURL = "http://dev.messagefromme.org/api/v2/students/" +
+        String studentDetailsURL = Constants.MFM_API_URL + "/api/v2/students/" +
                 Integer.toString(student.getId()) +
-                "?kiosk_uid=f6321b67d68cd8092806094f1d1f16c5";
+                "?kiosk_uid=" + Constants.kioskID;
 
         StringRequest studentAddDetailsRequest = new StringRequest(Request.Method.GET,
                     studentDetailsURL, new Response.Listener<String>() {
@@ -217,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
         return isAvailable;
     }
 
+    // TODO should this be utilized anywhere?
     private void alertUserAboutError() {
         AlertDialogFragment dialog = new AlertDialogFragment();
         dialog.show(getFragmentManager(), "error_dialog");

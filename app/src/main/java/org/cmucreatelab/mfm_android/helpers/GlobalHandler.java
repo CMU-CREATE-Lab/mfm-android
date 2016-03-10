@@ -2,6 +2,7 @@ package org.cmucreatelab.mfm_android.helpers;
 
 import android.content.Context;
 
+import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Kiosk;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
@@ -26,8 +27,11 @@ public class GlobalHandler {
     public SharedPreferencesHandler sharedPreferencesHandler;
     // the "kiosk" that this application represents
     final public Kiosk kiosk;
-    private ArrayList<Student> mStudents = new ArrayList<>();
+
+    private ArrayList<Student> mStudents;
     private Student mIndividualStudent;
+    private ArrayList<Group> mGroups;
+    private Group mIndividualGroup;
 
     public ArrayList<Student> getStudentData(){
         return this.mStudents;
@@ -39,11 +43,21 @@ public class GlobalHandler {
         return this.mIndividualStudent;
     }
 
+    public ArrayList<Group> getGroupData(){
+        return this.mGroups;
+    }
+    public void setIndividualGroup(Group gp){
+        this.mIndividualGroup = gp;
+    }
+    public Group getIndividualGroup(){
+        return this.mIndividualGroup;
+    }
+
 
     public void refreshStudentsAndGroups() {
         mfmRequestHandler.requestListStudents();
         // TODO groups
-        //mfmRequestHandler.requestListGroups();
+        mfmRequestHandler.requestListGroups();
     }
 
 
@@ -54,6 +68,14 @@ public class GlobalHandler {
         mStudents.addAll(students);
         for (Student student : students) {
             mfmRequestHandler.updateStudent(student);
+        }
+    }
+
+    public void checkAndUpdateGroups(ArrayList<Group> groups){
+        mGroups.clear();
+        mGroups.addAll(groups);
+        for(Group group : groups){
+            mfmRequestHandler.updateGroup(group);
         }
     }
 
@@ -74,6 +96,8 @@ public class GlobalHandler {
         this.mfmRequestHandler = new MfmRequestHandler(this);
         this.sharedPreferencesHandler = new SharedPreferencesHandler(this);
         this.kiosk = new Kiosk();
+        this.mStudents = new ArrayList<>();
+        this.mGroups = new ArrayList<>();
         // TODO just a placeholder for testing
         kiosk.login(Constants.schoolId, Constants.schoolName, Constants.kioskID);
     }

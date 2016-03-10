@@ -22,7 +22,7 @@ public class Constants {
     // TODO these are placeholder constants; mostly just for testing stuff
     public static final int schoolId = 17;
     public static final String schoolName = "Android Test School";
-    public static final String kioskID = "f6321b67d68cd8092806094f1d1f16c5";
+    public static final String kioskID = "a7602d5b9ee63617698504b8f0f57db5";
     public static final String studentsURL = "http://dev.messagefromme.org/api/v2/students?kiosk_uid=" + kioskID;
     public static final String groupURL = "http://dev.messagefromme.org/api/v2/groups?kiosk_uid=" + kioskID;
 

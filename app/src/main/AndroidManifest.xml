@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="org.cmucreatelab.mfm_android"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.cmucreatelab.mfm_android">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -14,9 +14,9 @@
             android:name=".activities.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -26,7 +26,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.cmucreatelab.mfm_android.activities.MainActivity"/>
+                android:value="org.cmucreatelab.mfm_android.activities.MainActivity" />
         </activity>
         <activity
             android:name=".activities.RecordMessageActivity"
@@ -35,8 +35,12 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.cmucreatelab.mfm_android.activities.ViewStudentsActivity"/>
+                android:value="org.cmucreatelab.mfm_android.activities.ViewStudentsActivity" />
         </activity>
+        <activity
+            android:name=".activities.ViewGroupsActivity"
+            android:label="@string/title_activity_view_groups"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

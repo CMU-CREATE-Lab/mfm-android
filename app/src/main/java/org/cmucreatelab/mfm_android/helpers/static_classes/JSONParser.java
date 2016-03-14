@@ -3,12 +3,14 @@ package org.cmucreatelab.mfm_android.helpers.static_classes;
 import android.util.Log;
 
 import org.cmucreatelab.mfm_android.classes.Group;
+import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -143,6 +145,7 @@ public class JSONParser {
         // create group
         Group result = new Group();
         result.setName(name);
+        result.setStudentIds(studentIds);
         result.setUpdatedAt(updatedAt);
         result.setPhotoUrl(thumbPhotoUrl);
         result.setStudentIds(studentIds);
@@ -166,6 +169,23 @@ public class JSONParser {
         result.setUpdatedAt(updatedAt);
         result.setPhotoUrl(thumbPhotoUrl);
         result.setUsers(users);
+
+        return result;
+    }
+
+    public static ArrayList<School> parseSchoolsFromJSON(JSONObject row) throws JSONException {
+        ArrayList<School> result = new ArrayList<School>();
+
+        JSONArray schools = row.getJSONArray("schools");
+
+        // parse the separate schools
+        for(int i = 0; i < schools.length(); i++){
+            JSONObject json = schools.getJSONObject(i);
+            School school = new School();
+            school.setId(json.getInt("id"));
+            school.setName(json.getString("name"));
+            result.add(school);
+        }
 
         return result;
     }

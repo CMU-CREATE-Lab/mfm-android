@@ -5,6 +5,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 
 import org.cmucreatelab.mfm_android.classes.Group;
+import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
@@ -126,9 +127,18 @@ public class MfmRequestHandler {
 
                     // set values
                     group.setName(temp.getName());
+                    group.setStudentIds(temp.getStudentIds());
                     group.setPhotoUrl(temp.getPhotoUrl());
                     group.setUpdatedAt(temp.getUpdatedAt());
                     group.setStudentIds(temp.getStudentIds());
+
+                    ArrayList<Student> result = new ArrayList<Student>();
+                    ArrayList<Integer> ids = group.getStudentIds();
+                    for(int i = 0; i < temp.getStudentIds().size(); i++){
+                        Student student = globalHandler.getStudentByID(ids.get(i));
+                        result.add(student);
+                    }
+                    group.setStudents(result);
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for updateGroup");
                 }
@@ -151,8 +161,14 @@ public class MfmRequestHandler {
         response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                // TODO response handling
                 Log.i(Constants.LOG_TAG, "ping onResponse");
+                try {
+                    String success = response.getString("success");
+                    String statusMessage = response.getString("status_message");
+                    // TODO Do something with these variables
+                } catch (JSONException e) {
+                    Log.e(Constants.LOG_TAG, "JSONException in response for ping.");
+                }
             }
         };
 
@@ -170,8 +186,13 @@ public class MfmRequestHandler {
         response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                // TODO response handling
                 Log.i(Constants.LOG_TAG, "requestListSchools onResponse");
+                try {
+                    ArrayList<School> schools = JSONParser.parseSchoolsFromJSON(response);
+                    globalHandler.setSchools(schools);
+                } catch (JSONException e) {
+                    Log.e(Constants.LOG_TAG, "JSONException in response for requestListSchools.");
+                }
             }
         };
 

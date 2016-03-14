@@ -4,6 +4,7 @@ import android.content.Context;
 
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Kiosk;
+import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 
@@ -28,10 +29,18 @@ public class GlobalHandler {
     // the "kiosk" that this application represents
     final public Kiosk kiosk;
 
+    private ArrayList<School> schools;
     private ArrayList<Student> mStudents;
     private Student mIndividualStudent;
     private ArrayList<Group> mGroups;
     private Group mIndividualGroup;
+
+    public ArrayList<School> getSchools(){
+        return this.schools;
+    }
+    public void setSchools(ArrayList<School> schools){
+        this.schools = schools;
+    }
 
     public ArrayList<Student> getStudentData(){
         return this.mStudents;
@@ -55,9 +64,10 @@ public class GlobalHandler {
 
 
     public void refreshStudentsAndGroups() {
-        mfmRequestHandler.requestListStudents();
-        // TODO groups
+        mfmRequestHandler.requestListSchools("stevefulton", "stevefulton");
         mfmRequestHandler.requestListGroups();
+        mfmRequestHandler.requestListStudents();
+        mfmRequestHandler.ping();
     }
 
 
@@ -77,6 +87,19 @@ public class GlobalHandler {
         for(Group group : groups){
             mfmRequestHandler.updateGroup(group);
         }
+    }
+
+    public Student getStudentByID(int id){
+        Student result = null;
+
+        for(int i = 0; i < this.mStudents.size(); i++){
+            Student test = this.mStudents.get(i);
+            if(id == test.getId()){
+                result = test;
+            }
+        }
+
+        return result;
     }
 
 

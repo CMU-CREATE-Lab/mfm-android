@@ -6,4 +6,7 @@
     <string name="title_activity_view_students">ViewStudentsActivity</string>
     <string name="title_activity_record_message">RecordMessageActivity</string>
     <string name="title_activity_view_groups">ViewGroupsActivity</string>
+    <string name="title_activity_camera_and_audio">CameraAndAudioActivity</string>
+    <string name="title_activity_camera">CameraActivity</string>
+    <string name="title_activity_audio">AudioActivity</string>
 </resources>

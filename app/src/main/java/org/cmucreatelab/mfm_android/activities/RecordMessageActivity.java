@@ -1,6 +1,8 @@
 package org.cmucreatelab.mfm_android.activities;
 
 import android.content.Intent;
+import android.graphics.Camera;
+import android.hardware.camera2.CameraDevice;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import org.cmucreatelab.mfm_android.R;

@@ -62,6 +62,9 @@ public class GlobalHandler {
         return this.mIndividualGroup;
     }
 
+    public Context getAppContext(){
+        return this.appContext;
+    }
 
     public void refreshStudentsAndGroups() {
         mfmRequestHandler.requestListSchools("stevefulton", "stevefulton");

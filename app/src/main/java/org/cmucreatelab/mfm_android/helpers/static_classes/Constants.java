@@ -13,6 +13,8 @@ public class Constants {
 
     public static final String MFM_API_URL = "http://dev.messagefromme.org";
 
+    public static final int CAMERA_ID = 0;
+
     public final class AlertDialogFragment {
         public static final String title = "Oops! sorry!";
         public static final String message = "There was an error please try again";

@@ -8,6 +8,7 @@ import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -35,6 +36,9 @@ public class GlobalHandler {
     private ArrayList<Group> mGroups;
     private Group mIndividualGroup;
 
+    private File mImage;
+    private File mAudio;
+
     public ArrayList<School> getSchools(){
         return this.schools;
     }
@@ -60,6 +64,19 @@ public class GlobalHandler {
     }
     public Group getIndividualGroup(){
         return this.mIndividualGroup;
+    }
+
+    public File getCurrentImage(){
+        return this.mImage;
+    }
+    public void setCurrentImage(File image){
+        this.mImage = image;
+    }
+    public File getCurrentAudio(){
+        return this.mAudio;
+    }
+    public void setCurrentAudio(File audio){
+        this.mAudio = audio;
     }
 
     public Context getAppContext(){

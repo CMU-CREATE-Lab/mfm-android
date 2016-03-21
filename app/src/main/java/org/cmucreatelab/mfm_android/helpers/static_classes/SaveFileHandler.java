@@ -14,18 +14,18 @@ import java.util.Date;
  */
 public class SaveFileHandler {
     public static final int MEDIA_TYPE_IMAGE = 1;
+    public static final int MEDIA_TYPE_AUDIO = 2;
 
-    /** Create a File for saving an image or video */
     public static File getOutputMediaFile(Context context, int type){
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
 
-        File mediaStorageDir = new File(context.getExternalFilesDir(
-                Environment.DIRECTORY_PICTURES), "Message From Me");
-        // This location works best if you want the created images to be shared
-        // between applications and persist after your app has been uninstalled.
+        File mediaStorageDir = new File("","");
 
-        // Create the storage directory if it does not exist
+        if(type == MEDIA_TYPE_IMAGE){
+            mediaStorageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Message From Me");
+        } else if(type == MEDIA_TYPE_AUDIO){
+            mediaStorageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC), "Message From Me");
+        }
+
         if (! mediaStorageDir.exists()){
             if (! mediaStorageDir.mkdirs()){
                 Log.d("Message From Me", "failed to create directory");
@@ -33,13 +33,15 @@ public class SaveFileHandler {
             }
         }
 
-        // Create a media file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile;
         if (type == MEDIA_TYPE_IMAGE){
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_"+ timeStamp + ".jpg");
-        } else {
+                    "IMG_" + timeStamp + ".jpg");
+        } else if(type == MEDIA_TYPE_AUDIO){
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+                    "AUDIO_" + timeStamp + ".wav");
+        } else{
             return null;
         }
 

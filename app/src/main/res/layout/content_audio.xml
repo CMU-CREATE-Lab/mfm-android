@@ -12,4 +12,13 @@
     tools:context="org.cmucreatelab.mfm_android.activities.AudioActivity"
     tools:showIn="@layout/activity_audio">
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recordAudio"
+        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/button_audio_start"/>
+
 </RelativeLayout>

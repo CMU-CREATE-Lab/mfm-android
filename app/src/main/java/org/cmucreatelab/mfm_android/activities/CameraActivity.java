@@ -131,7 +131,10 @@ public class CameraActivity extends AppCompatActivity {
                     FileOutputStream fos = new FileOutputStream(picture);
                     fos.write(bytes);
                     fos.close();
-                    Log.i(Constants.LOG_TAG, "Picture Taken and saved...apparently :)");
+                    Log.i(Constants.LOG_TAG, "Picture Taken and saved.");
+
+                    // We may not need to save the image to any directory if we do this.
+                    globalHandler.setCurrentImage(picture);
                 } catch (FileNotFoundException e) {
                     Log.e(Constants.LOG_TAG, "File not found: " + e.getMessage());
                 } catch (IOException e) {

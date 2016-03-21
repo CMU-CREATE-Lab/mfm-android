@@ -9,4 +9,7 @@
     <string name="title_activity_camera_and_audio">CameraAndAudioActivity</string>
     <string name="title_activity_camera">CameraActivity</string>
     <string name="title_activity_audio">AudioActivity</string>
+    <string name="button_camera">Take Picture</string>
+    <string name="button_audio_start">Start Recording</string>
+    <string name="button_audio_stop">Stop Recording</string>
 </resources>

@@ -122,7 +122,7 @@ public class CameraActivity extends AppCompatActivity {
 
             @Override
             public void onPictureTaken(byte[] bytes, Camera camera) {
-                File picture = SaveFileHandler.getOutputMediaFile(context, SaveFileHandler.MEDIA_TYPE_IMAGE);
+                File picture = SaveFileHandler.getOutputMediaFile(context, SaveFileHandler.MEDIA_TYPE_IMAGE, globalHandler);
 
                 if(picture == null){
                     Log.e(Constants.LOG_TAG, "Could not create the media file");

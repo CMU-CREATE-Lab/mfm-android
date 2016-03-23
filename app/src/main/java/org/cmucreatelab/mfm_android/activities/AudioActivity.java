@@ -49,7 +49,7 @@ public class AudioActivity extends AppCompatActivity {
     }
 
     private void startRecording(){
-        File audioFile = SaveFileHandler.getOutputMediaFile(context, SaveFileHandler.MEDIA_TYPE_AUDIO);
+        File audioFile = SaveFileHandler.getOutputMediaFile(context, SaveFileHandler.MEDIA_TYPE_AUDIO, globalHandler);
         this.mediaRecorder = new MediaRecorder();
         this.mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         this.mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);

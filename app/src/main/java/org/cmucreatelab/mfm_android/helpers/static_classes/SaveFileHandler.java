@@ -5,6 +5,9 @@ import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
+import org.cmucreatelab.mfm_android.classes.Student;
+import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,14 +19,17 @@ public class SaveFileHandler {
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_AUDIO = 2;
 
-    public static File getOutputMediaFile(Context context, int type){
+    public static File getOutputMediaFile(Context context, int type, GlobalHandler globalHandler){
 
         File mediaStorageDir = new File("","");
 
+        // TODO - change the structure of the folder hierarchy
+        // TODO - possibly pass in a user/student/whatever instead of the global handler
+        Student student = globalHandler.getStudentData().get(0);
         if(type == MEDIA_TYPE_IMAGE){
-            mediaStorageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Message From Me");
+            mediaStorageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), student.getFirstName() + "_" + student.getLastName());
         } else if(type == MEDIA_TYPE_AUDIO){
-            mediaStorageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC), "Message From Me");
+            mediaStorageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC), student.getFirstName() + "_" + student.getLastName());
         }
 
         if (! mediaStorageDir.exists()){

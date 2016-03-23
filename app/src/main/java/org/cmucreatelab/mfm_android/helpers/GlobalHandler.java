@@ -79,10 +79,6 @@ public class GlobalHandler {
         this.mAudio = audio;
     }
 
-    public Context getAppContext(){
-        return this.appContext;
-    }
-
     public void refreshStudentsAndGroups() {
         mfmRequestHandler.requestListSchools("stevefulton", "stevefulton");
         mfmRequestHandler.requestListGroups();

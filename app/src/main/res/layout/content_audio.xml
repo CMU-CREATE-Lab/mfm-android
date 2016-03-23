@@ -4,21 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="org.cmucreatelab.mfm_android.activities.AudioActivity"
-    tools:showIn="@layout/activity_audio">
+    tools:showIn="@layout/activity_audio"
+    android:background="#fc970b"
+    android:screenOrientation="portrait">
 
-    <Button
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recordAudio"
         android:layout_alignParentBottom="true"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/button_audio_start"/>
+        android:layout_centerHorizontal="true">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recordAudio"
+            android:layout_weight="1"
+            android:background="#40FFFFFF"
+            android:text="@string/button_audio_start"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/playbackAudio"
+            android:layout_marginBottom="2dp"
+            android:layout_weight="1"
+            android:background="#40FFFFFF"
+            android:layout_marginLeft="2dp"
+            android:text="@string/button_audio_playback"/>
+    </LinearLayout>
 
 </RelativeLayout>

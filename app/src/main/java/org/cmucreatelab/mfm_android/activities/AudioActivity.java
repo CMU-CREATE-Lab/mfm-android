@@ -1,14 +1,16 @@
 package org.cmucreatelab.mfm_android.activities;
 
+import android.content.Context;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
@@ -27,6 +29,7 @@ public class AudioActivity extends AppCompatActivity {
     private Button recorderButton;
     private boolean isRecording;
     private MediaRecorder mediaRecorder;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +45,11 @@ public class AudioActivity extends AppCompatActivity {
         this.recorderButton = (Button) findViewById(R.id.recordAudio);
         this.isRecording = false;
         this.mediaRecorder = null;
+        this.context = this.getApplicationContext();
     }
 
     private void startRecording(){
-        File audioFile = SaveFileHandler.getOutputMediaFile(globalHandler.getAppContext(), SaveFileHandler.MEDIA_TYPE_AUDIO);
+        File audioFile = SaveFileHandler.getOutputMediaFile(context, SaveFileHandler.MEDIA_TYPE_AUDIO);
         this.mediaRecorder = new MediaRecorder();
         this.mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         this.mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -60,12 +64,20 @@ public class AudioActivity extends AppCompatActivity {
         }
 
         this.mediaRecorder.start();
+
+        String message = "Recording audio";
+        Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     private void stopRecording(){
         this.mediaRecorder.stop();
         this.mediaRecorder.release();
         this.mediaRecorder = null;
+
+        String message = "Audio file has been saved.";
+        Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     @OnClick(R.id.recordAudio)
@@ -79,6 +91,23 @@ public class AudioActivity extends AppCompatActivity {
             this.isRecording = false;
             this.recorderButton.setText(R.string.button_audio_start);
             stopRecording();
+        }
+    }
+
+    @OnClick(R.id.playbackAudio)
+    public void onPlayback(){
+        File audioFile = globalHandler.getCurrentAudio();
+        if(audioFile != null) {
+            Uri.Builder uriBuilder = new Uri.Builder();
+            uriBuilder.appendPath(audioFile.getAbsolutePath());
+            Uri uri = uriBuilder.build();
+            MediaPlayer mediaPlayer = MediaPlayer.create(context, uri);
+            mediaPlayer.start(); // no need to call prepare(); create() does that for you
+        }
+        else{
+            String message = "There has been no recent audio recording.\nClick Start Recording to record audio.";
+            Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+            toast.show();
         }
     }
 

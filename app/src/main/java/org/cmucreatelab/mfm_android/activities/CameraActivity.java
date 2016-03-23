@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Surface;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.helpers.CameraPreview;
@@ -26,9 +27,10 @@ import butterknife.OnClick;
 
 public class CameraActivity extends AppCompatActivity {
 
-    private GlobalHandler globalHandler;
     private Camera mCamera;
     private CameraPreview mPreview;
+    private Context context;
+    private GlobalHandler globalHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class CameraActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         GlobalHandler gh = GlobalHandler.getInstance(this.getApplicationContext());
         this.globalHandler = gh;
+        this.context = this.getApplicationContext();
     }
 
     @Override
@@ -119,7 +122,7 @@ public class CameraActivity extends AppCompatActivity {
 
             @Override
             public void onPictureTaken(byte[] bytes, Camera camera) {
-                File picture = SaveFileHandler.getOutputMediaFile(globalHandler.getAppContext(), SaveFileHandler.MEDIA_TYPE_IMAGE);
+                File picture = SaveFileHandler.getOutputMediaFile(context, SaveFileHandler.MEDIA_TYPE_IMAGE);
 
                 if(picture == null){
                     Log.e(Constants.LOG_TAG, "Could not create the media file");
@@ -131,7 +134,10 @@ public class CameraActivity extends AppCompatActivity {
                     FileOutputStream fos = new FileOutputStream(picture);
                     fos.write(bytes);
                     fos.close();
-                    Log.i(Constants.LOG_TAG, "Picture Taken and saved.");
+
+                    String message = "Picture has been taken and saved.";
+                    Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+                    toast.show();
 
                     // We may not need to save the image to any directory if we do this.
                     globalHandler.setCurrentImage(picture);
@@ -144,7 +150,6 @@ public class CameraActivity extends AppCompatActivity {
         };
 
         this.mCamera.takePicture(null, null, jpegCallBack);
-        Log.i(Constants.LOG_TAG, "Picture has been taken.");
     }
 
 }

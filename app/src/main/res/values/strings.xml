@@ -13,4 +13,5 @@
     <string name="button_audio_start">Start Recording</string>
     <string name="button_audio_stop">Stop Recording</string>
     <string name="button_audio_playback">Playback Audio</string>
+    <string name="title_activity_login">LoginActivity</string>
 </resources>

@@ -1,14 +1,21 @@
 package org.cmucreatelab.mfm_android.helpers;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Kiosk;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
+import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
+import org.cmucreatelab.mfm_android.helpers.static_classes.database.GroupDbHelper;
+import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentDbHelper;
+import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentGroupDbHelper;
+import org.cmucreatelab.mfm_android.helpers.static_classes.database.UserDbHelper;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -80,12 +87,12 @@ public class GlobalHandler {
     }
 
     public void refreshStudentsAndGroups() {
+        // TODO change how username and password is entered
         mfmRequestHandler.requestListSchools("stevefulton", "stevefulton");
         mfmRequestHandler.requestListGroups();
         mfmRequestHandler.requestListStudents();
         mfmRequestHandler.ping();
     }
-
 
     public void checkAndUpdateStudents(ArrayList<Student> students) {
         // TODO we want to compare updatedAt string with objects sharing IDs. If they need updated, add/update them.
@@ -118,7 +125,6 @@ public class GlobalHandler {
         return result;
     }
 
-
     // Only public way to get instance of class (synchronized means thread-safe)
     public static synchronized GlobalHandler getInstance(Context ctx) {
         if (classInstance == null) {
@@ -139,6 +145,32 @@ public class GlobalHandler {
         this.mGroups = new ArrayList<>();
         // TODO just a placeholder for testing
         kiosk.login(Constants.schoolId, Constants.schoolName, Constants.kioskID);
+
+        // load from database
+        ArrayList<Group> dbGroups = GroupDbHelper.fetchFromDatabase(ctx);
+        ArrayList<Student> dbStudents = StudentDbHelper.fetchFromDatabase(ctx);
+        ArrayList<User> dbUsers = UserDbHelper.fetchFromDatabase(ctx);
+        // I am not sure if this is how we want to access elements in the database
+        ArrayList<ArrayList<Integer>> dbStudentsInGroups = new ArrayList<>();
+
+        for(Group group : dbGroups){
+            // add the student ids for each group
+            ArrayList<Integer> dbStudentIdsFromGroup = StudentGroupDbHelper.fetchStudentsFromGroup(ctx, group);
+            dbStudentsInGroups.add(dbStudentIdsFromGroup);
+            // TODO add group readings
+        }
+        for(Student student : dbStudents){
+            // TODO add student readings
+        }
+        for(User user : dbUsers){
+            // TODO add user readings
+        }
+        for(ArrayList<Integer> studentIds : dbStudentsInGroups){
+            // TODO add studentId readings
+            Log.i(Constants.LOG_TAG, studentIds.get(0).toString());
+        }
+
+
     }
 
 }

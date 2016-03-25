@@ -199,7 +199,7 @@ public class MfmRequestHandler {
         globalHandler.httpRequestHandler.sendJsonRequest(requestMethod, requestUrl, null, response);
     }
 
-
+    // TODO fix the os version
     public void login(String username, String password, String schoolId) {
         int requestMethod;
         String requestUrl;
@@ -211,11 +211,13 @@ public class MfmRequestHandler {
                 "&password=" + password +
                 "&with_school=" + schoolId +
                 "&app_version=" + globalHandler.kiosk.getAppVersion() +
-                "&os_version=" + globalHandler.kiosk.getIosVersion();
+                //"&os_version=" + globalHandler.kiosk.getIosVersion();
+                "&os_version=android_4.5";
         response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 // TODO response handling
+                Log.i(Constants.LOG_TAG, response.toString());
                 Log.i(Constants.LOG_TAG, "login onResponse");
             }
         };

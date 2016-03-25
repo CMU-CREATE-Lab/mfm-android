@@ -68,42 +68,20 @@ public class StudentGroupDbHelper {
         Log.i(Constants.LOG_TAG, "inserted new student _id=" + newStudentId);
     }
 
-
+    // I am not sure if this is how we want to fetch the Students, but it makes sense to me
+    // since the group that was passed in was fetched from the database earlier
     public static ArrayList<Integer> fetchStudentsFromGroup(Context context, Group group) {
         ArrayList<Integer> result = new ArrayList<>();
 
-        //TODO fetch students from Group
-
-        /*String[] projection = {
-                "_id",
-                StudentGroupContract.COLUMN_GROUP_ID, StudentGroupContract.COLUMN_STUDENT_ID,
-        };
-        MessageFromMeSQLLiteOpenHelper mDbHelper;
-        SQLiteDatabase db;
-        Cursor cursor;
-
-        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
-        db = mDbHelper.getWritableDatabase();
-        cursor = db.query(GroupContract.TABLE_NAME, projection,
-                null, null, // columns and values for WHERE clause
-                null, null, // group rows, filter row groups
-                StudentGroupContract.COLUMN_GROUP_ID + " ASC" // sort order
-        );
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            try {
-                result.add(generateGroupFromRecord(cursor));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            // iterate
-            cursor.moveToNext();
+        try {
+            result = group.getStudentIds();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         if (result.size() == 0) {
             Log.w(Constants.LOG_TAG, "fetchGroupFromDatabase is returning an empty list.");
-        }*/
+        }
 
         return result;
     }

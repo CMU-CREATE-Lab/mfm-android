@@ -52,10 +52,13 @@ public class MainActivity extends AppCompatActivity {
         final GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
 
         if (isNetworkAvailable()) {
+            globalHandler.mfmRequestHandler.login("stevefulton", "stevefulton", "17");
             globalHandler.refreshStudentsAndGroups();
+
         } else {
             Toast.makeText(this, "Network Is Unavailable!", Toast.LENGTH_LONG).show();
         }
+
     }
 
 

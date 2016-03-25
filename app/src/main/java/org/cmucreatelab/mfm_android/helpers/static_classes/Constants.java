@@ -21,7 +21,14 @@ public class Constants {
         public static final String positiveButton = "OK";
     }
 
+    public static final class PreferencesKeys {
+        public static final String kioskIsLoggedIn = "kiosk_logged_in";
+        public static final String kioskSchoolName = "kiosk_school_name";
+        public static final String kioskId = "kiosk_id";
+    }
+
     // TODO these are placeholder constants; mostly just for testing stuff
+    public static final String osVersion = "android_4.5";
     public static final int schoolId = 17;
     public static final String schoolName = "Android Test School";
     public static final String kioskID = "a7602d5b9ee63617698504b8f0f57db5";

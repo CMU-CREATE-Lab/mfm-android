@@ -144,7 +144,6 @@ public class GlobalHandler {
         this.mStudents = new ArrayList<>();
         this.mGroups = new ArrayList<>();
         // TODO just a placeholder for testing
-        kiosk.login(Constants.schoolId, Constants.schoolName, Constants.kioskID);
 
         // load from database
         ArrayList<Group> dbGroups = GroupDbHelper.fetchFromDatabase(ctx);
@@ -169,7 +168,6 @@ public class GlobalHandler {
             // TODO add studentId readings
             Log.i(Constants.LOG_TAG, studentIds.get(0).toString());
         }
-
 
     }
 

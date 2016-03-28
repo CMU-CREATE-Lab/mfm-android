@@ -207,7 +207,7 @@ public class MfmRequestHandler {
 
         requestMethod = Request.Method.POST;
         requestUrl = Constants.MFM_API_URL +
-                "/api/v2/schools?username=" + username +
+                "/api/v2/login?username=" + username +
                 "&password=" + password +
                 "&with_school=" + schoolId +
                 "&app_version=" + globalHandler.kiosk.getAppVersion() +
@@ -216,8 +216,16 @@ public class MfmRequestHandler {
         response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                // TODO response handling
-                Log.i(Constants.LOG_TAG, response.toString());
+                try {
+                    String schoolName = response.getString("school_name");
+                    String kioskId = response.getString("kiosk_id");
+
+                    globalHandler.kiosk.setSchoolName(schoolName);
+                    globalHandler.kiosk.setKioskUid(kioskId);
+                    globalHandler.kiosk.setIsLoggedIn(true);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 Log.i(Constants.LOG_TAG, "login onResponse");
             }
         };
@@ -236,7 +244,10 @@ public class MfmRequestHandler {
         response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                // TODO response handling
+                Log.i(Constants.LOG_TAG, response.toString());
+                globalHandler.kiosk.setKioskUid(null);
+                globalHandler.kiosk.setSchoolName(null);
+                globalHandler.kiosk.setIsLoggedIn(false);
                 Log.i(Constants.LOG_TAG, "logout onResponse");
             }
         };

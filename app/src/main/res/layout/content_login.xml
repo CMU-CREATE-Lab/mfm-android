@@ -9,7 +9,38 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="org.cmucreatelab.mfm_android.activities.login.LoginActivity"
+    tools:context=".activities.LoginActivity"
     tools:showIn="@layout/activity_login">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/input_username"
+            android:inputType="text"
+            android:layout_centerInParent="true"/>
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/input_password"
+            android:inputType="text"
+            android:layout_below="@+id/username"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_login"
+            android:id="@+id/loginButton"
+            android:layout_below="@+id/password"/>
+
+    </ListView>
+
+
 
 </RelativeLayout>

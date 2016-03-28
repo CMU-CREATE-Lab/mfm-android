@@ -2,41 +2,25 @@ package org.cmucreatelab.mfm_android.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.Camera;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Surface;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.Toast;
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.classes.StudentList;
-import org.cmucreatelab.mfm_android.helpers.CameraPreview;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class MainScreenActivity extends AppCompatActivity {
 
-    public static final String TAG = MainActivity.class.getSimpleName();
+    public static final String TAG = MainScreenActivity.class.getSimpleName();
     private StudentList mStudentList;
-
-
-    // to handle cases when there is no network available
-    private boolean isNetworkAvailable() {
-        ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo  = manager.getActiveNetworkInfo();
-        boolean isAvailable = false;
-
-        if (networkInfo != null && networkInfo.isConnected()) {
-            isAvailable = true;
-        }
-        return isAvailable;
-    }
+    private GlobalHandler globalHandler;
 
     private void alertUserAboutError() {
         AlertDialogFragment dialog = new AlertDialogFragment();
@@ -49,18 +33,35 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        final GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
+        this.globalHandler = GlobalHandler.getInstance(getApplicationContext());
 
-        if (isNetworkAvailable()) {
-            globalHandler.mfmRequestHandler.login("stevefulton", "stevefulton", "17");
-            globalHandler.refreshStudentsAndGroups();
 
-        } else {
-            Toast.makeText(this, "Network Is Unavailable!", Toast.LENGTH_LONG).show();
-        }
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.logout) {
+            this.globalHandler.mfmRequestHandler.logout();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @OnClick(R.id.studentListButton)
     public void startStudentActivity(View view){

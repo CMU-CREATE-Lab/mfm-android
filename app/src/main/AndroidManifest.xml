@@ -20,7 +20,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.LoginActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,11 +31,11 @@
         <activity
             android:name=".activities.ViewStudentsActivity"
             android:label="@string/title_activity_view_students"
-            android:parentActivityName=".activities.MainActivity"
+            android:parentActivityName=".activities.MainScreenActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.cmucreatelab.mfm_android.activities.MainActivity" />
+                android:value=".activities.MainScreenActivity" />
         </activity>
         <activity
             android:name=".activities.RecordMessageActivity"
@@ -60,8 +60,8 @@
             android:label="@string/title_activity_audio"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.login.LoginActivity"
-            android:label="@string/title_activity_login"
+            android:name=".activities.MainScreenActivity"
+            android:label="@string/title_activity_main_screen"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

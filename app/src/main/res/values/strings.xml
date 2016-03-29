@@ -10,7 +10,7 @@
     <string name="title_activity_camera">CameraActivity</string>
     <string name="title_activity_audio">AudioActivity</string>
     <string name="title_activity_login">LoginActivity</string>
-    <string name="title_activity_main_screen">LoginActivity</string>
+    <string name="title_activity_main_screen">MainScreenActivity</string>
 
     <string name="input_username">Username:</string>
     <string name="input_password">Password:</string>
@@ -20,5 +20,12 @@
     <string name="button_audio_stop">Stop Recording</string>
     <string name="button_audio_playback">Playback Audio</string>
     <string name="button_login">Login</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_username">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="error_invalid_credentials">Username or password is invalid</string>
+    <string name="error_field_required">This field is required</string>
 
 </resources>

@@ -61,8 +61,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.MainScreenActivity"
-            android:label="@string/title_activity_main_screen"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="@string/title_activity_main_screen"></activity>
     </application>
 
 </manifest>

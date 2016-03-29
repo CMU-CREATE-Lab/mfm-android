@@ -14,7 +14,7 @@ import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 
 import java.util.ArrayList;
 
-public class ViewGroupsActivity extends ListActivity {
+public class ViewGroupsActivity extends ListActivity{
 
     public static final String TAG = ViewGroupsActivity.class.getSimpleName();
     private ArrayList<Group> mGroups;

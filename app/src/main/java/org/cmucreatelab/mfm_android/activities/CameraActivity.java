@@ -39,8 +39,7 @@ public class CameraActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
-        GlobalHandler gh = GlobalHandler.getInstance(this.getApplicationContext());
-        this.globalHandler = gh;
+        this.globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
         this.context = this.getApplicationContext();
     }
 

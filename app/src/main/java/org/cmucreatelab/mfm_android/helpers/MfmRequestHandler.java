@@ -4,6 +4,7 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
 
+import org.cmucreatelab.mfm_android.activities.LoginActivity;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
@@ -200,7 +201,7 @@ public class MfmRequestHandler {
     }
 
     // TODO fix the os version
-    public void login(String username, String password, String schoolId) {
+    public void login(final LoginActivity login, String username, String password, String schoolId) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;
@@ -216,13 +217,25 @@ public class MfmRequestHandler {
         response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                Log.i(Constants.LOG_TAG, response.toString());
                 try {
-                    String schoolName = response.getString("school_name");
-                    String kioskId = response.getString("kiosk_id");
+                    String success = response.getString("success");
 
-                    globalHandler.kiosk.setSchoolName(schoolName);
-                    globalHandler.kiosk.setKioskUid(kioskId);
-                    globalHandler.kiosk.setIsLoggedIn(true);
+                    if(success.equals("true")){
+                        String schoolName = response.getString("school_name");
+                        String kioskId = response.getString("kiosk_id");
+
+                        globalHandler.kiosk.setSchoolName(schoolName);
+                        globalHandler.kiosk.setKioskUid(kioskId);
+                        globalHandler.kiosk.setIsLoggedIn(true);
+
+                        login.loginSuccess();
+                    }
+                    else{
+                        globalHandler.kiosk.setIsLoggedIn(false);
+                        login.loginFailure();
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

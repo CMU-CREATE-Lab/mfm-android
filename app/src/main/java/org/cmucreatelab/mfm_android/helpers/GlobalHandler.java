@@ -3,6 +3,7 @@ package org.cmucreatelab.mfm_android.helpers;
 import android.content.Context;
 import android.util.Log;
 
+import org.cmucreatelab.mfm_android.activities.LoginActivity;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Kiosk;
 import org.cmucreatelab.mfm_android.classes.School;
@@ -86,12 +87,13 @@ public class GlobalHandler {
         this.mAudio = audio;
     }
 
-    public void refreshStudentsAndGroups() {
+    public void refreshStudentsAndGroups(LoginActivity login) {
         // TODO change how username and password is entered
         mfmRequestHandler.requestListSchools("stevefulton", "stevefulton");
         mfmRequestHandler.requestListGroups();
         mfmRequestHandler.requestListStudents();
         mfmRequestHandler.ping();
+        login.populateStudentAndGroupSuccess();
     }
 
     public void checkAndUpdateStudents(ArrayList<Student> students) {

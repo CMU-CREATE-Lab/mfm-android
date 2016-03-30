@@ -19,10 +19,6 @@ public class MainScreenActivity extends AppCompatActivity {
     private StudentList mStudentList;
     private GlobalHandler globalHandler;
 
-    private void alertUserAboutError() {
-        AlertDialogFragment dialog = new AlertDialogFragment();
-        dialog.show(getFragmentManager(), "error_dialog");
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

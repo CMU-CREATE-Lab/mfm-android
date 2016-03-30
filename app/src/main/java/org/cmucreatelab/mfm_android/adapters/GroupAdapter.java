@@ -69,7 +69,7 @@ public class GroupAdapter extends BaseAdapter {
 
         Group group  = mGroups.get(i);
         String photoUrl = group.getPhotoUrl();
-        String url = "http://dev.messagefromme.org" + photoUrl;
+        String url = Constants.MFM_API_URL + photoUrl;
 
         holder.groupName.setText(group.getName());
         Picasso.with(mContext)

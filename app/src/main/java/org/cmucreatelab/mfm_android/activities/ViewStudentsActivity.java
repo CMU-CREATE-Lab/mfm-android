@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 public class ViewStudentsActivity extends ListActivity {
 
-    public static final String TAG = ViewStudentsActivity.class.getSimpleName();
     private ArrayList<Student> mStudents;
 
     @Override

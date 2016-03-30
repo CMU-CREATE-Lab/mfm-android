@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.classes.Student;
+import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
+
 import java.util.ArrayList;
 
 /**
@@ -70,7 +72,7 @@ public class StudentAdapter extends BaseAdapter {
 
         Student student  = mStudents.get(i);
         String photoUrl = student.getPhotoUrl();
-        String url = "http://dev.messagefromme.org" + photoUrl;
+        String url = Constants.MFM_API_URL + photoUrl;
 
         holder.studentName.setText(student.getFirstName() + " " + student.getLastName());
         Picasso.with(mContext)

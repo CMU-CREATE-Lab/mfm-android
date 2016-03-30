@@ -177,9 +177,9 @@ public class JSONParser {
         // parse the separate schools
         for (int i = 0; i < schools.length(); i++) {
             JSONObject json = schools.getJSONObject(i);
-            School school = new School();
-            school.setId(json.getInt("id"));
-            school.setName(json.getString("name"));
+            int id = json.getInt("id");
+            String name = json.getString("name");
+            School school = new School(id,name);
             result.add(school);
         }
 

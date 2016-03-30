@@ -48,9 +48,11 @@ public class GlobalHandler {
         this.httpRequestHandler = new HttpRequestHandler(this);
         this.mfmRequestHandler = new MfmRequestHandler(this);
         this.sharedPreferencesHandler = new SharedPreferencesHandler(this);
-        this.kiosk = new Kiosk();
+        this.mfmLoginHandler = new MfmLoginHandler(this);
         this.mStudents = new ArrayList<>();
         this.mGroups = new ArrayList<>();
+        // TODO request OS version, and append it to kiosk attribute
+        Kiosk.ioSVersion += "4.5";
 
         // load from database
         ArrayList<Group> dbGroups = GroupDbHelper.fetchFromDatabase(ctx);
@@ -86,8 +88,7 @@ public class GlobalHandler {
     public HttpRequestHandler httpRequestHandler;
     public MfmRequestHandler mfmRequestHandler;
     public SharedPreferencesHandler sharedPreferencesHandler;
-    // the "kiosk" that this application represents
-    public final Kiosk kiosk;
+    public MfmLoginHandler mfmLoginHandler;
 
     // TODO add to "School"
     public ArrayList<Student> mStudents;

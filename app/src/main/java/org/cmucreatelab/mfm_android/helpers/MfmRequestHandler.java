@@ -5,6 +5,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import org.cmucreatelab.mfm_android.activities.LoginActivity;
 import org.cmucreatelab.mfm_android.classes.Group;
+import org.cmucreatelab.mfm_android.classes.Kiosk;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
@@ -37,7 +38,7 @@ public class MfmRequestHandler {
         Response.Listener<JSONObject> response;
 
         requestMethod = Request.Method.GET;
-        requestUrl = Constants.MFM_API_URL + "/api/v2/students?kiosk_uid=" + globalHandler.kiosk.getKioskUid();
+        requestUrl = Constants.MFM_API_URL + "/api/v2/students?kiosk_uid=" + globalHandler.mfmLoginHandler.getKioskUid();
         response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -60,7 +61,7 @@ public class MfmRequestHandler {
         Response.Listener<JSONObject> response;
 
         requestMethod = Request.Method.GET;
-        requestUrl = Constants.MFM_API_URL + "/api/v2/groups?kiosk_uid=" + globalHandler.kiosk.getKioskUid();
+        requestUrl = Constants.MFM_API_URL + "/api/v2/groups?kiosk_uid=" + globalHandler.mfmLoginHandler.getKioskUid();
         response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -84,7 +85,7 @@ public class MfmRequestHandler {
         Response.Listener<JSONObject> response;
 
         requestMethod = Request.Method.GET;
-        requestUrl = Constants.MFM_API_URL + "/api/v2/students/" + student.getId() + "?kiosk_uid=" + globalHandler.kiosk.getKioskUid();
+        requestUrl = Constants.MFM_API_URL + "/api/v2/students/" + student.getId() + "?kiosk_uid=" + globalHandler.mfmLoginHandler.getKioskUid();
         response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -116,7 +117,7 @@ public class MfmRequestHandler {
         Response.Listener<JSONObject> response;
 
         requestMethod = Request.Method.GET;
-        requestURL = Constants.MFM_API_URL + "/api/v2/groups/" + group.getId() + "?kiosk_uid=" + globalHandler.kiosk.getKioskUid();
+        requestURL = Constants.MFM_API_URL + "/api/v2/groups/" + group.getId() + "?kiosk_uid=" + globalHandler.mfmLoginHandler.getKioskUid();
         response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -157,9 +158,9 @@ public class MfmRequestHandler {
 
         requestMethod = Request.Method.GET;
         requestUrl = Constants.MFM_API_URL +
-                "/api/v2/ping?kiosk_uid=" + globalHandler.kiosk.getKioskUid() +
-                "&app_version=" + globalHandler.kiosk.getAppVersion() +
-                "&os_version=" + globalHandler.kiosk.getIosVersion();
+                "/api/v2/ping?kiosk_uid=" + globalHandler.mfmLoginHandler.getKioskUid() +
+                "&app_version=" + Kiosk.appVersion +
+                "&os_version=" + Kiosk.ioSVersion;
         response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -203,7 +204,6 @@ public class MfmRequestHandler {
     }
 
 
-    // TODO fix the os version
     public void login(final LoginActivity login, String username, String password, String schoolId) {
         int requestMethod;
         String requestUrl;
@@ -214,9 +214,8 @@ public class MfmRequestHandler {
                 "/api/v2/login?username=" + username +
                 "&password=" + password +
                 "&with_school=" + schoolId +
-                "&app_version=" + globalHandler.kiosk.getAppVersion() +
-                //"&os_version=" + globalHandler.kiosk.getIosVersion();
-                "&os_version=android_4.5";
+                "&app_version=" + Kiosk.appVersion +
+                "&os_version=" + Kiosk.ioSVersion;
         response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -225,16 +224,15 @@ public class MfmRequestHandler {
                     String success = response.getString("success");
 
                     if (success.equals("true")) {
+                        int schoolId = response.getInt("school_id");
                         String schoolName = response.getString("school_name");
                         String kioskId = response.getString("kiosk_id");
+                        School school = new School(schoolId,schoolName);
 
-                        globalHandler.kiosk.setSchoolName(schoolName);
-                        globalHandler.kiosk.setKioskUid(kioskId);
-                        globalHandler.kiosk.setIsLoggedIn(true);
-
+                        globalHandler.mfmLoginHandler.login(school, kioskId);
                         login.loginSuccess();
                     } else{
-                        globalHandler.kiosk.setIsLoggedIn(false);
+                        globalHandler.mfmLoginHandler.logout();
                         login.loginFailure();
                     }
 
@@ -255,14 +253,12 @@ public class MfmRequestHandler {
         Response.Listener<JSONObject> response;
 
         requestMethod = Request.Method.DELETE;
-        requestUrl = Constants.MFM_API_URL + "/api/v2/logout?kiosk_uid="+globalHandler.kiosk.getKioskUid();
+        requestUrl = Constants.MFM_API_URL + "/api/v2/logout?kiosk_uid="+globalHandler.mfmLoginHandler.getKioskUid();
         response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.i(Constants.LOG_TAG, response.toString());
-                globalHandler.kiosk.setKioskUid(null);
-                globalHandler.kiosk.setSchoolName(null);
-                globalHandler.kiosk.setIsLoggedIn(false);
+                globalHandler.mfmLoginHandler.logout();
                 Log.i(Constants.LOG_TAG, "logout onResponse");
             }
         };

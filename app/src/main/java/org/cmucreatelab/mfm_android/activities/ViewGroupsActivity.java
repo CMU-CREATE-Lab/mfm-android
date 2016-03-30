@@ -21,7 +21,8 @@ public class ViewGroupsActivity extends ListActivity{
         setContentView(R.layout.activity_view_groups);
         GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
 
-        mGroups = globalHandler.mGroups;
+        // TODO handle when school is null
+        mGroups = globalHandler.mfmLoginHandler.getSchool().getGroups();
         GroupAdapter adapter = new GroupAdapter(this, mGroups);
         setListAdapter(adapter);
     }

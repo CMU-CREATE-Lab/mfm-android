@@ -5,6 +5,7 @@ import android.util.Log;
 import org.cmucreatelab.mfm_android.activities.LoginActivity;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Kiosk;
+import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
@@ -49,8 +50,6 @@ public class GlobalHandler {
         this.mfmRequestHandler = new MfmRequestHandler(this);
         this.sharedPreferencesHandler = new SharedPreferencesHandler(this);
         this.mfmLoginHandler = new MfmLoginHandler(this);
-        this.mStudents = new ArrayList<>();
-        this.mGroups = new ArrayList<>();
         // TODO request OS version, and append it to kiosk attribute
         Kiosk.ioSVersion += "4.5";
 
@@ -90,10 +89,6 @@ public class GlobalHandler {
     public SharedPreferencesHandler sharedPreferencesHandler;
     public MfmLoginHandler mfmLoginHandler;
 
-    // TODO add to "School"
-    public ArrayList<Student> mStudents;
-    public ArrayList<Group> mGroups;
-
     // TODO this will form a "Session"
     public Student mIndividualStudent;
     public Group mIndividualGroup;
@@ -114,8 +109,10 @@ public class GlobalHandler {
     public void checkAndUpdateStudents(ArrayList<Student> students) {
         // TODO we want to compare updatedAt string with objects sharing IDs. If they need updated, add/update them.
         // For now, just clear and add all
-        mStudents.clear();
-        mStudents.addAll(students);
+        // TODO handle when school is null
+        School school = mfmLoginHandler.getSchool();
+        school.getStudents().clear();
+        school.getStudents().addAll(students);
         for (Student student : students) {
             mfmRequestHandler.updateStudent(student);
         }
@@ -123,8 +120,10 @@ public class GlobalHandler {
 
 
     public void checkAndUpdateGroups(ArrayList<Group> groups) {
-        mGroups.clear();
-        mGroups.addAll(groups);
+        // TODO handle when school is null
+        School school = mfmLoginHandler.getSchool();
+        school.getGroups().clear();
+        school.getGroups().addAll(groups);
         for (Group group : groups) {
             mfmRequestHandler.updateGroup(group);
         }
@@ -134,8 +133,10 @@ public class GlobalHandler {
     public Student getStudentByID(int id) {
         Student result = null;
 
-        for (int i = 0; i < this.mStudents.size(); i++) {
-            Student test = this.mStudents.get(i);
+        // TODO handle when school is null
+        ArrayList<Student> students = mfmLoginHandler.getSchool().getStudents();
+        for (int i = 0; i < students.size(); i++) {
+            Student test = students.get(i);
             if (id == test.getId()) {
                 result = test;
             }

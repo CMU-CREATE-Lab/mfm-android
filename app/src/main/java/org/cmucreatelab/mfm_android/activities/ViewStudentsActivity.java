@@ -22,7 +22,8 @@ public class ViewStudentsActivity extends ListActivity {
         setContentView(R.layout.activity_view_students);
         Intent intent = getIntent();
         GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
-        mStudents = globalHandler.mStudents;
+        // TODO handle when school is null
+        mStudents = globalHandler.mfmLoginHandler.getSchool().getStudents();
         StudentAdapter adapter = new StudentAdapter(this, mStudents);
         setListAdapter(adapter);
 

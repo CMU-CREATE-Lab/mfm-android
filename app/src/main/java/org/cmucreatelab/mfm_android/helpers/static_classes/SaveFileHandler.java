@@ -25,7 +25,8 @@ public class SaveFileHandler {
 
         // TODO - change the structure of the folder hierarchy
         // TODO - possibly pass in a user/student/whatever instead of the global handler
-        Student student = globalHandler.mStudents.get(0);
+        // TODO handle when school is null
+        Student student = globalHandler.mfmLoginHandler.getSchool().getStudents().get(0);
         if (type == MEDIA_TYPE_IMAGE) {
             mediaStorageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), student.getFirstName() + "_" + student.getLastName());
         } else if (type == MEDIA_TYPE_AUDIO) {

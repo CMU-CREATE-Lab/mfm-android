@@ -1,11 +1,8 @@
 package org.cmucreatelab.mfm_android.helpers;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
-import org.cmucreatelab.mfm_android.classes.Kiosk;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 
 /**
@@ -33,26 +30,26 @@ public class SharedPreferencesHandler {
         Log.v(Constants.LOG_TAG, "SHAREDPREFERENCES: "  + sharedPreferences.getAll().toString());
     }
 
-    public SharedPreferences getSharedPreferences(){
+    public SharedPreferences getSharedPreferences() {
         return this.sharedPreferences;
     }
 
     // Is there more to do with these methods?
-    public void setIsLoggedIn(boolean isLoggedIn){
+    public void setIsLoggedIn(boolean isLoggedIn) {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
         editor.putBoolean(Constants.PreferencesKeys.kioskIsLoggedIn, isLoggedIn);
         editor.apply();
         this.kioskIsLoggedIn = isLoggedIn;
     }
 
-    public void setSchoolName(String schoolName){
+    public void setSchoolName(String schoolName) {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
         editor.putString(Constants.PreferencesKeys.kioskSchoolName, schoolName);
         editor.apply();
         this.kioskSchoolName = schoolName;
     }
 
-    public void setKioskUId(int id){
+    public void setKioskUId(int id) {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
         editor.putInt(Constants.PreferencesKeys.kioskId, id);
         editor.apply();

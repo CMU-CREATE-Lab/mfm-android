@@ -3,12 +3,10 @@ package org.cmucreatelab.mfm_android.helpers;
 import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
-
 import org.cmucreatelab.mfm_android.activities.LoginActivity;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
-import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.JSONParser;
 import org.json.JSONException;
@@ -54,6 +52,7 @@ public class MfmRequestHandler {
 
         globalHandler.httpRequestHandler.sendJsonRequest(requestMethod, requestUrl, null, response);
     }
+
 
     public void requestListGroups() {
         int requestMethod;
@@ -110,7 +109,8 @@ public class MfmRequestHandler {
         globalHandler.httpRequestHandler.sendJsonRequest(requestMethod, requestUrl, null, response);
     }
 
-    public void updateGroup(final Group group){
+
+    public void updateGroup(final Group group) {
         int requestMethod;
         String requestURL;
         Response.Listener<JSONObject> response;
@@ -135,7 +135,7 @@ public class MfmRequestHandler {
 
                     ArrayList<Student> result = new ArrayList<Student>();
                     ArrayList<Integer> ids = group.getStudentIds();
-                    for(int i = 0; i < temp.getStudentIds().size(); i++){
+                    for (int i = 0; i < temp.getStudentIds().size(); i++) {
                         Student student = globalHandler.getStudentByID(ids.get(i));
                         result.add(student);
                     }
@@ -148,6 +148,7 @@ public class MfmRequestHandler {
 
         globalHandler.httpRequestHandler.sendJsonRequest(requestMethod, requestURL, null, response);
     }
+
 
     public void ping() {
         int requestMethod;
@@ -200,6 +201,7 @@ public class MfmRequestHandler {
         globalHandler.httpRequestHandler.sendJsonRequest(requestMethod, requestUrl, null, response);
     }
 
+
     // TODO fix the os version
     public void login(final LoginActivity login, String username, String password, String schoolId) {
         int requestMethod;
@@ -221,7 +223,7 @@ public class MfmRequestHandler {
                 try {
                     String success = response.getString("success");
 
-                    if(success.equals("true")){
+                    if (success.equals("true")) {
                         String schoolName = response.getString("school_name");
                         String kioskId = response.getString("kiosk_id");
 
@@ -230,8 +232,7 @@ public class MfmRequestHandler {
                         globalHandler.kiosk.setIsLoggedIn(true);
 
                         login.loginSuccess();
-                    }
-                    else{
+                    } else{
                         globalHandler.kiosk.setIsLoggedIn(false);
                         login.loginFailure();
                     }

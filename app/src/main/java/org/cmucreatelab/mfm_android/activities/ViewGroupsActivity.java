@@ -21,7 +21,7 @@ public class ViewGroupsActivity extends ListActivity{
         setContentView(R.layout.activity_view_groups);
         GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
 
-        mGroups = globalHandler.getGroupData();
+        mGroups = globalHandler.mGroups;
         GroupAdapter adapter = new GroupAdapter(this, mGroups);
         setListAdapter(adapter);
     }
@@ -33,7 +33,7 @@ public class ViewGroupsActivity extends ListActivity{
         GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
 
         Group group = mGroups.get(position);
-        globalHandler.setIndividualGroup(group);
+        globalHandler.mIndividualGroup = group;
     }
 
 }

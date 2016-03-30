@@ -22,7 +22,7 @@ public class RecordMessageActivity extends AppCompatActivity {
         GlobalHandler globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
 
         Intent intent = getIntent();
-        mStudent = globalHandler.getIndividualStudentData();
+        mStudent = globalHandler.mIndividualStudent;
         MessageAdapter adapter = new MessageAdapter(this, mStudent);
     }
 

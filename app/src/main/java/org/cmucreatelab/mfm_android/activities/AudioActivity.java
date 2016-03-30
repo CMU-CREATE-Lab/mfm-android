@@ -38,7 +38,7 @@ public class AudioActivity extends AppCompatActivity {
         this.mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         this.mediaRecorder.setOutputFile(audioFile.getAbsolutePath());
         this.mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        globalHandler.setCurrentAudio(audioFile);
+        globalHandler.mAudio = audioFile;
 
         try {
             this.mediaRecorder.prepare();
@@ -99,7 +99,7 @@ public class AudioActivity extends AppCompatActivity {
 
     @OnClick(R.id.playbackAudio)
     public void onPlayback() {
-        File audioFile = GlobalHandler.getInstance(getApplicationContext()).getCurrentAudio();
+        File audioFile = GlobalHandler.getInstance(getApplicationContext()).mAudio;
         if (audioFile != null) {
             Uri.Builder uriBuilder = new Uri.Builder();
             uriBuilder.appendPath(audioFile.getAbsolutePath());

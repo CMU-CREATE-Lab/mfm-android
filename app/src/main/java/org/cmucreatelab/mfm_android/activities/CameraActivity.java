@@ -128,7 +128,7 @@ public class CameraActivity extends AppCompatActivity {
                     toast.show();
 
                     // We may not need to save the image to any directory if we do this.
-                    globalHandler.setCurrentImage(picture);
+                    globalHandler.mImage = picture;
                 } catch (FileNotFoundException e) {
                     Log.e(Constants.LOG_TAG, "File not found: " + e.getMessage());
                 } catch (IOException e) {

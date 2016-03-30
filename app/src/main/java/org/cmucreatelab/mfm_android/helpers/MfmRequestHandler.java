@@ -191,7 +191,8 @@ public class MfmRequestHandler {
                 Log.i(Constants.LOG_TAG, "requestListSchools onResponse");
                 try {
                     ArrayList<School> schools = JSONParser.parseSchoolsFromJSON(response);
-                    globalHandler.setSchools(schools);
+                    // TODO we probably will send this to an Activity to display, rather than storing in GH
+                    //globalHandler.schools = schools;
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for requestListSchools.");
                 }

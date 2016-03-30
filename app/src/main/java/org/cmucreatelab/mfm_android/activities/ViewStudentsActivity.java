@@ -22,7 +22,7 @@ public class ViewStudentsActivity extends ListActivity {
         setContentView(R.layout.activity_view_students);
         Intent intent = getIntent();
         GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
-        mStudents = globalHandler.getStudentData();
+        mStudents = globalHandler.mStudents;
         StudentAdapter adapter = new StudentAdapter(this, mStudents);
         setListAdapter(adapter);
 
@@ -35,7 +35,7 @@ public class ViewStudentsActivity extends ListActivity {
         GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
 
         Student student = mStudents.get(position);
-        globalHandler.setIndividualStudentData(student);
+        globalHandler.mIndividualStudent = student;
         Intent intent = new Intent(this, RecordMessageActivity.class);
         startActivity(intent);
     }

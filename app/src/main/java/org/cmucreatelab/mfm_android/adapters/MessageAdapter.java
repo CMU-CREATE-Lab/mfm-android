@@ -19,15 +19,15 @@ public class MessageAdapter extends BaseAdapter {
     private Context mContext;
     private Student mStudent;
 
-    public MessageAdapter(Context context, Student student) {
-        mContext = context;
-        mStudent = student;
-    }
-
-
     //allows to reuse views when the list is long
     private static class ViewHolder {
         TextView userName;
+    }
+
+
+    public MessageAdapter(Context context, Student student) {
+        mContext = context;
+        mStudent = student;
     }
 
 
@@ -53,21 +53,19 @@ public class MessageAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder holder;
 
-        if (view == null){
+        if (view == null) {
             view = LayoutInflater.from(mContext).inflate(R.layout.message, null);
             holder = new ViewHolder();
             holder.userName = (TextView) view.findViewById(R.id.UserNameTextView);
 
             view.setTag(holder);
-        }
-
-        else{
+        } else {
             holder = (ViewHolder) view.getTag();
         }
 
         ArrayList<User> users = mStudent.getUsers();
         String name = "";
-        if (users.size() > 0){
+        if (users.size() > 0) {
             User user = users.get(0);
             name = user.getFirstName() + " " + user.getLastName();
         }

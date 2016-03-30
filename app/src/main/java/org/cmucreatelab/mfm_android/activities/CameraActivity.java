@@ -1,7 +1,5 @@
 package org.cmucreatelab.mfm_android.activities;
 
-import android.content.Context;
-import android.content.res.Configuration;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,18 +8,15 @@ import android.util.Log;
 import android.view.Surface;
 import android.widget.FrameLayout;
 import android.widget.Toast;
-
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.helpers.CameraPreview;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.SaveFileHandler;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -29,52 +24,12 @@ public class CameraActivity extends AppCompatActivity {
 
     private Camera mCamera;
     private CameraPreview mPreview;
-    private Context context;
-    private GlobalHandler globalHandler;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ButterKnife.bind(this);
-        this.globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
-        this.context = this.getApplicationContext();
-    }
 
-    @Override
-    protected void onResume(){
-        super.onResume();
-        this.mCamera = getCameraInstance();
-        this.mCamera.setPreviewCallback(null);
-        this.mPreview = new CameraPreview(getApplicationContext(), this.mCamera);
+    // Class methods
 
-        // set the orientation and camera parameters
-        int rotation  = this.getCameraOrientation();
-        this.mCamera.setDisplayOrientation(rotation);
-        Camera.Parameters params = mCamera.getParameters();
-        params.setRotation(rotation);
-        mCamera.setParameters(params);
 
-        FrameLayout preview = (FrameLayout) findViewById(R.id.cameraPreview);
-        preview.addView(this.mPreview);
-    }
-
-    private static Camera getCameraInstance(){
-        Camera c = null;
-
-        try{
-            c = Camera.open(Constants.CAMERA_ID);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return c;
-    }
-
-    private int getCameraOrientation(){
+    private int getCameraOrientation() {
         int result = 0;
 
         Camera.CameraInfo info = new Camera.CameraInfo();
@@ -100,11 +55,44 @@ public class CameraActivity extends AppCompatActivity {
         return result;
     }
 
+
+    // Activity methods and listeners
+
+
     @Override
-    public void onPause(){
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_camera);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ButterKnife.bind(this);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.mCamera = Camera.open(Constants.CAMERA_ID);
+        this.mCamera.setPreviewCallback(null);
+        this.mPreview = new CameraPreview(getApplicationContext(), this.mCamera);
+
+        // set the orientation and camera parameters
+        int rotation  = this.getCameraOrientation();
+        this.mCamera.setDisplayOrientation(rotation);
+        Camera.Parameters params = mCamera.getParameters();
+        params.setRotation(rotation);
+        mCamera.setParameters(params);
+
+        FrameLayout preview = (FrameLayout) findViewById(R.id.cameraPreview);
+        preview.addView(this.mPreview);
+    }
+
+
+    @Override
+    public void onPause() {
         super.onPause();
 
-        if(this.mCamera != null && this.mPreview != null) {
+        if (this.mCamera != null && this.mPreview != null) {
             this.mCamera.setPreviewCallback(null);
             this.mPreview.getHolder().removeCallback(this.mPreview);
             this.mCamera.release();
@@ -113,29 +101,30 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
+
     @OnClick(R.id.takePicture)
-    public void onTakePicture(){
+    public void onTakePicture() {
+        final GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
 
         // call back for creating the picture
         Camera.PictureCallback jpegCallBack = new Camera.PictureCallback() {
-
             @Override
             public void onPictureTaken(byte[] bytes, Camera camera) {
-                File picture = SaveFileHandler.getOutputMediaFile(context, SaveFileHandler.MEDIA_TYPE_IMAGE, globalHandler);
+                File picture = SaveFileHandler.getOutputMediaFile(CameraActivity.this, SaveFileHandler.MEDIA_TYPE_IMAGE, globalHandler);
 
-                if(picture == null){
+                if (picture == null) {
                     Log.e(Constants.LOG_TAG, "Could not create the media file");
                     return;
                 }
 
-                try{
+                try {
                     Log.i(Constants.LOG_TAG, picture.getAbsolutePath());
                     FileOutputStream fos = new FileOutputStream(picture);
                     fos.write(bytes);
                     fos.close();
 
                     String message = "Picture has been taken and saved.";
-                    Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(CameraActivity.this, message, Toast.LENGTH_SHORT);
                     toast.show();
 
                     // We may not need to save the image to any directory if we do this.

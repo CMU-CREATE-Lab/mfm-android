@@ -5,57 +5,40 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
-
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.SaveFileHandler;
-
 import java.io.File;
 import java.io.IOException;
-
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AudioActivity extends AppCompatActivity {
 
-    private GlobalHandler globalHandler;
     private Button recorderButton;
     private boolean isRecording;
     private MediaRecorder mediaRecorder;
     private Context context;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_audio);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ButterKnife.bind(this);
+    // Class methods
 
-        GlobalHandler gh = GlobalHandler.getInstance(this.getApplicationContext());
-        this.globalHandler = gh;
-        this.recorderButton = (Button) findViewById(R.id.recordAudio);
-        this.isRecording = false;
-        this.mediaRecorder = null;
-        this.context = this.getApplicationContext();
-    }
 
-    private void startRecording(){
+    private void startRecording() {
+        GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
         File audioFile = SaveFileHandler.getOutputMediaFile(context, SaveFileHandler.MEDIA_TYPE_AUDIO, globalHandler);
         this.mediaRecorder = new MediaRecorder();
         this.mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         this.mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         this.mediaRecorder.setOutputFile(audioFile.getAbsolutePath());
         this.mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        this.globalHandler.setCurrentAudio(audioFile);
+        globalHandler.setCurrentAudio(audioFile);
 
         try {
             this.mediaRecorder.prepare();
@@ -70,7 +53,8 @@ public class AudioActivity extends AppCompatActivity {
         toast.show();
     }
 
-    private void stopRecording(){
+
+    private void stopRecording() {
         this.mediaRecorder.stop();
         this.mediaRecorder.release();
         this.mediaRecorder = null;
@@ -80,31 +64,49 @@ public class AudioActivity extends AppCompatActivity {
         toast.show();
     }
 
+
+    // Activity methods and listeners
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_audio);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ButterKnife.bind(this);
+
+        this.recorderButton = (Button) findViewById(R.id.recordAudio);
+        this.isRecording = false;
+        this.mediaRecorder = null;
+        this.context = this.getApplicationContext();
+    }
+
+
     @OnClick(R.id.recordAudio)
-    public void onStartAndStop(){
-        if(!this.isRecording){
+    public void onStartAndStop() {
+        if (!this.isRecording) {
             this.isRecording = true;
             this.recorderButton.setText(R.string.button_audio_stop);
             startRecording();
-        }
-        else{
+        } else {
             this.isRecording = false;
             this.recorderButton.setText(R.string.button_audio_start);
             stopRecording();
         }
     }
 
+
     @OnClick(R.id.playbackAudio)
-    public void onPlayback(){
-        File audioFile = globalHandler.getCurrentAudio();
-        if(audioFile != null) {
+    public void onPlayback() {
+        File audioFile = GlobalHandler.getInstance(getApplicationContext()).getCurrentAudio();
+        if (audioFile != null) {
             Uri.Builder uriBuilder = new Uri.Builder();
             uriBuilder.appendPath(audioFile.getAbsolutePath());
             Uri uri = uriBuilder.build();
             MediaPlayer mediaPlayer = MediaPlayer.create(context, uri);
             mediaPlayer.start(); // no need to call prepare(); create() does that for you
-        }
-        else{
+        } else{
             String message = "There has been no recent audio recording.\nClick Start Recording to record audio.";
             Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
             toast.show();

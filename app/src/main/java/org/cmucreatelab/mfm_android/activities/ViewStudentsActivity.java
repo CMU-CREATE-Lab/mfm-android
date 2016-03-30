@@ -15,6 +15,7 @@ public class ViewStudentsActivity extends ListActivity {
 
     private ArrayList<Student> mStudents;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +32,6 @@ public class ViewStudentsActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-
         GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
 
         Student student = mStudents.get(position);

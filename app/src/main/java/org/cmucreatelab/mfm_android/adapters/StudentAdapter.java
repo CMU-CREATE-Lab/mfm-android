@@ -11,7 +11,6 @@ import com.squareup.picasso.Picasso;
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
-
 import java.util.ArrayList;
 
 /**
@@ -22,16 +21,16 @@ public class StudentAdapter extends BaseAdapter {
     private Context mContext;
     private ArrayList<Student> mStudents;
 
-    public StudentAdapter(Context context, ArrayList<Student> students) {
-        mContext = context;
-        mStudents = students;
-    }
-
-
     //allows to reuse views when the list is long
     private static class ViewHolder {
         ImageView studentPhotoView;
         TextView studentName;
+    }
+
+
+    public StudentAdapter(Context context, ArrayList<Student> students) {
+        mContext = context;
+        mStudents = students;
     }
 
 
@@ -57,16 +56,14 @@ public class StudentAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder holder;
 
-        if (view == null){
+        if (view == null) {
             view = LayoutInflater.from(mContext).inflate(R.layout.student_list_item, null);
             holder = new ViewHolder();
             holder.studentPhotoView = (ImageView) view.findViewById(R.id.studentPhotoImageView);
             holder.studentName = (TextView) view.findViewById(R.id.studentNameTextView);
 
             view.setTag(holder);
-        }
-
-        else{
+        } else {
             holder = (ViewHolder) view.getTag();
         }
 

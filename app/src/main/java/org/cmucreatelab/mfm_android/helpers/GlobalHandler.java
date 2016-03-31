@@ -47,7 +47,6 @@ public class GlobalHandler {
         this.appContext = ctx;
         this.httpRequestHandler = new HttpRequestHandler(this);
         this.mfmRequestHandler = new MfmRequestHandler(this);
-        this.sharedPreferencesHandler = new SharedPreferencesHandler(this);
         this.mfmLoginHandler = new MfmLoginHandler(this);
         this.sessionHandler = new SessionHandler(this);
         // TODO request OS version, and append it to kiosk attribute
@@ -88,7 +87,6 @@ public class GlobalHandler {
     // managed global instances
     public HttpRequestHandler httpRequestHandler;
     public MfmRequestHandler mfmRequestHandler;
-    public SharedPreferencesHandler sharedPreferencesHandler;
     public MfmLoginHandler mfmLoginHandler;
     public SessionHandler sessionHandler;
 

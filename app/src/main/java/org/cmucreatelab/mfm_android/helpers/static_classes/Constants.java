@@ -1,5 +1,7 @@
 package org.cmucreatelab.mfm_android.helpers.static_classes;
 
+import java.util.HashMap;
+
 /**
  * Created by mike on 2/2/16.
  */
@@ -17,8 +19,16 @@ public class Constants {
 
     public static final class PreferencesKeys {
         public static final String kioskIsLoggedIn = "kiosk_logged_in";
+        public static final String kioskSchoolId = "kiosk_school_id";
         public static final String kioskSchoolName = "kiosk_school_name";
-        public static final String kioskId = "kiosk_id";
+        public static final String kioskUid = "kiosk_uid";
     }
+
+    public static final HashMap<String, Object> DEFAULT_SETTINGS = new HashMap(){{
+        put(PreferencesKeys.kioskIsLoggedIn, false);
+        put(PreferencesKeys.kioskSchoolId, 0);
+        put(PreferencesKeys.kioskSchoolName, "");
+        put(PreferencesKeys.kioskUid, "");
+    }};
 
 }

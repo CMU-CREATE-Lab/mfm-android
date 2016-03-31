@@ -25,4 +25,10 @@ public class Kiosk {
     public void setSchool(School school) { this.school = school; }
     public void setKioskUid(String id) { this.kioskUid = id; }
 
+
+    public Kiosk(School school, String kioskUid) {
+        this.school = school;
+        this.kioskUid = kioskUid;
+    }
+
 }

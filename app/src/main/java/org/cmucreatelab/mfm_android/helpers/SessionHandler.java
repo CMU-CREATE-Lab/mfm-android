@@ -10,6 +10,11 @@ import java.util.Collection;
 
 /**
  * Created by mike on 3/30/16.
+ *
+ * SessionHandler
+ *
+ * Represents the process of the app-user trying to send a message (selecting sender, recipients, photo/audio, and sending)
+ *
  */
 public class SessionHandler {
 

@@ -10,6 +10,11 @@ import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 
 /**
  * Created by mike on 3/30/16.
+ *
+ * MfmLoginHandler
+ *
+ * Represents the entire Logging in process and Kiosk state
+ *
  */
 public class MfmLoginHandler {
 

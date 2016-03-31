@@ -19,6 +19,7 @@ import java.util.ArrayList;
  */
 public class JSONParser {
 
+
     private static Group parseGroupFromJson(JSONObject row) throws JSONException {
         // parse values
         Integer id = row.getInt("id");
@@ -55,6 +56,7 @@ public class JSONParser {
 
         return user;
     }
+
 
     public static ArrayList<Integer> parseStudentIdsInGroup(JSONObject row) throws JSONException {
         ArrayList<Integer> ids = new ArrayList<>();
@@ -129,6 +131,7 @@ public class JSONParser {
         return results;
     }
 
+
     public static Group parseGroupBasedOffId(JSONObject row) throws JSONException {
         // parse values
         // should get "group"
@@ -149,6 +152,7 @@ public class JSONParser {
         return result;
     }
 
+
     public static Student parseStudentBasedOffId(JSONObject row) throws JSONException {
         // parse values
         JSONObject studentJson = row.getJSONObject("student");
@@ -168,6 +172,7 @@ public class JSONParser {
 
         return result;
     }
+
 
     public static ArrayList<School> parseSchoolsFromJSON(JSONObject row) throws JSONException {
         ArrayList<School> result = new ArrayList<>();

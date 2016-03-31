@@ -31,6 +31,7 @@ public class MfmLoginHandler {
     }
 
 
+    // TODO find a way to safely call these without null pointers
     public String getKioskUid() {
         return this.kiosk.getKioskUid();
     }
@@ -56,8 +57,10 @@ public class MfmLoginHandler {
 
     public void logout() {
         this.kioskIsLoggedIn = false;
-        this.kiosk.setSchool(null);
-        this.kiosk.setKioskUid("");
+        if (this.kiosk != null) {
+            this.kiosk.setSchool(null);
+            this.kiosk.setKioskUid("");
+        }
         // set SharedPreferences values
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
         editor.putBoolean(Constants.PreferencesKeys.kioskIsLoggedIn, (Boolean) Constants.DEFAULT_SETTINGS.get(Constants.PreferencesKeys.kioskIsLoggedIn));

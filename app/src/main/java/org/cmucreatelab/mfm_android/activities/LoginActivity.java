@@ -160,6 +160,7 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
+            // TODO this is okay for now, but in the future we will want to do a "requestListSchools" then use its first response as our school to log in from
             GlobalHandler.getInstance(getApplicationContext()).mfmRequestHandler.login(this, username, password, "17");
         }
     }

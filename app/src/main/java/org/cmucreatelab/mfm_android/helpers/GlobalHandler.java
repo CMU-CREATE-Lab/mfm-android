@@ -25,6 +25,60 @@ import java.util.ArrayList;
  */
 public class GlobalHandler {
 
+    // managed global instances
+    public HttpRequestHandler httpRequestHandler;
+    public MfmRequestHandler mfmRequestHandler;
+    public MfmLoginHandler mfmLoginHandler;
+    public SessionHandler sessionHandler;
+
+
+    public void refreshStudentsAndGroups(LoginActivity login) {
+        mfmRequestHandler.requestListGroups();
+        mfmRequestHandler.requestListStudents();
+        mfmRequestHandler.ping();
+        login.populateStudentAndGroupSuccess();
+    }
+
+
+    public void checkAndUpdateStudents(ArrayList<Student> students) {
+        // TODO we want to compare updatedAt string with objects sharing IDs. If they need updated, add/update them.
+        // For now, just clear and add all
+        // TODO handle when school is null
+        School school = mfmLoginHandler.getSchool();
+        school.getStudents().clear();
+        school.getStudents().addAll(students);
+        for (Student student : students) {
+            mfmRequestHandler.updateStudent(student);
+        }
+    }
+
+
+    public void checkAndUpdateGroups(ArrayList<Group> groups) {
+        // TODO handle when school is null
+        School school = mfmLoginHandler.getSchool();
+        school.getGroups().clear();
+        school.getGroups().addAll(groups);
+        for (Group group : groups) {
+            mfmRequestHandler.updateGroup(group);
+        }
+    }
+
+
+    public Student getStudentByID(int id) {
+        Student result = null;
+
+        // TODO handle when school is null
+        ArrayList<Student> students = mfmLoginHandler.getSchool().getStudents();
+        for (int i = 0; i < students.size(); i++) {
+            Student test = students.get(i);
+            if (id == test.getId()) {
+                result = test;
+            }
+        }
+
+        return result;
+    }
+
 
     // Singleton Implementation
 
@@ -78,66 +132,6 @@ public class GlobalHandler {
             Log.i(Constants.LOG_TAG, studentIds.get(0).toString());
         }
 
-    }
-
-
-    // Handler attributes and methods
-
-
-    // managed global instances
-    public HttpRequestHandler httpRequestHandler;
-    public MfmRequestHandler mfmRequestHandler;
-    public MfmLoginHandler mfmLoginHandler;
-    public SessionHandler sessionHandler;
-
-
-    public void refreshStudentsAndGroups(LoginActivity login) {
-        // TODO change how username and password is entered
-        mfmRequestHandler.requestListSchools("stevefulton", "stevefulton");
-        mfmRequestHandler.requestListGroups();
-        mfmRequestHandler.requestListStudents();
-        mfmRequestHandler.ping();
-        login.populateStudentAndGroupSuccess();
-    }
-
-
-    public void checkAndUpdateStudents(ArrayList<Student> students) {
-        // TODO we want to compare updatedAt string with objects sharing IDs. If they need updated, add/update them.
-        // For now, just clear and add all
-        // TODO handle when school is null
-        School school = mfmLoginHandler.getSchool();
-        school.getStudents().clear();
-        school.getStudents().addAll(students);
-        for (Student student : students) {
-            mfmRequestHandler.updateStudent(student);
-        }
-    }
-
-
-    public void checkAndUpdateGroups(ArrayList<Group> groups) {
-        // TODO handle when school is null
-        School school = mfmLoginHandler.getSchool();
-        school.getGroups().clear();
-        school.getGroups().addAll(groups);
-        for (Group group : groups) {
-            mfmRequestHandler.updateGroup(group);
-        }
-    }
-
-
-    public Student getStudentByID(int id) {
-        Student result = null;
-
-        // TODO handle when school is null
-        ArrayList<Student> students = mfmLoginHandler.getSchool().getStudents();
-        for (int i = 0; i < students.size(); i++) {
-            Student test = students.get(i);
-            if (id == test.getId()) {
-                result = test;
-            }
-        }
-
-        return result;
     }
 
 }

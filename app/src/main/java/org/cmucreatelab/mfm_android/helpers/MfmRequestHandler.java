@@ -232,7 +232,6 @@ public class MfmRequestHandler {
                         globalHandler.mfmLoginHandler.login(school, kioskId);
                         login.loginSuccess();
                     } else{
-                        globalHandler.mfmLoginHandler.logout();
                         login.loginFailure();
                     }
 

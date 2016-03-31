@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class ViewGroupsActivity extends ListActivity{
 
-    private ArrayList<Group> mGroups;
+    private ArrayList<Group> mGroups = new ArrayList<>();
 
 
     @Override
@@ -21,8 +21,9 @@ public class ViewGroupsActivity extends ListActivity{
         setContentView(R.layout.activity_view_groups);
         GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
 
-        // TODO handle when school is null
-        mGroups = globalHandler.mfmLoginHandler.getSchool().getGroups();
+        if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
+            mGroups = globalHandler.mfmLoginHandler.getSchool().getGroups();
+        }
         GroupAdapter adapter = new GroupAdapter(this, mGroups);
         setListAdapter(adapter);
     }

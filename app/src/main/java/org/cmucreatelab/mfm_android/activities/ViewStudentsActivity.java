@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class ViewStudentsActivity extends ListActivity {
 
-    private ArrayList<Student> mStudents;
+    private ArrayList<Student> mStudents = new ArrayList<>();
 
 
     @Override
@@ -22,8 +22,10 @@ public class ViewStudentsActivity extends ListActivity {
         setContentView(R.layout.activity_view_students);
         Intent intent = getIntent();
         GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
-        // TODO handle when school is null
-        mStudents = globalHandler.mfmLoginHandler.getSchool().getStudents();
+
+        if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
+            mStudents = globalHandler.mfmLoginHandler.getSchool().getStudents();
+        }
         StudentAdapter adapter = new StudentAdapter(this, mStudents);
         setListAdapter(adapter);
 

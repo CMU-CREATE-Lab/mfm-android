@@ -2,6 +2,8 @@ package org.cmucreatelab.mfm_android.helpers;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
+
 import org.cmucreatelab.mfm_android.classes.Kiosk;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
@@ -31,14 +33,23 @@ public class MfmLoginHandler {
     }
 
 
-    // TODO find a way to safely call these without null pointers
     public String getKioskUid() {
-        return this.kiosk.getKioskUid();
+        if (kioskIsLoggedIn) {
+            return this.kiosk.getKioskUid();
+        } else {
+            Log.w(Constants.LOG_TAG, "Requested KioskUid when Kiosk is not logged in.");
+            return "";
+        }
     }
 
 
     public School getSchool() {
-        return this.kiosk.getSchool();
+        if (kioskIsLoggedIn) {
+            return this.kiosk.getSchool();
+        } else {
+            Log.w(Constants.LOG_TAG, "Requested School when Kiosk is not logged in.");
+            return null;
+        }
     }
 
 

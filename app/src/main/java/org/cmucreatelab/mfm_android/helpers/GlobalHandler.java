@@ -41,25 +41,31 @@ public class GlobalHandler {
 
 
     public void checkAndUpdateStudents(ArrayList<Student> students) {
-        // TODO we want to compare updatedAt string with objects sharing IDs. If they need updated, add/update them.
-        // For now, just clear and add all
-        // TODO handle when school is null
-        School school = mfmLoginHandler.getSchool();
-        school.getStudents().clear();
-        school.getStudents().addAll(students);
-        for (Student student : students) {
-            mfmRequestHandler.updateStudent(student);
+        if (mfmLoginHandler.kioskIsLoggedIn) {
+            // TODO we want to compare updatedAt string with objects sharing IDs. If they need updated, add/update them.
+            // For now, just clear and add all
+            School school = mfmLoginHandler.getSchool();
+            school.getStudents().clear();
+            school.getStudents().addAll(students);
+            for (Student student : students) {
+                mfmRequestHandler.updateStudent(student);
+            }
+        } else {
+            Log.e(Constants.LOG_TAG, "Tried to checkAndUpdateStudents with Kiosk not logged in");
         }
     }
 
 
     public void checkAndUpdateGroups(ArrayList<Group> groups) {
-        // TODO handle when school is null
-        School school = mfmLoginHandler.getSchool();
-        school.getGroups().clear();
-        school.getGroups().addAll(groups);
-        for (Group group : groups) {
-            mfmRequestHandler.updateGroup(group);
+        if (mfmLoginHandler.kioskIsLoggedIn) {
+            School school = mfmLoginHandler.getSchool();
+            school.getGroups().clear();
+            school.getGroups().addAll(groups);
+            for (Group group : groups) {
+                mfmRequestHandler.updateGroup(group);
+            }
+        } else {
+            Log.e(Constants.LOG_TAG, "Tried to checkAndUpdateGroups with Kiosk not logged in");
         }
     }
 
@@ -67,13 +73,16 @@ public class GlobalHandler {
     public Student getStudentByID(int id) {
         Student result = null;
 
-        // TODO handle when school is null
-        ArrayList<Student> students = mfmLoginHandler.getSchool().getStudents();
-        for (int i = 0; i < students.size(); i++) {
-            Student test = students.get(i);
-            if (id == test.getId()) {
-                result = test;
+        if (mfmLoginHandler.kioskIsLoggedIn) {
+            ArrayList<Student> students = mfmLoginHandler.getSchool().getStudents();
+            for (int i = 0; i < students.size(); i++) {
+                Student test = students.get(i);
+                if (id == test.getId()) {
+                    result = test;
+                }
             }
+        } else {
+            Log.e(Constants.LOG_TAG, "Tried to getStudentByID with Kiosk not logged in");
         }
 
         return result;

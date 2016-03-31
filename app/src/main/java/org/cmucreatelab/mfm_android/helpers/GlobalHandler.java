@@ -13,7 +13,6 @@ import org.cmucreatelab.mfm_android.helpers.static_classes.database.GroupDbHelpe
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentDbHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentGroupDbHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.UserDbHelper;
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -50,8 +49,11 @@ public class GlobalHandler {
         this.mfmRequestHandler = new MfmRequestHandler(this);
         this.sharedPreferencesHandler = new SharedPreferencesHandler(this);
         this.mfmLoginHandler = new MfmLoginHandler(this);
+        this.sessionHandler = new SessionHandler(this);
         // TODO request OS version, and append it to kiosk attribute
         Kiosk.ioSVersion += "4.5";
+        // TODO sessions will need to be created when you select a student or group; for now this is just created to avoid null pointer
+        this.sessionHandler.startSession(new Student());
 
         // load from database
         ArrayList<Group> dbGroups = GroupDbHelper.fetchFromDatabase(ctx);
@@ -88,12 +90,7 @@ public class GlobalHandler {
     public MfmRequestHandler mfmRequestHandler;
     public SharedPreferencesHandler sharedPreferencesHandler;
     public MfmLoginHandler mfmLoginHandler;
-
-    // TODO this will form a "Session"
-    public Student mIndividualStudent;
-    public Group mIndividualGroup;
-    public File mImage;
-    public File mAudio;
+    public SessionHandler sessionHandler;
 
 
     public void refreshStudentsAndGroups(LoginActivity login) {

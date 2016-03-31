@@ -36,7 +36,7 @@ public class ViewStudentsActivity extends ListActivity {
         GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
 
         Student student = mStudents.get(position);
-        globalHandler.mIndividualStudent = student;
+        globalHandler.sessionHandler.startSession(student);
         Intent intent = new Intent(this, RecordMessageActivity.class);
         startActivity(intent);
     }

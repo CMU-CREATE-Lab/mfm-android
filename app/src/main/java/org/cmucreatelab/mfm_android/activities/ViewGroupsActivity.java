@@ -34,7 +34,7 @@ public class ViewGroupsActivity extends ListActivity{
         GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
 
         Group group = mGroups.get(position);
-        globalHandler.mIndividualGroup = group;
+        globalHandler.sessionHandler.startSession(group);
     }
 
 }

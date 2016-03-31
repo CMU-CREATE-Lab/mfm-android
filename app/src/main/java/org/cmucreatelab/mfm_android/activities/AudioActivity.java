@@ -25,6 +25,7 @@ public class AudioActivity extends AppCompatActivity {
     private boolean isRecording;
     private MediaRecorder mediaRecorder;
     private Context context;
+    private File audioFile;
 
 
     // Class methods
@@ -32,13 +33,13 @@ public class AudioActivity extends AppCompatActivity {
 
     private void startRecording() {
         GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
-        File audioFile = SaveFileHandler.getOutputMediaFile(context, SaveFileHandler.MEDIA_TYPE_AUDIO, globalHandler);
+        this.audioFile = SaveFileHandler.getOutputMediaFile(context, SaveFileHandler.MEDIA_TYPE_AUDIO, globalHandler);
         this.mediaRecorder = new MediaRecorder();
         this.mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         this.mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         this.mediaRecorder.setOutputFile(audioFile.getAbsolutePath());
         this.mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        globalHandler.mAudio = audioFile;
+        globalHandler.sessionHandler.setMessageAudio(this.audioFile);
 
         try {
             this.mediaRecorder.prepare();
@@ -99,7 +100,6 @@ public class AudioActivity extends AppCompatActivity {
 
     @OnClick(R.id.playbackAudio)
     public void onPlayback() {
-        File audioFile = GlobalHandler.getInstance(getApplicationContext()).mAudio;
         if (audioFile != null) {
             Uri.Builder uriBuilder = new Uri.Builder();
             uriBuilder.appendPath(audioFile.getAbsolutePath());

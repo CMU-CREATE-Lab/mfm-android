@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 
 /**
@@ -13,7 +12,7 @@ import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 public class MessageFromMeSQLLiteOpenHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 6; //??
+    public static final int DATABASE_VERSION = 6;
     public static final String DATABASE_NAME = "MessageFromMe.db";
 
 

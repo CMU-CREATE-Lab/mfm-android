@@ -5,11 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
 import org.cmucreatelab.mfm_android.classes.Group;
-import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
-
 import java.util.ArrayList;
 
 /**
@@ -38,7 +35,7 @@ public class GroupDbHelper {
         Log.i(Constants.LOG_TAG, "deleted group _id=" + group.getId());
         } else {
         Log.w(Constants.LOG_TAG, "Attempted to delete group _id=" +
-                group.getId() + " but deleted " + result + " items.");
+                group.getId() + " but deleted " + resultInt + " items.");
         }
         result = (resultInt > 0);
 
@@ -68,7 +65,6 @@ public class GroupDbHelper {
 
 
     public static void update(Context context, Group group) {
-
         if (group.getDatabaseId() >= 0) {
             MessageFromMeSQLLiteOpenHelper mDbHelper;
             SQLiteDatabase db;
@@ -99,7 +95,7 @@ public class GroupDbHelper {
     }
 
 
-    public static Group generateGroupFromRecord(Cursor cursor) {
+    private static Group generateGroupFromRecord(Cursor cursor) {
         Group result = new Group();
 
         int id;

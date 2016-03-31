@@ -5,10 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
-
 import java.util.ArrayList;
 
 /**
@@ -37,7 +35,7 @@ public class StudentDbHelper {
             Log.i(Constants.LOG_TAG, "deleted student _id=" + student.getId());
         } else {
             Log.w(Constants.LOG_TAG, "Attempted to delete student _id=" +
-                    student.getId() + " but deleted " + result + " items.");
+                    student.getId() + " but deleted " + resultInt + " items.");
         }
         result = (resultInt > 0);
 
@@ -46,7 +44,6 @@ public class StudentDbHelper {
 
 
     public static void addToDatabase(Context context, Student student) {
-
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
         ContentValues values;
@@ -68,7 +65,6 @@ public class StudentDbHelper {
 
 
     public static void update(Context context, Student student) {
-
         if (student.getDatabaseId() >= 0) {
             MessageFromMeSQLLiteOpenHelper mDbHelper;
             SQLiteDatabase db;
@@ -100,7 +96,7 @@ public class StudentDbHelper {
     }
 
 
-    public static Student generateStudentFromRecord(Cursor cursor) {
+    private static Student generateStudentFromRecord(Cursor cursor) {
         Student result = new Student();
 
         int id;

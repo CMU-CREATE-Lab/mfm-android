@@ -5,10 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
-
 import java.util.ArrayList;
 
 /**
@@ -37,7 +35,7 @@ public class UserDbHelper {
             Log.i(Constants.LOG_TAG, "deleted user _id=" + user.getId());
         } else {
             Log.w(Constants.LOG_TAG, "Attempted to delete user _id=" +
-                    user.getId() + " but deleted " + result + " items.");
+                    user.getId() + " but deleted " + resultInt + " items.");
         }
         result = (resultInt > 0);
 
@@ -46,7 +44,6 @@ public class UserDbHelper {
 
 
     public static void addToDatabase(Context context, User user) {
-
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
         ContentValues values;
@@ -70,7 +67,6 @@ public class UserDbHelper {
 
 
     public static void update(Context context, User user) {
-
         if (user.getDatabaseId() >= 0) {
             MessageFromMeSQLLiteOpenHelper mDbHelper;
             SQLiteDatabase db;
@@ -104,7 +100,7 @@ public class UserDbHelper {
     }
 
 
-    public static User generateUserFromRecord(Cursor cursor) {
+    private static User generateUserFromRecord(Cursor cursor) {
         User result = new User();
 
         int id;

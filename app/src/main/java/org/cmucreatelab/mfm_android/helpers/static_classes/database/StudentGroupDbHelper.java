@@ -2,14 +2,11 @@ package org.cmucreatelab.mfm_android.helpers.static_classes.database;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
-
 import java.util.ArrayList;
 
 /**
@@ -38,7 +35,7 @@ public class StudentGroupDbHelper {
             Log.i(Constants.LOG_TAG, "deleted studentGroup _id=" + databaseId);
         } else {
             Log.w(Constants.LOG_TAG, "Attempted to delete studentGroup _id=" +
-                    databaseId + " but deleted " + result + " items.");
+                    databaseId + " but deleted " + resultInt + " items.");
         }
         result = (resultInt > 0);
 
@@ -47,7 +44,6 @@ public class StudentGroupDbHelper {
 
 
     public static void addToDatabase(Context context, Student student, Group group) {
-
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
         ContentValues values;

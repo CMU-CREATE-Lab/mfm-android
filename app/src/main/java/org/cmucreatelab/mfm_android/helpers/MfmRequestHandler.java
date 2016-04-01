@@ -8,6 +8,7 @@ import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Kiosk;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
+import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.JSONParser;
 import org.json.JSONException;
@@ -149,7 +150,6 @@ public class MfmRequestHandler {
 
         globalHandler.httpRequestHandler.sendJsonRequest(requestMethod, requestURL, null, response);
     }
-
 
     public void ping() {
         int requestMethod;

@@ -1,12 +1,18 @@
 package org.cmucreatelab.mfm_android.classes;
 
+import org.cmucreatelab.mfm_android.helpers.readings.*;
+import org.cmucreatelab.mfm_android.helpers.readings.Readable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by mike on 1/28/16.
  */
-public class Student implements Sender, Serializable {
+public class Student implements Sender, Serializable, Readable {
+
+    private static final Sender.Type senderType = Sender.Type.Student;
+    private static final Readable.Type readableType = Readable.Type.STUDENT;
 
     // class attributes
     private int id;
@@ -36,10 +42,9 @@ public class Student implements Sender, Serializable {
 
 
     @Override
-    public Type getSenderType() {
-        return Type.Student;
+    public Sender.Type getSenderType() {
+        return Sender.Type.Student;
     }
-
 
     @Override
     public int getId() {
@@ -48,8 +53,23 @@ public class Student implements Sender, Serializable {
 
 
     @Override
+    public Readable.Type getReadableType() {
+        return readableType;
+    }
+
+    @Override
     public String getName() {
         return this.firstName+" "+this.lastName;
+    }
+
+    @Override
+    public boolean hasReadableValue() {
+        return false;
+    }
+
+    @Override
+    public double getReadableValue() {
+        return 0;
     }
 
 }

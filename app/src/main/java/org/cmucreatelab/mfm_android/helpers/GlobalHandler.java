@@ -1,6 +1,7 @@
 package org.cmucreatelab.mfm_android.helpers;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 import org.cmucreatelab.mfm_android.activities.LoginActivity;
 import org.cmucreatelab.mfm_android.classes.Group;
@@ -8,12 +9,14 @@ import org.cmucreatelab.mfm_android.classes.Kiosk;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
+import org.cmucreatelab.mfm_android.helpers.readings.ReadingsHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.GroupDbHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentDbHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentGroupDbHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.UserDbHelper;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by mike on 1/28/16.
@@ -30,6 +33,7 @@ public class GlobalHandler {
     public MfmRequestHandler mfmRequestHandler;
     public MfmLoginHandler mfmLoginHandler;
     public SessionHandler sessionHandler;
+    public ReadingsHandler readingsHandler;
 
 
     public void refreshStudentsAndGroups(LoginActivity login) {
@@ -88,6 +92,11 @@ public class GlobalHandler {
         return result;
     }
 
+    public void updateReadings(){
+        readingsHandler.updateGroups();
+        readingsHandler.updateStudents();
+    }
+
 
     // Singleton Implementation
 
@@ -112,35 +121,28 @@ public class GlobalHandler {
         this.mfmRequestHandler = new MfmRequestHandler(this);
         this.mfmLoginHandler = new MfmLoginHandler(this);
         this.sessionHandler = new SessionHandler(this);
-        // TODO request OS version, and append it to kiosk attribute
-        Kiosk.ioSVersion += "4.5";
+        Kiosk.ioSVersion = Build.VERSION.RELEASE;
         // TODO sessions will need to be created when you select a student or group; for now this is just created to avoid null pointer
         this.sessionHandler.startSession(new Student());
+        this.readingsHandler = ReadingsHandler.newInstance(this);
 
         // load from database
         ArrayList<Group> dbGroups = GroupDbHelper.fetchFromDatabase(ctx);
         ArrayList<Student> dbStudents = StudentDbHelper.fetchFromDatabase(ctx);
         ArrayList<User> dbUsers = UserDbHelper.fetchFromDatabase(ctx);
-        // I am not sure if this is how we want to access elements in the database
-        ArrayList<ArrayList<Integer>> dbStudentsInGroups = new ArrayList<>();
 
         for (Group group : dbGroups) {
-            // add the student ids for each group
-            ArrayList<Integer> dbStudentIdsFromGroup = StudentGroupDbHelper.fetchStudentsFromGroup(ctx, group);
-            dbStudentsInGroups.add(dbStudentIdsFromGroup);
             // TODO add group readings
+            readingsHandler.addReading(group);
         }
         for (Student student : dbStudents) {
             // TODO add student readings
+            readingsHandler.addReading(student);
         }
         for (User user : dbUsers) {
             // TODO add user readings
+            readingsHandler.addReading(user);
         }
-        for (ArrayList<Integer> studentIds : dbStudentsInGroups) {
-            // TODO add studentId readings
-            Log.i(Constants.LOG_TAG, studentIds.get(0).toString());
-        }
-
     }
 
 }

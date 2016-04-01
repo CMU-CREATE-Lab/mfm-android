@@ -1,11 +1,17 @@
 package org.cmucreatelab.mfm_android.classes;
 
+import org.cmucreatelab.mfm_android.helpers.readings.*;
+import org.cmucreatelab.mfm_android.helpers.readings.Readable;
+
 import java.util.ArrayList;
 
 /**
  * Created by mike on 1/28/16.
  */
-public class Group implements Sender {
+public class Group implements Sender, Readable {
+
+    private static final Sender.Type senderType = Sender.Type.Group;
+    private static final Readable.Type readableType = Readable.Type.GROUP;
 
     // class attributes
     private int id;
@@ -35,8 +41,8 @@ public class Group implements Sender {
 
 
     @Override
-    public Type getSenderType() {
-        return Type.Group;
+    public Readable.Type getReadableType() {
+        return readableType;
     }
 
 
@@ -47,8 +53,23 @@ public class Group implements Sender {
 
 
     @Override
+    public Sender.Type getSenderType() {
+        return senderType;
+    }
+
+    @Override
     public String getName() {
         return this.name;
+    }
+
+    @Override
+    public boolean hasReadableValue() {
+        return false;
+    }
+
+    @Override
+    public double getReadableValue() {
+        return 0;
     }
 
 }

@@ -24,6 +24,11 @@ public class Constants {
         public static final String kioskUid = "kiosk_uid";
     }
 
+    public static final String[] HEADER_TITLES = {
+        "GROUPS", "STUDENTS", "USERS", "STUDENT_IDS_PER_GROUP"
+
+    };
+
     public static final HashMap<String, Object> DEFAULT_SETTINGS = new HashMap(){{
         put(PreferencesKeys.kioskIsLoggedIn, false);
         put(PreferencesKeys.kioskSchoolId, 0);

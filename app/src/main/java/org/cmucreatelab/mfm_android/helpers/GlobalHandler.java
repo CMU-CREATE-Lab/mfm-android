@@ -35,11 +35,13 @@ public class GlobalHandler {
     public SessionHandler sessionHandler;
     public ReadingsHandler readingsHandler;
 
+    // This previously was a protected field but I changed it to public because I needed access to it so frequently
+    // and saw no reason why it shouldn't be public. I may be missing though.
+    public Context appContext;
+
 
     public void refreshStudentsAndGroups(LoginActivity login) {
-        mfmRequestHandler.requestListGroups();
-        mfmRequestHandler.requestListStudents();
-        mfmRequestHandler.ping();
+        this.readingsHandler.populateDatabase();
         login.populateStudentAndGroupSuccess();
     }
 
@@ -102,7 +104,6 @@ public class GlobalHandler {
 
 
     private static GlobalHandler classInstance;
-    protected Context appContext;
 
 
     // Only public way to get instance of class (synchronized means thread-safe)
@@ -131,6 +132,11 @@ public class GlobalHandler {
         ArrayList<Student> dbStudents = StudentDbHelper.fetchFromDatabase(ctx);
         ArrayList<User> dbUsers = UserDbHelper.fetchFromDatabase(ctx);
 
+        Log.v(Constants.LOG_TAG, dbGroups.toString());
+        Log.v(Constants.LOG_TAG, dbStudents.toString());
+        Log.v(Constants.LOG_TAG, dbUsers.toString());
+
+        // I left out students in groups because adding a reading of a group takes care of that.
         for (Group group : dbGroups) {
             // TODO add group readings
             readingsHandler.addReading(group);

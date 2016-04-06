@@ -204,7 +204,7 @@ public class MfmRequestHandler {
     }
 
 
-    public void login(final LoginActivity login, String username, String password, String schoolId) {
+    public void login(final LoginActivity login, final String username, final String password, String schoolId) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;
@@ -229,7 +229,7 @@ public class MfmRequestHandler {
                         String kioskId = response.getString("kiosk_id");
                         School school = new School(schoolId,schoolName);
 
-                        globalHandler.mfmLoginHandler.login(school, kioskId);
+                        globalHandler.mfmLoginHandler.login(school, kioskId, username, password);
                         login.loginSuccess();
                     } else{
                         login.loginFailure();

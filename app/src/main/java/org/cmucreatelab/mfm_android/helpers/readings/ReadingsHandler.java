@@ -59,29 +59,7 @@ public class ReadingsHandler{
     }
 
     public void populateDatabase(){
-        if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
-            // Populate the list of students and the list of groups
-            globalHandler.mfmRequestHandler.requestListStudents();
-            globalHandler.mfmRequestHandler.requestListGroups();
-            // Populate students and users in the database
-            for (Student student : students) {
-                if (student.getDatabaseId() <= 0) {
-                    StudentDbHelper.addToDatabase(globalHandler.appContext, student);
-                    for (User user : student.getUsers()) {
-                        UserDbHelper.addToDatabase(globalHandler.appContext, user);
-                    }
-                }
-            }
-            // Populate groups and students in group in the database
-            for (Group group : groups) {
-                GroupDbHelper.addToDatabase(globalHandler.appContext, group);
-                for (Student student: group.getStudents()) {
-                    StudentGroupDbHelper.addToDatabase(globalHandler.appContext, student, group);
-                }
-            }
-        }
-
-        refreshHash();
+        // TODO
     }
 
     public void refreshHash(){

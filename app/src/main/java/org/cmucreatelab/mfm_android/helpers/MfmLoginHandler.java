@@ -88,9 +88,6 @@ public class MfmLoginHandler {
         editor.putString(Constants.PreferencesKeys.kioskUid, kioskUid);
         editor.putString(Constants.PreferencesKeys.kioskSchoolName, school.getName());
         editor.apply();
-
-        // populate Groups, Students, etc.
-        globalHandler.readingsHandler.populateDatabase();
     }
 
 

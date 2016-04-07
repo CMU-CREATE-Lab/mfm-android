@@ -35,13 +35,17 @@ public class GlobalHandler {
     public SessionHandler sessionHandler;
     public ReadingsHandler readingsHandler;
 
-    // This previously was a protected field but I changed it to public because I needed access to it so frequently
-    // and saw no reason why it shouldn't be public. I may be missing though.
-    public Context appContext;
-
-
-    public void refreshStudentsAndGroups(LoginActivity login) {
-        this.readingsHandler.populateDatabase();
+    // login.populateStudentAndGroupSuccess is called before we truly know that it was successful.
+    // When I called addStudentsAndGroupsToDatabase the loginHandler returned empty lists
+    // for students and groups.  This tells me that the mfmRequests had not finished.
+    // We need some sort of callback.  This is difficult, though, because requesting a list of students,
+    // for example, requires calls to update students individually, which is a whole other mfmRequest.
+    // So that would mean we would need callbacks on callbacks on callbacks (I may be exaggerating a little...haha)
+    // I may end up making some sort of callbackHandler class that handles this sort of issue.
+    public void refreshStudentsAndGroups(final LoginActivity login) {
+        mfmRequestHandler.requestListGroups();
+        mfmRequestHandler.requestListStudents();
+        //addStudentsAndGroupsToDatabase();
         login.populateStudentAndGroupSuccess();
     }
 
@@ -99,11 +103,39 @@ public class GlobalHandler {
         readingsHandler.updateStudents();
     }
 
+    // We probably want to move this somewhere else eventually but, for now at least, this is here for testing purposes.
+    private void addStudentsAndGroupsToDatabase() {
+        ArrayList<Group> groups = mfmLoginHandler.getSchool().getGroups();
+        ArrayList<Student> students = mfmLoginHandler.getSchool().getStudents();
+
+        Log.v(Constants.LOG_TAG, groups.toString());
+        Log.v(Constants.LOG_TAG, students.toString());
+
+        // groups and students in those groups
+        for (Group group : groups) {
+            GroupDbHelper.addToDatabase(appContext, group);
+            ArrayList<Student> studentsInGroups = group.getStudents();
+            for (Student student : studentsInGroups) {
+                StudentGroupDbHelper.addToDatabase(appContext, student, group);
+            }
+        }
+        // students and users for each of those students
+        for (Student student : students) {
+            StudentDbHelper.addToDatabase(appContext, student);
+            ArrayList<User> users = student.getUsers();
+            for (User user : users) {
+                UserDbHelper.addToDatabase(appContext, user);
+            }
+        }
+
+    }
+
 
     // Singleton Implementation
 
 
     private static GlobalHandler classInstance;
+    protected Context appContext;
 
 
     // Only public way to get instance of class (synchronized means thread-safe)

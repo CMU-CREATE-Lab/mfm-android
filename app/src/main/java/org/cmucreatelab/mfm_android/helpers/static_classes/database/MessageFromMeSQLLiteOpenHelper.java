@@ -12,7 +12,8 @@ import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 public class MessageFromMeSQLLiteOpenHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 6;
+    // I do not think the database has even been made yet so I changed the version from 6 to 1.
+    public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "MessageFromMe.db";
 
 

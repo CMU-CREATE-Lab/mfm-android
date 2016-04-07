@@ -1,16 +1,11 @@
 package org.cmucreatelab.mfm_android.classes;
 
-import org.cmucreatelab.mfm_android.helpers.readings.*;
-import org.cmucreatelab.mfm_android.helpers.readings.Readable;
-
 import java.io.Serializable;
 
 /**
  * Created by mike on 1/28/16.
  */
-public class User implements Serializable, Readable {
-
-    private static final Readable.Type readableType = Type.USER;
+public class User implements Serializable {
 
     // class attributes
     private int id;
@@ -40,23 +35,4 @@ public class User implements Serializable, Readable {
     public void setPhotoUrl(String photoUrl) { this.photoUrl = photoUrl; }
     public void setStudent(Student student) { this.student = student; }
 
-    @Override
-    public Type getReadableType() {
-        return readableType;
-    }
-
-    @Override
-    public String getName() {
-        return firstName + " " + lastName;
-    }
-
-    @Override
-    public boolean hasReadableValue() {
-        return false;
-    }
-
-    @Override
-    public double getReadableValue() {
-        return 0;
-    }
 }

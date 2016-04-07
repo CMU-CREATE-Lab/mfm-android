@@ -48,24 +48,6 @@ public class MfmLoginHandler {
     }
 
 
-    public String getUsername() {
-        if (kioskIsLoggedIn) {
-            return this.kiosk.getUsername();
-        } else {
-            Log.w(Constants.LOG_TAG, "Requested username when kiosk is not logged in.");
-            return "";
-        }
-    }
-
-    public String getPassword() {
-        if (kioskIsLoggedIn) {
-            return this.kiosk.getPassword();
-        } else {
-            Log.w(Constants.LOG_TAG, "Requested password when kiosk is not logged in.");
-            return "";
-        }
-    }
-
     public School getSchool() {
         if (kioskIsLoggedIn) {
             return this.kiosk.getSchool();
@@ -76,11 +58,12 @@ public class MfmLoginHandler {
     }
 
 
-    public void login(School school, String kioskUid, String username, String password) {
+    public void login(School school, String kioskUid) {
         this.kioskIsLoggedIn = true;
         this.kiosk = new Kiosk(school, kioskUid);
-        this.kiosk.setUsername(username);
-        this.kiosk.setPassword(password);
+        this.kiosk.setSchool(school);
+        this.kiosk.setKioskUid(kioskUid);
+
         // set SharedPreferences values
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
         editor.putBoolean(Constants.PreferencesKeys.kioskIsLoggedIn, true);
@@ -92,6 +75,9 @@ public class MfmLoginHandler {
 
 
     public void logout() {
+        // write to database
+        globalHandler.addStudentsAndGroupsToDatabase();
+
         this.kioskIsLoggedIn = false;
         if (this.kiosk != null) {
             this.kiosk.setSchool(null);

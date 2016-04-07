@@ -11,12 +11,9 @@ import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.JSONParser;
-import org.cmucreatelab.mfm_android.helpers.static_classes.database.GroupDbHelper;
-import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentDbHelper;
-import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentGroupDbHelper;
-import org.cmucreatelab.mfm_android.helpers.static_classes.database.UserDbHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -37,7 +34,8 @@ public class MfmRequestHandler {
     }
 
 
-    public void requestListStudents() {
+    // May make a Callback interface since other activities may want to call this
+    public void requestListStudents(final LoginActivity login) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;
@@ -49,7 +47,7 @@ public class MfmRequestHandler {
             public void onResponse(JSONObject response) {
                 try {
                     ArrayList<Student> students = JSONParser.parseStudentsFromJson(response);
-                    globalHandler.checkAndUpdateStudents(students);
+                    globalHandler.checkAndUpdateStudents(login, students);
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for requestListStudents");
                 }
@@ -60,7 +58,8 @@ public class MfmRequestHandler {
     }
 
 
-    public void requestListGroups() {
+    // May make a Callback interface since other activities may want to call this
+    public void requestListGroups(final LoginActivity login) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;
@@ -73,7 +72,7 @@ public class MfmRequestHandler {
                 Log.i(Constants.LOG_TAG, "requestListGroups onResponse");
                 try {
                     ArrayList<Group> groups = JSONParser.parseGroupsFromJson(response);
-                    globalHandler.checkAndUpdateGroups(groups);
+                    globalHandler.checkAndUpdateGroups(login, groups);
                 } catch (JSONException ex) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for requestListGroups");
                 }
@@ -108,22 +107,33 @@ public class MfmRequestHandler {
                     student.setUsers(temp.getUsers());
                     student.setId(temp.getId());
 
-/*                    // update user objects
+                    // update user objects
                     ArrayList<User> users = student.getUsers();
                     for (User user: users) {
                         user.setStudent(student);
-                    }*/
-
-                    // database
-                    /*StudentDbHelper.addToDatabase(globalHandler.appContext, student);
-                    ArrayList<User> users = student.getUsers();
-                    for (User user : users) {
-                        // update user object
-                        user.setStudent(student);
-                        UserDbHelper.addToDatabase(globalHandler.appContext, user);
                     }
+                    // update the school object
+                    School school = globalHandler.mfmLoginHandler.getSchool();
+                    school.addStudent(student);
 
-                    StudentDbHelper.addToDatabase(globalHandler.appContext, student);*/
+                    // Testing everything to make sure the student is populated correctly
+                    /*Log.i(Constants.LOG_TAG, String.format("value = %d", student.getId()));
+                    ArrayList<User> us = student.getUsers();
+                    for (User user : us) {
+                        user.getId();
+                        user.getStudent();
+                        user.getLastName();
+                        user.getFirstName();
+                        user.getPhotoUrl();
+                        user.getStudentUserRole();
+                        user.getUpdatedAt();
+                    }
+                    student.getUpdatedAt();
+                    student.getPhotoUrl();
+                    student.getFirstName();
+                    student.getLastName();
+                    student.getName();
+                    student.getSenderType();*/
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for updateStudent");
                 }
@@ -157,20 +167,45 @@ public class MfmRequestHandler {
                     group.setUpdatedAt(temp.getUpdatedAt());
                     group.setStudentIds(temp.getStudentIds());
 
-                    ArrayList<Student> result = new ArrayList<Student>();
+                    ArrayList<Student> result = new ArrayList<>();
                     ArrayList<Integer> ids = group.getStudentIds();
-                    for (int i = 0; i < temp.getStudentIds().size(); i++) {
+                    for (int i = 0; i < ids.size(); i++) {
                         Student student = globalHandler.getStudentByID(ids.get(i));
                         result.add(student);
                     }
                     group.setStudents(result);
 
-                    /*// database
-                    GroupDbHelper.addToDatabase(globalHandler.appContext, group);
-                    ArrayList<Student> students= group.getStudents();
+                    School school = globalHandler.mfmLoginHandler.getSchool();
+                    school.addGroup(group);
+
+                    // testing everything to make sure the group is populated correctly
+                    /*group.getSenderType();
+                    ArrayList<Student> students = group.getStudents();
+                    Log.i(Constants.LOG_TAG, students.toString());
                     for (Student student : students) {
-                        StudentGroupDbHelper.addToDatabase(globalHandler.appContext, student, group);
-                    }*/
+                        student.getSenderType();
+                        student.getName();
+                        student.getLastName();
+                        student.getFirstName();
+                        student.getId();
+                        student.getPhotoUrl();
+                        student.getUpdatedAt();
+                        ArrayList<User> users = student.getUsers();
+                        for (User user : users) {
+                            user.getUpdatedAt();
+                            user.getStudentUserRole();
+                            user.getStudent();
+                            user.getPhotoUrl();
+                            user.getFirstName();
+                            user.getId();
+                            user.getLastName();
+                        }
+                    }
+                    group.getId();
+                    group.getStudentIds();
+                    group.getUpdatedAt();
+                    group.getPhotoUrl();
+                    group.getName();*/
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for updateGroup");
                 }
@@ -208,7 +243,7 @@ public class MfmRequestHandler {
     }
 
 
-    public void requestListSchools(String username, String password) {
+    public void requestListSchools(final LoginActivity login, String username, String password) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;
@@ -222,7 +257,7 @@ public class MfmRequestHandler {
                 try {
                     ArrayList<School> schools = JSONParser.parseSchoolsFromJSON(response);
                     // TODO we probably will send this to an Activity to display, rather than storing in GH
-                    //globalHandler.schools = schools;
+                   login.requestListSchoolsSuccess(schools);
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for requestListSchools.");
                 }
@@ -256,9 +291,9 @@ public class MfmRequestHandler {
                         int schoolId = response.getInt("school_id");
                         String schoolName = response.getString("school_name");
                         String kioskId = response.getString("kiosk_id");
-                        School school = new School(schoolId,schoolName);
+                        School school = new School(schoolId, schoolName);
 
-                        globalHandler.mfmLoginHandler.login(school, kioskId, username, password);
+                        globalHandler.mfmLoginHandler.login(school, kioskId);
                         login.loginSuccess();
                     } else{
                         login.loginFailure();
@@ -285,7 +320,6 @@ public class MfmRequestHandler {
         response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.i(Constants.LOG_TAG, response.toString());
                 globalHandler.mfmLoginHandler.logout();
                 Log.i(Constants.LOG_TAG, "logout onResponse");
             }

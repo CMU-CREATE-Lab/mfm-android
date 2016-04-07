@@ -9,14 +9,12 @@ import org.cmucreatelab.mfm_android.classes.Kiosk;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
-import org.cmucreatelab.mfm_android.helpers.readings.ReadingsHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.GroupDbHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentDbHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentGroupDbHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.UserDbHelper;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by mike on 1/28/16.
@@ -33,49 +31,45 @@ public class GlobalHandler {
     public MfmRequestHandler mfmRequestHandler;
     public MfmLoginHandler mfmLoginHandler;
     public SessionHandler sessionHandler;
-    public ReadingsHandler readingsHandler;
 
-    /*
-    login.populateStudentAndGroupSuccess is called before we truly know that it was successful.
-    When I called addStudentsAndGroupsToDatabase the loginHandler returned empty lists
-    for students and groups.  This tells me that the mfmRequests had not finished.
-    We need some sort of callback.  This is difficult, though, because requesting a list of students,
-    for example, requires calls to update students individually, which is a whole other mfmRequest.
-    So that would mean we would need callbacks on callbacks on callbacks (I may be exaggerating a little...haha)
-    I may end up making some sort of callbackHandler class that handles this sort of issue.
-    */
-    public void refreshStudentsAndGroups(final LoginActivity login) {
-        mfmRequestHandler.requestListGroups();
-        mfmRequestHandler.requestListStudents();
-        //addStudentsAndGroupsToDatabase();
-        login.populateStudentAndGroupSuccess();
+
+    public void refreshStudents(final LoginActivity login) {
+        //mfmRequestHandler.requestListGroups();
+        mfmRequestHandler.requestListStudents(login);
+        //login.populateStudentAndGroupSuccess();
+    }
+
+    public void refreshGroups(final LoginActivity login) {
+        mfmRequestHandler.requestListGroups(login);
     }
 
 
-    public void checkAndUpdateStudents(ArrayList<Student> students) {
+    public void checkAndUpdateStudents(final LoginActivity login, ArrayList<Student> students) {
         if (mfmLoginHandler.kioskIsLoggedIn) {
             // TODO we want to compare updatedAt string with objects sharing IDs. If they need updated, add/update them.
             // For now, just clear and add all
             School school = mfmLoginHandler.getSchool();
             school.getStudents().clear();
-            school.getStudents().addAll(students);
+            //school.getStudents().addAll(students);
             for (Student student : students) {
                 mfmRequestHandler.updateStudent(student);
             }
+            login.populateStudentsSuccess();
         } else {
             Log.e(Constants.LOG_TAG, "Tried to checkAndUpdateStudents with Kiosk not logged in");
         }
     }
 
 
-    public void checkAndUpdateGroups(ArrayList<Group> groups) {
+    public void checkAndUpdateGroups(final LoginActivity login, ArrayList<Group> groups) {
         if (mfmLoginHandler.kioskIsLoggedIn) {
             School school = mfmLoginHandler.getSchool();
             school.getGroups().clear();
-            school.getGroups().addAll(groups);
+            //school.getGroups().addAll(groups);
             for (Group group : groups) {
                 mfmRequestHandler.updateGroup(group);
             }
+            login.populateGroupsSuccess();
         } else {
             Log.e(Constants.LOG_TAG, "Tried to checkAndUpdateGroups with Kiosk not logged in");
         }
@@ -100,20 +94,16 @@ public class GlobalHandler {
         return result;
     }
 
-    public void updateReadings(){
-        readingsHandler.updateGroups();
-        readingsHandler.updateStudents();
-    }
 
-    // We probably want to move this somewhere else eventually but, for now at least, this is here for testing purposes.
-    private void addStudentsAndGroupsToDatabase() {
+    public void addStudentsAndGroupsToDatabase() {
+        Log.i(Constants.LOG_TAG, mfmLoginHandler.getSchool().toString());
         ArrayList<Group> groups = mfmLoginHandler.getSchool().getGroups();
         ArrayList<Student> students = mfmLoginHandler.getSchool().getStudents();
 
         Log.v(Constants.LOG_TAG, groups.toString());
         Log.v(Constants.LOG_TAG, students.toString());
 
-        // groups and students in those groups
+        // groups and students in each of those groups
         for (Group group : groups) {
             GroupDbHelper.addToDatabase(appContext, group);
             ArrayList<Student> studentsInGroups = group.getStudents();
@@ -153,36 +143,12 @@ public class GlobalHandler {
     private GlobalHandler(Context ctx) {
         this.appContext = ctx;
         this.httpRequestHandler = new HttpRequestHandler(this);
-        this.mfmRequestHandler = new MfmRequestHandler(this);
         this.mfmLoginHandler = new MfmLoginHandler(this);
+        this.mfmRequestHandler = new MfmRequestHandler(this);
         this.sessionHandler = new SessionHandler(this);
         Kiosk.ioSVersion = Build.VERSION.RELEASE;
         // TODO sessions will need to be created when you select a student or group; for now this is just created to avoid null pointer
         this.sessionHandler.startSession(new Student());
-        this.readingsHandler = ReadingsHandler.newInstance(this);
-
-        // load from database
-        ArrayList<Group> dbGroups = GroupDbHelper.fetchFromDatabase(ctx);
-        ArrayList<Student> dbStudents = StudentDbHelper.fetchFromDatabase(ctx);
-        ArrayList<User> dbUsers = UserDbHelper.fetchFromDatabase(ctx);
-
-        Log.v(Constants.LOG_TAG, dbGroups.toString());
-        Log.v(Constants.LOG_TAG, dbStudents.toString());
-        Log.v(Constants.LOG_TAG, dbUsers.toString());
-
-        // I left out students in groups because adding a reading of a group takes care of that.
-        for (Group group : dbGroups) {
-            // TODO add group readings
-            readingsHandler.addReading(group);
-        }
-        for (Student student : dbStudents) {
-            // TODO add student readings
-            readingsHandler.addReading(student);
-        }
-        for (User user : dbUsers) {
-            // TODO add user readings
-            readingsHandler.addReading(user);
-        }
     }
 
 }

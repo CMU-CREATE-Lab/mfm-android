@@ -14,12 +14,22 @@ public class School {
     private final ArrayList<Group> groups = new ArrayList<>();
 
     // getters/setters
-    public int getId() { return id; }
+    public Integer getId() { return id; }
     public String getName() { return name; }
     public ArrayList<Student> getStudents() { return students; }
     public ArrayList<Group> getGroups() { return groups; }
     public void setId(int id) { this.id = id; }
     public void setName(String name) { this.name = name; }
+
+
+    public void addStudent(Student student) {
+        this.students.add(student);
+    }
+
+
+    public void addGroup(Group group) {
+        this.groups.add(group);
+    }
 
 
     public School(int id, String name) {

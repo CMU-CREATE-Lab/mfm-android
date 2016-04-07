@@ -15,11 +15,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.cmucreatelab.mfm_android.R;
+import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import android.annotation.TargetApi;
+
+import java.util.ArrayList;
 
 /**
  * A login screen that offers login via email/password.
@@ -30,26 +33,44 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private String username;
+    private String password;
 
 
     // Class methods
+    private void populateStudentAndGroupSuccess() {
+        showProgress(false);
+        Intent intent = new Intent(this, MainScreenActivity.class);
+        startActivity(intent);
+    }
 
 
     public void loginSuccess() {
-        GlobalHandler.getInstance(getApplicationContext()).refreshStudentsAndGroups(this);
+        GlobalHandler.getInstance(getApplicationContext()).refreshStudents(this);
     }
 
 
     public void loginFailure() {
+        // TODO Have more possible failures instead of just username or password being invalid.
         showProgress(false);
         Toast.makeText(this.getApplicationContext(), R.string.error_invalid_credentials, Toast.LENGTH_LONG).show();
     }
 
 
-    public void populateStudentAndGroupSuccess() {
-        showProgress(false);
-        Intent intent = new Intent(this, MainScreenActivity.class);
-        startActivity(intent);
+    public void populateStudentsSuccess() {
+        GlobalHandler.getInstance(getApplicationContext()).refreshGroups(this);
+    }
+
+
+    public void populateGroupsSuccess() {
+        this.populateStudentAndGroupSuccess();
+    }
+
+
+    public void requestListSchoolsSuccess(ArrayList<School> schools) {
+        // TODO fix so I am not just using the first school
+        final GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
+        globalHandler.mfmRequestHandler.login(this, username, password, schools.get(0).getId().toString());
     }
 
 
@@ -132,8 +153,8 @@ public class LoginActivity extends AppCompatActivity {
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String username = mUsernameView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        username = mUsernameView.getText().toString();
+        password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -161,7 +182,7 @@ public class LoginActivity extends AppCompatActivity {
             // perform the user login attempt.
             showProgress(true);
             // TODO this is okay for now, but in the future we will want to do a "requestListSchools" then use its first response as our school to log in from
-            GlobalHandler.getInstance(getApplicationContext()).mfmRequestHandler.login(this, username, password, "17");
+            GlobalHandler.getInstance(getApplicationContext()).mfmRequestHandler.requestListSchools(this, username, password);
         }
     }
 

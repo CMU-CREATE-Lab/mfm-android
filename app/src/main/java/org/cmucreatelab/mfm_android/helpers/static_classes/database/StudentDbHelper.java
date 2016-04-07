@@ -57,7 +57,7 @@ public class StudentDbHelper {
         values.put(StudentContract.COLUMN_STUDENT_ID, String.valueOf(student.getId()));
         values.put(StudentContract.COLUMN_PHOTO_URL, student.getPhotoUrl());
         values.put(StudentContract.COLUMN_UPDATED_AT, student.getUpdatedAt());
-        newId = db.insert(GroupContract.TABLE_NAME, "null", values);
+        newId = db.insert(StudentContract.TABLE_NAME, "null", values);
 
         student.setDatabaseId(newId);
         Log.i(Constants.LOG_TAG, "inserted new student _id=" + newId);

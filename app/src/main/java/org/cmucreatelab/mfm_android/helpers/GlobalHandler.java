@@ -35,13 +35,15 @@ public class GlobalHandler {
     public SessionHandler sessionHandler;
     public ReadingsHandler readingsHandler;
 
-    // login.populateStudentAndGroupSuccess is called before we truly know that it was successful.
-    // When I called addStudentsAndGroupsToDatabase the loginHandler returned empty lists
-    // for students and groups.  This tells me that the mfmRequests had not finished.
-    // We need some sort of callback.  This is difficult, though, because requesting a list of students,
-    // for example, requires calls to update students individually, which is a whole other mfmRequest.
-    // So that would mean we would need callbacks on callbacks on callbacks (I may be exaggerating a little...haha)
-    // I may end up making some sort of callbackHandler class that handles this sort of issue.
+    /*
+    login.populateStudentAndGroupSuccess is called before we truly know that it was successful.
+    When I called addStudentsAndGroupsToDatabase the loginHandler returned empty lists
+    for students and groups.  This tells me that the mfmRequests had not finished.
+    We need some sort of callback.  This is difficult, though, because requesting a list of students,
+    for example, requires calls to update students individually, which is a whole other mfmRequest.
+    So that would mean we would need callbacks on callbacks on callbacks (I may be exaggerating a little...haha)
+    I may end up making some sort of callbackHandler class that handles this sort of issue.
+    */
     public void refreshStudentsAndGroups(final LoginActivity login) {
         mfmRequestHandler.requestListGroups();
         mfmRequestHandler.requestListStudents();

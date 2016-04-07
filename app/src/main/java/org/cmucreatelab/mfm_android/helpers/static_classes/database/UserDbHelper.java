@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import org.cmucreatelab.mfm_android.classes.User;
+import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import java.util.ArrayList;
 
@@ -123,7 +124,9 @@ public class UserDbHelper {
             result.setLastName(lastName);
             result.setStudentUserRole(studentUserRole);
             result.setId(Integer.parseInt(userId));
-            result.getStudent().setId(Integer.parseInt(studentId));
+            // The only way I can think of getting the student with the structure layed out so far, is by accessing the kiosk.
+            // Right now the student is a null pointer.
+            //result.getStudent().setId(Integer.parseInt(studentId));
             result.setPhotoUrl(photoURL);
             result.setUpdatedAt(updatedAt);
         } catch (Exception e) {

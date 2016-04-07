@@ -11,6 +11,10 @@ import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.JSONParser;
+import org.cmucreatelab.mfm_android.helpers.static_classes.database.GroupDbHelper;
+import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentDbHelper;
+import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentGroupDbHelper;
+import org.cmucreatelab.mfm_android.helpers.static_classes.database.UserDbHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
@@ -96,12 +100,30 @@ public class MfmRequestHandler {
                     // create a temp student
                     Student temp = JSONParser.parseStudentBasedOffId(response);
 
-                    // update object
+                    // update student object
                     student.setFirstName(temp.getFirstName());
                     student.setLastName(temp.getLastName());
                     student.setUpdatedAt(temp.getUpdatedAt());
                     student.setPhotoUrl(temp.getPhotoUrl());
                     student.setUsers(temp.getUsers());
+                    student.setId(temp.getId());
+
+/*                    // update user objects
+                    ArrayList<User> users = student.getUsers();
+                    for (User user: users) {
+                        user.setStudent(student);
+                    }*/
+
+                    // database
+                    /*StudentDbHelper.addToDatabase(globalHandler.appContext, student);
+                    ArrayList<User> users = student.getUsers();
+                    for (User user : users) {
+                        // update user object
+                        user.setStudent(student);
+                        UserDbHelper.addToDatabase(globalHandler.appContext, user);
+                    }
+
+                    StudentDbHelper.addToDatabase(globalHandler.appContext, student);*/
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for updateStudent");
                 }
@@ -142,6 +164,13 @@ public class MfmRequestHandler {
                         result.add(student);
                     }
                     group.setStudents(result);
+
+                    /*// database
+                    GroupDbHelper.addToDatabase(globalHandler.appContext, group);
+                    ArrayList<Student> students= group.getStudents();
+                    for (Student student : students) {
+                        StudentGroupDbHelper.addToDatabase(globalHandler.appContext, student, group);
+                    }*/
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for updateGroup");
                 }

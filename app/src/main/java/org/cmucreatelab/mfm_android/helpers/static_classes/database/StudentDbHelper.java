@@ -96,7 +96,7 @@ public class StudentDbHelper {
     }
 
 
-    private static Student generateStudentFromRecord(Cursor cursor) {
+    private static Student generateStudentFromRecord(Context context, Cursor cursor) {
         Student result = new Student();
 
         int id;
@@ -118,6 +118,9 @@ public class StudentDbHelper {
             result.setId(Integer.parseInt(studentID));
             result.setPhotoUrl(photoURL);
             result.setUpdatedAt(updatedAt);
+
+            // make request for the student's users
+            result.setUsers(UserDbHelper.fetchFromDatabaseWithStudentId(context, id));
         } catch (Exception e) {
             Log.e(Constants.LOG_TAG, "Failed to read from cursor! cursor.toString()=" + cursor.toString());
             throw e;
@@ -151,7 +154,7 @@ public class StudentDbHelper {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             try {
-                result.add(generateStudentFromRecord(cursor));
+                result.add(generateStudentFromRecord(context, cursor));
             } catch (Exception e) {
                 e.printStackTrace();
             }

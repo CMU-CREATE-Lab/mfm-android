@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import org.cmucreatelab.mfm_android.classes.Group;
+import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import java.util.ArrayList;
 
@@ -95,7 +96,7 @@ public class GroupDbHelper {
     }
 
 
-    private static Group generateGroupFromRecord(Cursor cursor) {
+    private static Group generateGroupFromRecord(Context context, Cursor cursor, ArrayList<Student> students) {
         Group result = new Group();
 
         int id;
@@ -115,6 +116,9 @@ public class GroupDbHelper {
             result.setId(Integer.parseInt(groupId));
             result.setPhotoUrl(photoURL);
             result.setUpdatedAt(updatedAt);
+
+            // make request for the group's students
+            StudentGroupDbHelper.fetchStudentsFromGroup(context, result);
         } catch (Exception e) {
             Log.e(Constants.LOG_TAG, "Failed to read from cursor! cursor.toString()=" + cursor.toString());
             throw e;
@@ -124,7 +128,7 @@ public class GroupDbHelper {
     }
 
 
-    public static ArrayList<Group> fetchFromDatabase(Context context) {
+    public static ArrayList<Group> fetchFromDatabaseWithStudents(Context context, ArrayList<Student> students) {
         ArrayList<Group> result = new ArrayList<>();
 
         String[] projection = {
@@ -147,7 +151,7 @@ public class GroupDbHelper {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             try {
-                result.add(generateGroupFromRecord(cursor));
+                result.add(generateGroupFromRecord(context, cursor, students));
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -138,7 +138,8 @@ public class UserDbHelper {
     }
 
 
-    public static ArrayList<User> fetchFromDatabase(Context context) {
+    // NOTE: this fetches from the database ONLY for a specific studentId
+    public static ArrayList<User> fetchFromDatabaseWithStudentId(Context context, int studentId) {
         ArrayList<User> result = new ArrayList<>();
 
         String[] projection = {
@@ -148,6 +149,10 @@ public class UserDbHelper {
                 UserContract.COLUMN_PHOTO_URL, UserContract.COLUMN_UPDATED_AT,
                 UserContract.COLUMN_STUDENT_ID
         };
+        String selection = "student_id = ?";
+        String[] selectionArgs = {
+                String.valueOf(studentId)
+        };
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
         Cursor cursor;
@@ -155,7 +160,7 @@ public class UserDbHelper {
         mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
         db = mDbHelper.getWritableDatabase();
         cursor = db.query(UserContract.TABLE_NAME, projection,
-                null, null, // columns and values for WHERE clause
+                selection, selectionArgs, // columns and values for WHERE clause
                 null, null, // group rows, filter row groups
                 UserContract.COLUMN_USER_ID + " ASC" // sort order
         );

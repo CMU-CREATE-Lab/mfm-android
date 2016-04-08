@@ -2,11 +2,13 @@ package org.cmucreatelab.mfm_android.helpers.static_classes.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
+import org.cmucreatelab.mfm_android.helpers.static_classes.ListHelper;
 import java.util.ArrayList;
 
 /**
@@ -25,7 +27,7 @@ public class StudentGroupDbHelper {
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
         String selection = "_id LIKE ?";
-        String[] selectionArgs = { String.valueOf(databaseId) };
+        String[] selectionArgs = {String.valueOf(databaseId)};
         int resultInt;
 
         mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
@@ -80,6 +82,51 @@ public class StudentGroupDbHelper {
         }
 
         return result;
+    }
+
+
+    public static void populateGroupFromDb(Context context, Group group, ArrayList<Student> students) {
+        ArrayList<Student> result = new ArrayList<>();
+
+        String[] projection = {
+                "_id",
+                StudentGroupContract.COLUMN_GROUP_ID, StudentGroupContract.COLUMN_STUDENT_ID
+        };
+        String selection = "group_id = ?";
+        String[] selectionArgs = {
+                String.valueOf(group.getId())
+        };
+        MessageFromMeSQLLiteOpenHelper mDbHelper;
+        SQLiteDatabase db;
+        Cursor cursor;
+
+        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
+        db = mDbHelper.getWritableDatabase();
+        cursor = db.query(StudentGroupContract.TABLE_NAME, projection,
+                selection, selectionArgs, // columns and values for WHERE clause
+                null, null, // group rows, filter row groups
+                StudentGroupContract.COLUMN_STUDENT_ID + " ASC" // sort order
+        );
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            try {
+                int studentId = cursor.getInt(cursor.getColumnIndexOrThrow(StudentGroupContract.COLUMN_STUDENT_ID));
+                result.add(ListHelper.findStudentWithId(students, studentId));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            // iterate
+            cursor.moveToNext();
+        }
+
+        if (result.size() == 0) {
+            Log.w(Constants.LOG_TAG, "populateGroupFromDb is returning an empty list.");
+        }
+
+        // set group's list of students
+        // TODO order the list of students (by name, most likely)
+        group.setStudents(result);
     }
 
 }

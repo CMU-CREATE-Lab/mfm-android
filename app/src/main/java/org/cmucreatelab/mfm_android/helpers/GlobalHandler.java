@@ -123,6 +123,27 @@ public class GlobalHandler {
     }
 
 
+    public void loadFromDb() {
+        if (mfmLoginHandler.kioskIsLoggedIn) {
+            // ASSERT: the students/groups list in school is empty
+            School school = mfmLoginHandler.getSchool();
+            ArrayList<Student> dbStudents;
+            ArrayList<Group> dbGroups;
+
+            dbStudents = StudentDbHelper.fetchFromDatabase(appContext);
+            for (Student student : dbStudents) {
+                school.addStudent(student);
+            }
+            dbGroups = GroupDbHelper.fetchFromDatabaseWithStudents(appContext, dbStudents);
+            for (Group group : dbGroups) {
+                school.addGroup(group);
+            }
+        } else {
+            Log.e(Constants.LOG_TAG, "trying to load from database but Kiosk is not logged in.");
+        }
+    }
+
+
     // Singleton Implementation
 
 

@@ -17,6 +17,7 @@ public class GroupDbHelper {
 
 
     public static boolean destroy(Context context, Group group) {
+        // TODO destroy group, then also destroy all StudentGroups
         boolean result = false;
 
         if (group.getDatabaseId() < 0) {
@@ -45,7 +46,7 @@ public class GroupDbHelper {
 
 
     public static void addToDatabase(Context context, Group group) {
-
+        // TODO write StudentGroups
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
         ContentValues values;
@@ -66,6 +67,7 @@ public class GroupDbHelper {
 
 
     public static void update(Context context, Group group) {
+        // TODO update group, then destroy and re-enter all StudentGroups
         if (group.getDatabaseId() >= 0) {
             MessageFromMeSQLLiteOpenHelper mDbHelper;
             SQLiteDatabase db;
@@ -112,13 +114,14 @@ public class GroupDbHelper {
             Log.v(Constants.LOG_TAG, "Read group record _id=" + id);
 
             // add to data structure
+            // TODO set database ID
             result.setName(name);
             result.setId(Integer.parseInt(groupId));
             result.setPhotoUrl(photoURL);
             result.setUpdatedAt(updatedAt);
 
             // make request for the group's students
-            StudentGroupDbHelper.fetchStudentsFromGroup(context, result);
+            StudentGroupDbHelper.populateGroupFromDb(context, result, students);
         } catch (Exception e) {
             Log.e(Constants.LOG_TAG, "Failed to read from cursor! cursor.toString()=" + cursor.toString());
             throw e;

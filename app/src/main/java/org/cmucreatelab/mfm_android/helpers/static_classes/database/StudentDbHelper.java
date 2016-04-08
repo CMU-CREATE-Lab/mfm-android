@@ -16,6 +16,7 @@ public class StudentDbHelper {
 
 
     public static boolean destroy(Context context, Student student) {
+        // TODO destroy student, then also destroy all users matching studentId
         boolean result = false;
 
         if (student.getDatabaseId() < 0) {
@@ -44,6 +45,7 @@ public class StudentDbHelper {
 
 
     public static void addToDatabase(Context context, Student student) {
+        // TODO write users
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
         ContentValues values;
@@ -65,6 +67,7 @@ public class StudentDbHelper {
 
 
     public static void update(Context context, Student student) {
+        // TODO update student, then destroy  and re-enter all users matching studentId
         if (student.getDatabaseId() >= 0) {
             MessageFromMeSQLLiteOpenHelper mDbHelper;
             SQLiteDatabase db;
@@ -113,6 +116,7 @@ public class StudentDbHelper {
             Log.v(Constants.LOG_TAG, "Read student record _id=" + id);
 
             // add to data structure
+            // TODO set database ID
             result.setFirstName(firstName);
             result.setLastName(lastName);
             result.setId(Integer.parseInt(studentID));
@@ -120,7 +124,7 @@ public class StudentDbHelper {
             result.setUpdatedAt(updatedAt);
 
             // make request for the student's users
-            result.setUsers(UserDbHelper.fetchFromDatabaseWithStudentId(context, id));
+            result.setUsers(UserDbHelper.fetchFromDatabaseWithStudentId(context, Integer.parseInt(studentID)));
         } catch (Exception e) {
             Log.e(Constants.LOG_TAG, "Failed to read from cursor! cursor.toString()=" + cursor.toString());
             throw e;

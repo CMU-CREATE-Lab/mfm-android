@@ -49,4 +49,6 @@ public class MessageFromMeSQLLiteOpenHelper extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
+    // TODO helper function loadFromDb should be here? -- then make access private/protected for rest of DB READ calls (write will still be public)
+
 }

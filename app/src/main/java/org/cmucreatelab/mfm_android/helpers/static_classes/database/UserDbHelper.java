@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class UserDbHelper {
 
 
+    // TODO delete this method?
     public static boolean destroy(Context context, User user) {
         boolean result = false;
 
@@ -67,6 +68,7 @@ public class UserDbHelper {
     }
 
 
+    // TODO delete this method?
     public static void update(Context context, User user) {
         if (user.getDatabaseId() >= 0) {
             MessageFromMeSQLLiteOpenHelper mDbHelper;
@@ -120,6 +122,7 @@ public class UserDbHelper {
             Log.v(Constants.LOG_TAG, "Read user record _id=" + id);
 
             // add to data structure
+            // TODO set database ID
             result.setFirstName(firstName);
             result.setLastName(lastName);
             result.setStudentUserRole(studentUserRole);

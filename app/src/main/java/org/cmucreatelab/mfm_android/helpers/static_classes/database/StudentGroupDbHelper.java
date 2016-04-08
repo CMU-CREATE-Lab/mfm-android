@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class StudentGroupDbHelper {
 
 
+    // TODO delete this method?
     public static boolean destroy(Context context, long databaseId) {
         boolean result = false;
 
@@ -66,6 +67,7 @@ public class StudentGroupDbHelper {
         Log.i(Constants.LOG_TAG, "inserted new student _id=" + newStudentId);
     }
 
+    // TODO delete this method?
     // I am not sure if this is how we want to fetch the Students, but it makes sense to me
     // since the group that was passed in was fetched from the database earlier
     public static ArrayList<Integer> fetchStudentsFromGroup(Context context, Group group) {

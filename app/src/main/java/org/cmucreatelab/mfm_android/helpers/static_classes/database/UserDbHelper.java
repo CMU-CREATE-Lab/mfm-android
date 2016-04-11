@@ -5,8 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
+import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
-import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import java.util.ArrayList;
 
@@ -16,32 +17,21 @@ import java.util.ArrayList;
 public class UserDbHelper {
 
 
-    // TODO delete this method?
-    public static boolean destroy(Context context, User user) {
-        boolean result = false;
-
-        if (user.getDatabaseId() < 0) {
-            return false;
-        }
-
+    public static void destroyAllFromStudent(Context context, int studentId) {
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
-        String selection = "_id LIKE ?";
-        String[] selectionArgs = { String.valueOf(user.getId()) };
+        String selection = UserContract.COLUMN_STUDENT_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(studentId)};
         int resultInt;
 
         mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
         db = mDbHelper.getWritableDatabase();
         resultInt = db.delete(UserContract.TABLE_NAME, selection, selectionArgs);
-        if (resultInt == 1) {
-            Log.i(Constants.LOG_TAG, "deleted user _id=" + user.getId());
+        if (resultInt > 0) {
+            Log.i(Constants.LOG_TAG, "deleted " + resultInt + " users.");
         } else {
-            Log.w(Constants.LOG_TAG, "Attempted to delete user _id=" +
-                    user.getId() + " but deleted " + resultInt + " items.");
+            Log.w(Constants.LOG_TAG, "Attempted to delete users with studentId=" + studentId + " but returned " + resultInt);
         }
-        result = (resultInt > 0);
-
-        return result;
     }
 
 
@@ -68,46 +58,11 @@ public class UserDbHelper {
     }
 
 
-    // TODO delete this method?
-    public static void update(Context context, User user) {
-        if (user.getDatabaseId() >= 0) {
-            MessageFromMeSQLLiteOpenHelper mDbHelper;
-            SQLiteDatabase db;
-            String selection = "_id LIKE ?";
-            String[] selectionArgs = { String.valueOf(user.getDatabaseId()) };
-            int result;
-            ContentValues contentValues;
-
-            mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
-            db = mDbHelper.getWritableDatabase();
-
-            // find values to be updated
-            contentValues = new ContentValues();
-            contentValues.put(UserContract.COLUMN_FIRST_NAME, user.getFirstName());
-            contentValues.put(UserContract.COLUMN_LAST_NAME, user.getLastName());
-            contentValues.put(UserContract.COLUMN_STUDENT_USER_ROLE, user.getStudentUserRole());
-            contentValues.put(UserContract.COLUMN_USER_ID, user.getId());
-            contentValues.put(UserContract.COLUMN_STUDENT_ID, user.getStudent().getId());
-            contentValues.put(UserContract.COLUMN_PHOTO_URL, user.getPhotoUrl());
-            contentValues.put(UserContract.COLUMN_UPDATED_AT, user.getUpdatedAt());
-
-            // perform update
-            result = db.update(UserContract.TABLE_NAME, contentValues, selection, selectionArgs);
-            if (result == 1) {
-                Log.i(Constants.LOG_TAG, "updated user _id=" + user.getDatabaseId());
-            } else {
-                Log.w(Constants.LOG_TAG, "Attempted to update user _id=" +
-                        user.getDatabaseId() + " but updated " + result + " items.");
-            }
-        }
-    }
-
-
-    private static User generateUserFromRecord(Cursor cursor) {
+    private static User generateUserFromRecord(Cursor cursor, Student student) {
         User result = new User();
 
-        int id;
-        String firstName, lastName, studentUserRole, userId, studentId, photoURL, updatedAt;
+        int id, studentId;
+        String firstName, lastName, studentUserRole, userId, photoURL, updatedAt;
 
         try {
             // read record
@@ -116,13 +71,18 @@ public class UserDbHelper {
             lastName = cursor.getString(cursor.getColumnIndexOrThrow(UserContract.COLUMN_LAST_NAME));
             studentUserRole = cursor.getString(cursor.getColumnIndexOrThrow(UserContract.COLUMN_STUDENT_USER_ROLE));
             userId = cursor.getString(cursor.getColumnIndexOrThrow(UserContract.COLUMN_USER_ID));
-            studentId = cursor.getString(cursor.getColumnIndexOrThrow(UserContract.COLUMN_STUDENT_ID));
+            studentId = cursor.getInt(cursor.getColumnIndexOrThrow(UserContract.COLUMN_STUDENT_ID));
             photoURL = cursor.getString(cursor.getColumnIndexOrThrow(UserContract.COLUMN_PHOTO_URL));
             updatedAt = cursor.getString(cursor.getColumnIndexOrThrow(UserContract.COLUMN_UPDATED_AT));
             Log.v(Constants.LOG_TAG, "Read user record _id=" + id);
+            if (student.getId() != studentId) {
+                Log.wtf(Constants.LOG_TAG, "WTF? Passed in studentId="+student.getId()+" to generate user but found studentId="+studentId+" in DB.");
+                return result;
+            }
 
             // add to data structure
-            // TODO set database ID
+            // TODO studentId => Student?
+            result.setDatabaseId(id);
             result.setFirstName(firstName);
             result.setLastName(lastName);
             result.setStudentUserRole(studentUserRole);
@@ -142,7 +102,7 @@ public class UserDbHelper {
 
 
     // NOTE: this fetches from the database ONLY for a specific studentId
-    public static ArrayList<User> fetchFromDatabaseWithStudentId(Context context, int studentId) {
+    public static ArrayList<User> fetchFromDatabaseWithStudent(Context context, Student student) {
         ArrayList<User> result = new ArrayList<>();
 
         String[] projection = {
@@ -154,7 +114,7 @@ public class UserDbHelper {
         };
         String selection = "student_id = ?";
         String[] selectionArgs = {
-                String.valueOf(studentId)
+                String.valueOf(student.getId())
         };
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
@@ -171,7 +131,7 @@ public class UserDbHelper {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             try {
-                result.add(generateUserFromRecord(cursor));
+                result.add(generateUserFromRecord(cursor, student));
             } catch (Exception e) {
                 e.printStackTrace();
             }

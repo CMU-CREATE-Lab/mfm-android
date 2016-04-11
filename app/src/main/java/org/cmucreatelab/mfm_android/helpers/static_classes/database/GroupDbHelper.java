@@ -17,7 +17,6 @@ public class GroupDbHelper {
 
 
     public static boolean destroy(Context context, Group group) {
-        // TODO destroy group, then also destroy all StudentGroups
         boolean result = false;
 
         if (group.getDatabaseId() < 0) {
@@ -34,19 +33,21 @@ public class GroupDbHelper {
         db = mDbHelper.getWritableDatabase();
         resultInt = db.delete(GroupContract.TABLE_NAME, selection, selectionArgs);
         if (resultInt == 1) {
-        Log.i(Constants.LOG_TAG, "deleted group _id=" + group.getId());
+            Log.i(Constants.LOG_TAG, "deleted group _id=" + group.getId());
         } else {
-        Log.w(Constants.LOG_TAG, "Attempted to delete group _id=" +
+            Log.w(Constants.LOG_TAG, "Attempted to delete group _id=" +
                 group.getId() + " but deleted " + resultInt + " items.");
         }
         result = (resultInt > 0);
+
+        // delete ALL student associations
+        StudentGroupDbHelper.destroyAllFromGroup(context, group.getId());
 
         return result;
     }
 
 
     public static void addToDatabase(Context context, Group group) {
-        // TODO write StudentGroups
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
         ContentValues values;
@@ -63,11 +64,17 @@ public class GroupDbHelper {
 
         group.setDatabaseId(newId);
         Log.i(Constants.LOG_TAG, "inserted new group _id=" + newId);
+
+        // double-check that there aren't already students in the DB sharing groupId (there shouldn't be)
+        StudentGroupDbHelper.destroyAllFromGroup(context, group.getId());
+        // add student_groups to DB
+        for (Student student : group.getStudents()) {
+            StudentGroupDbHelper.addToDatabase(context, student, group);
+        }
     }
 
 
     public static void update(Context context, Group group) {
-        // TODO update group, then destroy and re-enter all StudentGroups
         if (group.getDatabaseId() >= 0) {
             MessageFromMeSQLLiteOpenHelper mDbHelper;
             SQLiteDatabase db;
@@ -94,6 +101,13 @@ public class GroupDbHelper {
                 Log.w(Constants.LOG_TAG, "Attempted to update group _id=" +
                         group.getDatabaseId() + " but updated " + result + " items.");
             }
+
+            // delete ALL students in the DB sharing groupId
+            StudentGroupDbHelper.destroyAllFromGroup(context, group.getId());
+            // (re-)add student_groups to DB
+            for (Student student : group.getStudents()) {
+                StudentGroupDbHelper.addToDatabase(context, student, group);
+            }
         }
     }
 
@@ -114,7 +128,7 @@ public class GroupDbHelper {
             Log.v(Constants.LOG_TAG, "Read group record _id=" + id);
 
             // add to data structure
-            // TODO set database ID
+            result.setDatabaseId(id);
             result.setName(name);
             result.setId(Integer.parseInt(groupId));
             result.setPhotoUrl(photoURL);

@@ -17,32 +17,39 @@ import java.util.ArrayList;
 public class StudentGroupDbHelper {
 
 
-    // TODO delete this method?
-    public static boolean destroy(Context context, long databaseId) {
-        boolean result = false;
-
-        if (databaseId < 0) {
-            return false;
-        }
-
+    public static void destroyAllFromStudent(Context context, int studentId) {
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
-        String selection = "_id LIKE ?";
-        String[] selectionArgs = {String.valueOf(databaseId)};
+        String selection = StudentGroupContract.COLUMN_STUDENT_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(studentId)};
         int resultInt;
 
         mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
         db = mDbHelper.getWritableDatabase();
         resultInt = db.delete(StudentGroupContract.TABLE_NAME, selection, selectionArgs);
-        if (resultInt == 1) {
-            Log.i(Constants.LOG_TAG, "deleted studentGroup _id=" + databaseId);
+        if (resultInt > 0) {
+            Log.i(Constants.LOG_TAG, "deleted " + resultInt + " student_groups.");
         } else {
-            Log.w(Constants.LOG_TAG, "Attempted to delete studentGroup _id=" +
-                    databaseId + " but deleted " + resultInt + " items.");
+            Log.w(Constants.LOG_TAG, "Attempted to delete student_groups with studentId=" + studentId + " but returned " + resultInt);
         }
-        result = (resultInt > 0);
+    }
 
-        return result;
+
+    public static void destroyAllFromGroup(Context context, int groupId) {
+        MessageFromMeSQLLiteOpenHelper mDbHelper;
+        SQLiteDatabase db;
+        String selection = StudentGroupContract.COLUMN_GROUP_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(groupId)};
+        int resultInt;
+
+        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
+        db = mDbHelper.getWritableDatabase();
+        resultInt = db.delete(StudentGroupContract.TABLE_NAME, selection, selectionArgs);
+        if (resultInt > 0) {
+            Log.i(Constants.LOG_TAG, "deleted " + resultInt + " student_groups.");
+        } else {
+            Log.w(Constants.LOG_TAG, "Attempted to delete student_groups with groupId=" + groupId + " but returned " + resultInt);
+        }
     }
 
 
@@ -65,25 +72,6 @@ public class StudentGroupDbHelper {
 
         student.setDatabaseId(newStudentId);
         Log.i(Constants.LOG_TAG, "inserted new student _id=" + newStudentId);
-    }
-
-    // TODO delete this method?
-    // I am not sure if this is how we want to fetch the Students, but it makes sense to me
-    // since the group that was passed in was fetched from the database earlier
-    public static ArrayList<Integer> fetchStudentsFromGroup(Context context, Group group) {
-        ArrayList<Integer> result = new ArrayList<>();
-
-        try {
-            result = group.getStudentIds();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (result.size() == 0) {
-            Log.w(Constants.LOG_TAG, "fetchGroupFromDatabase is returning an empty list.");
-        }
-
-        return result;
     }
 
 

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import org.cmucreatelab.mfm_android.classes.Student;
+import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import java.util.ArrayList;
 
@@ -16,7 +17,6 @@ public class StudentDbHelper {
 
 
     public static boolean destroy(Context context, Student student) {
-        // TODO destroy student, then also destroy all users matching studentId
         boolean result = false;
 
         if (student.getDatabaseId() < 0) {
@@ -40,12 +40,16 @@ public class StudentDbHelper {
         }
         result = (resultInt > 0);
 
+        // delete ALL users in the DB sharing studentId
+        UserDbHelper.destroyAllFromStudent(context, student.getId());
+        // also delete all Group associations
+        StudentGroupDbHelper.destroyAllFromStudent(context, student.getId());
+
         return result;
     }
 
 
     public static void addToDatabase(Context context, Student student) {
-        // TODO write users
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
         ContentValues values;
@@ -63,11 +67,17 @@ public class StudentDbHelper {
 
         student.setDatabaseId(newId);
         Log.i(Constants.LOG_TAG, "inserted new student _id=" + newId);
+
+        // double-check that there aren't already users in the DB sharing studentId (there shouldn't be)
+        UserDbHelper.destroyAllFromStudent(context, student.getId());
+        // add users for student to DB
+        for (User user : student.getUsers()) {
+            UserDbHelper.addToDatabase(context, user);
+        }
     }
 
 
     public static void update(Context context, Student student) {
-        // TODO update student, then destroy  and re-enter all users matching studentId
         if (student.getDatabaseId() >= 0) {
             MessageFromMeSQLLiteOpenHelper mDbHelper;
             SQLiteDatabase db;
@@ -95,6 +105,15 @@ public class StudentDbHelper {
                 Log.w(Constants.LOG_TAG, "Attempted to update student _id=" +
                         student.getDatabaseId() + " but updated " + result + " items.");
             }
+
+            // delete ALL users in the DB sharing studentId
+            UserDbHelper.destroyAllFromStudent(context, student.getId());
+            // (re-)add users for student to DB
+            for (User user : student.getUsers()) {
+                UserDbHelper.addToDatabase(context, user);
+            }
+        } else {
+            Log.e(Constants.LOG_TAG, "Tried to update studentId="+student.getId()+" but databaseId="+student.getDatabaseId());
         }
     }
 
@@ -116,7 +135,7 @@ public class StudentDbHelper {
             Log.v(Constants.LOG_TAG, "Read student record _id=" + id);
 
             // add to data structure
-            // TODO set database ID
+            result.setDatabaseId(id);
             result.setFirstName(firstName);
             result.setLastName(lastName);
             result.setId(Integer.parseInt(studentID));
@@ -124,7 +143,7 @@ public class StudentDbHelper {
             result.setUpdatedAt(updatedAt);
 
             // make request for the student's users
-            result.setUsers(UserDbHelper.fetchFromDatabaseWithStudentId(context, Integer.parseInt(studentID)));
+            result.setUsers(UserDbHelper.fetchFromDatabaseWithStudent(context, result));
         } catch (Exception e) {
             Log.e(Constants.LOG_TAG, "Failed to read from cursor! cursor.toString()=" + cursor.toString());
             throw e;

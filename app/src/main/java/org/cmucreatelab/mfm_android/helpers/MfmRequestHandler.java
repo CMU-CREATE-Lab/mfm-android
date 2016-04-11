@@ -11,6 +11,7 @@ import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.JSONParser;
+import org.cmucreatelab.mfm_android.helpers.static_classes.ListHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -115,25 +116,6 @@ public class MfmRequestHandler {
                     // update the school object
                     School school = globalHandler.mfmLoginHandler.getSchool();
                     school.addStudent(student);
-
-                    // Testing everything to make sure the student is populated correctly
-                    /*Log.i(Constants.LOG_TAG, String.format("value = %d", student.getId()));
-                    ArrayList<User> us = student.getUsers();
-                    for (User user : us) {
-                        user.getId();
-                        user.getStudent();
-                        user.getLastName();
-                        user.getFirstName();
-                        user.getPhotoUrl();
-                        user.getStudentUserRole();
-                        user.getUpdatedAt();
-                    }
-                    student.getUpdatedAt();
-                    student.getPhotoUrl();
-                    student.getFirstName();
-                    student.getLastName();
-                    student.getName();
-                    student.getSenderType();*/
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for updateStudent");
                 }
@@ -170,44 +152,17 @@ public class MfmRequestHandler {
                     ArrayList<Student> result = new ArrayList<>();
                     ArrayList<Integer> ids = group.getStudentIds();
                     for (int i = 0; i < ids.size(); i++) {
-                        Student student = globalHandler.getStudentByID(ids.get(i));
+                        Student student = ListHelper.findStudentWithId(globalHandler.mfmLoginHandler.getSchool().getStudents(), ids.get(i));
                         result.add(student);
                     }
                     group.setStudents(result);
 
                     School school = globalHandler.mfmLoginHandler.getSchool();
                     school.addGroup(group);
-
-                    // testing everything to make sure the group is populated correctly
-                    /*group.getSenderType();
-                    ArrayList<Student> students = group.getStudents();
-                    Log.i(Constants.LOG_TAG, students.toString());
-                    for (Student student : students) {
-                        student.getSenderType();
-                        student.getName();
-                        student.getLastName();
-                        student.getFirstName();
-                        student.getId();
-                        student.getPhotoUrl();
-                        student.getUpdatedAt();
-                        ArrayList<User> users = student.getUsers();
-                        for (User user : users) {
-                            user.getUpdatedAt();
-                            user.getStudentUserRole();
-                            user.getStudent();
-                            user.getPhotoUrl();
-                            user.getFirstName();
-                            user.getId();
-                            user.getLastName();
-                        }
-                    }
-                    group.getId();
-                    group.getStudentIds();
-                    group.getUpdatedAt();
-                    group.getPhotoUrl();
-                    group.getName();*/
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for updateGroup");
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         };

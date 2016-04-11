@@ -35,9 +35,7 @@ public class GlobalHandler {
 
 
     public void refreshStudents(final LoginActivity login) {
-        //mfmRequestHandler.requestListGroups();
         mfmRequestHandler.requestListStudents(login);
-        //login.populateStudentAndGroupSuccess();
     }
 
     public void refreshGroups(final LoginActivity login) {
@@ -74,25 +72,6 @@ public class GlobalHandler {
         } else {
             Log.e(Constants.LOG_TAG, "Tried to checkAndUpdateGroups with Kiosk not logged in");
         }
-    }
-
-
-    public Student getStudentByID(int id) {
-        Student result = null;
-
-        if (mfmLoginHandler.kioskIsLoggedIn) {
-            ArrayList<Student> students = mfmLoginHandler.getSchool().getStudents();
-            for (int i = 0; i < students.size(); i++) {
-                Student test = students.get(i);
-                if (id == test.getId()) {
-                    result = test;
-                }
-            }
-        } else {
-            Log.e(Constants.LOG_TAG, "Tried to getStudentByID with Kiosk not logged in");
-        }
-
-        return result;
     }
 
 

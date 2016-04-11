@@ -26,16 +26,16 @@ public class GroupDbHelper {
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
         String selection = "_id LIKE ?";
-        String[] selectionArgs = { String.valueOf(group.getId()) };
+        String[] selectionArgs = { String.valueOf(group.getDatabaseId()) };
         int resultInt;
 
         mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
         db = mDbHelper.getWritableDatabase();
         resultInt = db.delete(GroupContract.TABLE_NAME, selection, selectionArgs);
         if (resultInt == 1) {
-            Log.i(Constants.LOG_TAG, "deleted group _id=" + group.getId());
+            Log.i(Constants.LOG_TAG, "deleted group with _id=" + group.getId());
         } else {
-            Log.w(Constants.LOG_TAG, "Attempted to delete group _id=" +
+            Log.w(Constants.LOG_TAG, "Attempted to delete group with _id=" +
                 group.getId() + " but deleted " + resultInt + " items.");
         }
         result = (resultInt > 0);

@@ -64,14 +64,8 @@ public class StudentGroupDbHelper {
         values = new ContentValues();
         values.put(StudentGroupContract.COLUMN_GROUP_ID, String.valueOf(group.getId()));
         values.put(StudentGroupContract.COLUMN_STUDENT_ID, String.valueOf(student.getId()));
-        newGroupId = db.insert(StudentGroupContract.TABLE_NAME, "null", values);
-        newStudentId = db.insert(StudentGroupContract.TABLE_NAME, "null", values);
-
-        group.setDatabaseId(newGroupId);
-        Log.i(Constants.LOG_TAG, "inserted new group _id=" + newGroupId);
-
-        student.setDatabaseId(newStudentId);
-        Log.i(Constants.LOG_TAG, "inserted new student _id=" + newStudentId);
+        // construct in database (we don't care about the returned databaseId)
+        db.insert(StudentGroupContract.TABLE_NAME, "null", values);
     }
 
 

@@ -10,6 +10,7 @@ import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
+import org.cmucreatelab.mfm_android.helpers.static_classes.database.DbHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.GroupDbHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentDbHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentGroupDbHelper;
@@ -123,27 +124,6 @@ public class GlobalHandler {
     }
 
 
-    public void loadFromDb() {
-        if (mfmLoginHandler.kioskIsLoggedIn) {
-            // ASSERT: the students/groups list in school is empty
-            School school = mfmLoginHandler.getSchool();
-            ArrayList<Student> dbStudents;
-            ArrayList<Group> dbGroups;
-
-            dbStudents = StudentDbHelper.fetchFromDatabase(appContext);
-            for (Student student : dbStudents) {
-                school.addStudent(student);
-            }
-            dbGroups = GroupDbHelper.fetchFromDatabaseWithStudents(appContext, dbStudents);
-            for (Group group : dbGroups) {
-                school.addGroup(group);
-            }
-        } else {
-            Log.e(Constants.LOG_TAG, "trying to load from database but Kiosk is not logged in.");
-        }
-    }
-
-
     // Singleton Implementation
 
 
@@ -170,6 +150,8 @@ public class GlobalHandler {
         Kiosk.ioSVersion = Build.VERSION.RELEASE;
         // TODO sessions will need to be created when you select a student or group; for now this is just created to avoid null pointer
         this.sessionHandler.startSession(new Student());
+        // TODO load from database, then compare with HTTP request and perform necessary updates
+        //DbHelper.loadFromDb(appContext);
     }
 
 }

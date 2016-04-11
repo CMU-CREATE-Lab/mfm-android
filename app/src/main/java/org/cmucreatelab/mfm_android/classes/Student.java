@@ -16,7 +16,7 @@ public class Student implements Sender, Serializable {
     private String firstName,lastName;
     private String photoUrl;
     private String updatedAt;
-    private ArrayList<User> users; // users connected to the student (message recipients)
+    private ArrayList<User> users = new ArrayList<>(); // users connected to the student (message recipients)
 
     // getters/setters
     public long getDatabaseId() { return databaseId; }

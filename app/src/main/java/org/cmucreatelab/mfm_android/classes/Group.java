@@ -15,7 +15,7 @@ public class Group implements Sender {
     private String name;
     private String photoUrl;
     private String updatedAt;
-    private ArrayList<Student> students;
+    private ArrayList<Student> students = new ArrayList<>();
     private ArrayList<Integer> studentIds;
 
     // getters/setters

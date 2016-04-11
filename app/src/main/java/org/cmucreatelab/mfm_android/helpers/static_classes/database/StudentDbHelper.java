@@ -26,16 +26,16 @@ public class StudentDbHelper {
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
         String selection = "_id LIKE ?";
-        String[] selectionArgs = { String.valueOf(student.getId()) };
+        String[] selectionArgs = { String.valueOf(student.getDatabaseId()) };
         int resultInt;
 
         mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
         db = mDbHelper.getWritableDatabase();
         resultInt = db.delete(StudentContract.TABLE_NAME, selection, selectionArgs);
         if (resultInt == 1) {
-            Log.i(Constants.LOG_TAG, "deleted student _id=" + student.getId());
+            Log.i(Constants.LOG_TAG, "deleted student with _id=" + student.getId());
         } else {
-            Log.w(Constants.LOG_TAG, "Attempted to delete student _id=" +
+            Log.w(Constants.LOG_TAG, "Attempted to delete student with _id=" +
                     student.getId() + " but deleted " + resultInt + " items.");
         }
         result = (resultInt > 0);

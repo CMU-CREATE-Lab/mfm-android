@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.School;
+import org.cmucreatelab.mfm_android.classes.Sender;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
@@ -73,6 +74,48 @@ public class DbHelper {
         }
         for (Student mStudent : flatStudents) {
             StudentDbHelper.addToDatabase(context, mStudent);
+        }
+    }
+
+
+    public static void destroy(Context context, Sender sender) {
+        switch(sender.getSenderType()) {
+            case Group:
+                GroupDbHelper.destroy(context, (Group)sender);
+                break;
+            case Student:
+                StudentDbHelper.destroy(context, (Student)sender);
+                break;
+            default:
+                Log.e(Constants.LOG_TAG, "Invalid SenderType in DbHelper.destroy");
+        }
+    }
+
+
+    public static void addToDatabase(Context context, Sender sender) {
+        switch(sender.getSenderType()) {
+            case Group:
+                GroupDbHelper.addToDatabase(context, (Group) sender);
+                break;
+            case Student:
+                StudentDbHelper.addToDatabase(context, (Student) sender);
+                break;
+            default:
+                Log.e(Constants.LOG_TAG, "Invalid SenderType in DbHelper.addToDatabase");
+        }
+    }
+
+
+    public static void update(Context context, Sender sender) {
+        switch(sender.getSenderType()) {
+            case Group:
+                GroupDbHelper.update(context, (Group) sender);
+                break;
+            case Student:
+                StudentDbHelper.update(context, (Student) sender);
+                break;
+            default:
+                Log.e(Constants.LOG_TAG, "Invalid SenderType in DbHelper.update");
         }
     }
 

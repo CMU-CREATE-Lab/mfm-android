@@ -106,19 +106,11 @@ public class GlobalHandler {
 
         // groups and students in each of those groups
         for (Group group : groups) {
-            GroupDbHelper.addToDatabase(appContext, group);
-            ArrayList<Student> studentsInGroups = group.getStudents();
-            for (Student student : studentsInGroups) {
-                StudentGroupDbHelper.addToDatabase(appContext, student, group);
-            }
+            DbHelper.addToDatabase(appContext, group);
         }
         // students and users for each of those students
         for (Student student : students) {
-            StudentDbHelper.addToDatabase(appContext, student);
-            ArrayList<User> users = student.getUsers();
-            for (User user : users) {
-                UserDbHelper.addToDatabase(appContext, user);
-            }
+            DbHelper.addToDatabase(appContext, student);
         }
 
     }

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class StudentGroupDbHelper {
 
 
-    public static void destroyAllFromStudent(Context context, int studentId) {
+    protected static void destroyAllFromStudent(Context context, int studentId) {
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
         String selection = StudentGroupContract.COLUMN_STUDENT_ID + " = ?";
@@ -35,7 +35,7 @@ public class StudentGroupDbHelper {
     }
 
 
-    public static void destroyAllFromGroup(Context context, int groupId) {
+    protected static void destroyAllFromGroup(Context context, int groupId) {
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
         String selection = StudentGroupContract.COLUMN_GROUP_ID + " = ?";
@@ -53,7 +53,7 @@ public class StudentGroupDbHelper {
     }
 
 
-    public static void addToDatabase(Context context, Student student, Group group) {
+    protected static void addToDatabase(Context context, Student student, Group group) {
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
         ContentValues values;
@@ -69,7 +69,7 @@ public class StudentGroupDbHelper {
     }
 
 
-    public static void populateGroupFromDb(Context context, Group group, ArrayList<Student> students) {
+    protected static void populateGroupFromDb(Context context, Group group, ArrayList<Student> students) {
         ArrayList<Student> result = new ArrayList<>();
 
         String[] projection = {

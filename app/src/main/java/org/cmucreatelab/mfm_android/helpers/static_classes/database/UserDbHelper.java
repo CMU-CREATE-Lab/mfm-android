@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
@@ -15,47 +14,6 @@ import java.util.ArrayList;
  * Created by mike on 2/8/16.
  */
 public class UserDbHelper {
-
-
-    public static void destroyAllFromStudent(Context context, int studentId) {
-        MessageFromMeSQLLiteOpenHelper mDbHelper;
-        SQLiteDatabase db;
-        String selection = UserContract.COLUMN_STUDENT_ID + " = ?";
-        String[] selectionArgs = {String.valueOf(studentId)};
-        int resultInt;
-
-        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
-        db = mDbHelper.getWritableDatabase();
-        resultInt = db.delete(UserContract.TABLE_NAME, selection, selectionArgs);
-        if (resultInt > 0) {
-            Log.i(Constants.LOG_TAG, "deleted " + resultInt + " users.");
-        } else {
-            Log.w(Constants.LOG_TAG, "Attempted to delete users with studentId=" + studentId + " but returned " + resultInt);
-        }
-    }
-
-
-    public static void addToDatabase(Context context, User user) {
-        MessageFromMeSQLLiteOpenHelper mDbHelper;
-        SQLiteDatabase db;
-        ContentValues values;
-        long newId;
-
-        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
-        db = mDbHelper.getWritableDatabase();
-        values = new ContentValues();
-        values.put(UserContract.COLUMN_FIRST_NAME, user.getFirstName());
-        values.put(UserContract.COLUMN_LAST_NAME, String.valueOf(user.getLastName()));
-        values.put(UserContract.COLUMN_STUDENT_ID, user.getStudent().getId());
-        values.put(UserContract.COLUMN_USER_ID, user.getId());
-        values.put(UserContract.COLUMN_STUDENT_USER_ROLE, user.getStudentUserRole());
-        values.put(UserContract.COLUMN_PHOTO_URL, user.getPhotoUrl());
-        values.put(UserContract.COLUMN_UPDATED_AT, user.getUpdatedAt());
-        newId = db.insert(UserContract.TABLE_NAME, "null", values);
-
-        user.setDatabaseId(newId);
-        Log.i(Constants.LOG_TAG, "inserted new user _id=" + newId);
-    }
 
 
     private static User generateUserFromRecord(Cursor cursor, Student student) {
@@ -101,8 +59,49 @@ public class UserDbHelper {
     }
 
 
+    protected static void destroyAllFromStudent(Context context, int studentId) {
+        MessageFromMeSQLLiteOpenHelper mDbHelper;
+        SQLiteDatabase db;
+        String selection = UserContract.COLUMN_STUDENT_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(studentId)};
+        int resultInt;
+
+        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
+        db = mDbHelper.getWritableDatabase();
+        resultInt = db.delete(UserContract.TABLE_NAME, selection, selectionArgs);
+        if (resultInt > 0) {
+            Log.i(Constants.LOG_TAG, "deleted " + resultInt + " users.");
+        } else {
+            Log.w(Constants.LOG_TAG, "Attempted to delete users with studentId=" + studentId + " but returned " + resultInt);
+        }
+    }
+
+
+    protected static void addToDatabase(Context context, User user) {
+        MessageFromMeSQLLiteOpenHelper mDbHelper;
+        SQLiteDatabase db;
+        ContentValues values;
+        long newId;
+
+        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
+        db = mDbHelper.getWritableDatabase();
+        values = new ContentValues();
+        values.put(UserContract.COLUMN_FIRST_NAME, user.getFirstName());
+        values.put(UserContract.COLUMN_LAST_NAME, String.valueOf(user.getLastName()));
+        values.put(UserContract.COLUMN_STUDENT_ID, user.getStudent().getId());
+        values.put(UserContract.COLUMN_USER_ID, user.getId());
+        values.put(UserContract.COLUMN_STUDENT_USER_ROLE, user.getStudentUserRole());
+        values.put(UserContract.COLUMN_PHOTO_URL, user.getPhotoUrl());
+        values.put(UserContract.COLUMN_UPDATED_AT, user.getUpdatedAt());
+        newId = db.insert(UserContract.TABLE_NAME, "null", values);
+
+        user.setDatabaseId(newId);
+        Log.i(Constants.LOG_TAG, "inserted new user _id=" + newId);
+    }
+
+
     // NOTE: this fetches from the database ONLY for a specific studentId
-    public static ArrayList<User> fetchFromDatabaseWithStudent(Context context, Student student) {
+    protected static ArrayList<User> fetchFromDatabaseWithStudent(Context context, Student student) {
         ArrayList<User> result = new ArrayList<>();
 
         String[] projection = {

@@ -16,7 +16,40 @@ import java.util.ArrayList;
 public class GroupDbHelper {
 
 
-    public static boolean destroy(Context context, Group group) {
+    private static Group generateGroupFromRecord(Context context, Cursor cursor, ArrayList<Student> students) {
+        Group result = new Group();
+
+        int id;
+        String name,groupId, photoURL, updatedAt;
+
+        try {
+            // read record
+            id = cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
+            name = cursor.getString(cursor.getColumnIndexOrThrow(GroupContract.COLUMN_NAME));
+            groupId = cursor.getString(cursor.getColumnIndexOrThrow(GroupContract.COLUMN_GROUP_ID));
+            photoURL = cursor.getString(cursor.getColumnIndexOrThrow(GroupContract.COLUMN_PHOTO_URL));
+            updatedAt = cursor.getString(cursor.getColumnIndexOrThrow(GroupContract.COLUMN_UPDATED_AT));
+            Log.v(Constants.LOG_TAG, "Read group record _id=" + id);
+
+            // add to data structure
+            result.setDatabaseId(id);
+            result.setName(name);
+            result.setId(Integer.parseInt(groupId));
+            result.setPhotoUrl(photoURL);
+            result.setUpdatedAt(updatedAt);
+
+            // make request for the group's students
+            StudentGroupDbHelper.populateGroupFromDb(context, result, students);
+        } catch (Exception e) {
+            Log.e(Constants.LOG_TAG, "Failed to read from cursor! cursor.toString()=" + cursor.toString());
+            throw e;
+        }
+
+        return result;
+    }
+
+
+    protected static boolean destroy(Context context, Group group) {
         boolean result = false;
 
         if (group.getDatabaseId() < 0) {
@@ -47,7 +80,7 @@ public class GroupDbHelper {
     }
 
 
-    public static void addToDatabase(Context context, Group group) {
+    protected static void addToDatabase(Context context, Group group) {
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
         ContentValues values;
@@ -74,7 +107,7 @@ public class GroupDbHelper {
     }
 
 
-    public static void update(Context context, Group group) {
+    protected static void update(Context context, Group group) {
         if (group.getDatabaseId() >= 0) {
             MessageFromMeSQLLiteOpenHelper mDbHelper;
             SQLiteDatabase db;
@@ -112,40 +145,7 @@ public class GroupDbHelper {
     }
 
 
-    private static Group generateGroupFromRecord(Context context, Cursor cursor, ArrayList<Student> students) {
-        Group result = new Group();
-
-        int id;
-        String name,groupId, photoURL, updatedAt;
-
-        try {
-            // read record
-            id = cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
-            name = cursor.getString(cursor.getColumnIndexOrThrow(GroupContract.COLUMN_NAME));
-            groupId = cursor.getString(cursor.getColumnIndexOrThrow(GroupContract.COLUMN_GROUP_ID));
-            photoURL = cursor.getString(cursor.getColumnIndexOrThrow(GroupContract.COLUMN_PHOTO_URL));
-            updatedAt = cursor.getString(cursor.getColumnIndexOrThrow(GroupContract.COLUMN_UPDATED_AT));
-            Log.v(Constants.LOG_TAG, "Read group record _id=" + id);
-
-            // add to data structure
-            result.setDatabaseId(id);
-            result.setName(name);
-            result.setId(Integer.parseInt(groupId));
-            result.setPhotoUrl(photoURL);
-            result.setUpdatedAt(updatedAt);
-
-            // make request for the group's students
-            StudentGroupDbHelper.populateGroupFromDb(context, result, students);
-        } catch (Exception e) {
-            Log.e(Constants.LOG_TAG, "Failed to read from cursor! cursor.toString()=" + cursor.toString());
-            throw e;
-        }
-
-        return result;
-    }
-
-
-    public static ArrayList<Group> fetchFromDatabaseWithStudents(Context context, ArrayList<Student> students) {
+    protected static ArrayList<Group> fetchFromDatabaseWithStudents(Context context, ArrayList<Student> students) {
         ArrayList<Group> result = new ArrayList<>();
 
         String[] projection = {

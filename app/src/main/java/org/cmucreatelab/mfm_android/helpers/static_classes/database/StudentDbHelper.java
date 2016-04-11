@@ -16,7 +16,42 @@ import java.util.ArrayList;
 public class StudentDbHelper {
 
 
-    public static boolean destroy(Context context, Student student) {
+    private static Student generateStudentFromRecord(Context context, Cursor cursor) {
+        Student result = new Student();
+
+        int id;
+        String firstName, lastName,studentID, photoURL, updatedAt;
+
+        try {
+            // read record
+            id = cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
+            firstName = cursor.getString(cursor.getColumnIndexOrThrow(StudentContract.COLUMN_FIRST_NAME));
+            lastName = cursor.getString(cursor.getColumnIndexOrThrow(StudentContract.COLUMN_LAST_NAME));
+            studentID = cursor.getString(cursor.getColumnIndexOrThrow(StudentContract.COLUMN_STUDENT_ID));
+            photoURL = cursor.getString(cursor.getColumnIndexOrThrow(StudentContract.COLUMN_PHOTO_URL));
+            updatedAt = cursor.getString(cursor.getColumnIndexOrThrow(StudentContract.COLUMN_UPDATED_AT));
+            Log.v(Constants.LOG_TAG, "Read student record _id=" + id);
+
+            // add to data structure
+            result.setDatabaseId(id);
+            result.setFirstName(firstName);
+            result.setLastName(lastName);
+            result.setId(Integer.parseInt(studentID));
+            result.setPhotoUrl(photoURL);
+            result.setUpdatedAt(updatedAt);
+
+            // make request for the student's users
+            result.setUsers(UserDbHelper.fetchFromDatabaseWithStudent(context, result));
+        } catch (Exception e) {
+            Log.e(Constants.LOG_TAG, "Failed to read from cursor! cursor.toString()=" + cursor.toString());
+            throw e;
+        }
+
+        return result;
+    }
+
+
+    protected static boolean destroy(Context context, Student student) {
         boolean result = false;
 
         if (student.getDatabaseId() < 0) {
@@ -49,7 +84,7 @@ public class StudentDbHelper {
     }
 
 
-    public static void addToDatabase(Context context, Student student) {
+    protected static void addToDatabase(Context context, Student student) {
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
         ContentValues values;
@@ -77,7 +112,7 @@ public class StudentDbHelper {
     }
 
 
-    public static void update(Context context, Student student) {
+    protected static void update(Context context, Student student) {
         if (student.getDatabaseId() >= 0) {
             MessageFromMeSQLLiteOpenHelper mDbHelper;
             SQLiteDatabase db;
@@ -118,42 +153,7 @@ public class StudentDbHelper {
     }
 
 
-    private static Student generateStudentFromRecord(Context context, Cursor cursor) {
-        Student result = new Student();
-
-        int id;
-        String firstName, lastName,studentID, photoURL, updatedAt;
-
-        try {
-            // read record
-            id = cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
-            firstName = cursor.getString(cursor.getColumnIndexOrThrow(StudentContract.COLUMN_FIRST_NAME));
-            lastName = cursor.getString(cursor.getColumnIndexOrThrow(StudentContract.COLUMN_LAST_NAME));
-            studentID = cursor.getString(cursor.getColumnIndexOrThrow(StudentContract.COLUMN_STUDENT_ID));
-            photoURL = cursor.getString(cursor.getColumnIndexOrThrow(StudentContract.COLUMN_PHOTO_URL));
-            updatedAt = cursor.getString(cursor.getColumnIndexOrThrow(StudentContract.COLUMN_UPDATED_AT));
-            Log.v(Constants.LOG_TAG, "Read student record _id=" + id);
-
-            // add to data structure
-            result.setDatabaseId(id);
-            result.setFirstName(firstName);
-            result.setLastName(lastName);
-            result.setId(Integer.parseInt(studentID));
-            result.setPhotoUrl(photoURL);
-            result.setUpdatedAt(updatedAt);
-
-            // make request for the student's users
-            result.setUsers(UserDbHelper.fetchFromDatabaseWithStudent(context, result));
-        } catch (Exception e) {
-            Log.e(Constants.LOG_TAG, "Failed to read from cursor! cursor.toString()=" + cursor.toString());
-            throw e;
-        }
-
-        return result;
-    }
-
-
-    public static ArrayList<Student> fetchFromDatabase(Context context) {
+    protected static ArrayList<Student> fetchFromDatabase(Context context) {
         ArrayList<Student> result = new ArrayList<>();
 
         String[] projection = {

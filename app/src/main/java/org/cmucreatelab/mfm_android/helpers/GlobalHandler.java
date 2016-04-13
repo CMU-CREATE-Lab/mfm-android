@@ -10,6 +10,7 @@ import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
+import org.cmucreatelab.mfm_android.helpers.static_classes.ListHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.DbHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.GroupDbHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentDbHelper;
@@ -43,15 +44,32 @@ public class GlobalHandler {
     }
 
 
-    public void checkAndUpdateStudents(final LoginActivity login, ArrayList<Student> students) {
+    public void checkAndUpdateStudents(final LoginActivity login, ArrayList<Student> studentsFromMfmRequest) {
         if (mfmLoginHandler.kioskIsLoggedIn) {
-            // TODO we want to compare updatedAt string with objects sharing IDs. If they need updated, add/update them.
-            // For now, just clear and add all
             School school = mfmLoginHandler.getSchool();
-            school.getStudents().clear();
-            //school.getStudents().addAll(students);
-            for (Student student : students) {
-                mfmRequestHandler.updateStudent(student);
+            ArrayList<Student> studentsFromDB = school.getStudents();
+            for (Student mfmStudent : studentsFromMfmRequest) {
+                try {
+                    Student dbStudent = ListHelper.findStudentWithId(studentsFromDB, mfmStudent.getId());
+                    // should we compare based off of some threshold?
+                    // does the api only update at a fixed interval of time?
+                    if (!dbStudent.getUpdatedAt().equals(mfmStudent.getUpdatedAt())) {
+                        mfmRequestHandler.updateStudent(dbStudent);
+                        DbHelper.update(appContext, dbStudent);
+                    }
+                    // For now we have to call this because the list of users within a student will not be populated.
+                    // Basically, loading from the database does not populate the list of users. It just populates fields
+                    // like FirstName and LastName.
+                    mfmRequestHandler.updateStudent(dbStudent);
+                } catch (Exception e) {
+                    Log.i(Constants.LOG_TAG, "No student found in the database that matched the mfmRequest. Adding to database");
+                    school.addStudent(mfmStudent);
+                    DbHelper.addToDatabase(appContext, mfmStudent);
+                    mfmRequestHandler.updateStudent(mfmStudent); // still calling this to populate the rest of the attributes
+
+                    //removing for now because I have a ton of duplicates I think.
+                    DbHelper.destroy(appContext, mfmStudent);
+                }
             }
             login.populateStudentsSuccess();
         } else {
@@ -60,13 +78,26 @@ public class GlobalHandler {
     }
 
 
-    public void checkAndUpdateGroups(final LoginActivity login, ArrayList<Group> groups) {
+    public void checkAndUpdateGroups(final LoginActivity login, ArrayList<Group> groupsFromMfmRequest) {
         if (mfmLoginHandler.kioskIsLoggedIn) {
             School school = mfmLoginHandler.getSchool();
-            school.getGroups().clear();
-            //school.getGroups().addAll(groups);
-            for (Group group : groups) {
-                mfmRequestHandler.updateGroup(group);
+            ArrayList<Group> groupsFromDB = school.getGroups();
+            for (Group mfmGroup : groupsFromMfmRequest) {
+                try {
+                    Group dbGroup = ListHelper.findGroupWithId(groupsFromDB, mfmGroup.getId());
+                    if (dbGroup.getUpdatedAt().equals(mfmGroup.getUpdatedAt())) {
+                        mfmRequestHandler.updateGroup(dbGroup);
+                        DbHelper.update(appContext, dbGroup);
+                    }
+                    mfmRequestHandler.updateGroup(dbGroup);
+                } catch (Exception e) {
+                    Log.i(Constants.LOG_TAG, "No student found in the database that matched the mfmRequest. Adding to database");
+                    school.addGroup(mfmGroup);
+                    DbHelper.addToDatabase(appContext, mfmGroup);
+                    mfmRequestHandler.updateGroup(mfmGroup);
+
+                    DbHelper.destroy(appContext, mfmGroup);
+                }
             }
             login.populateGroupsSuccess();
         } else {
@@ -75,6 +106,7 @@ public class GlobalHandler {
     }
 
 
+    // We probably do not need this method anymore
     public void addStudentsAndGroupsToDatabase() {
         Log.i(Constants.LOG_TAG, mfmLoginHandler.getSchool().toString());
         ArrayList<Group> groups = mfmLoginHandler.getSchool().getGroups();
@@ -122,7 +154,9 @@ public class GlobalHandler {
         // TODO sessions will need to be created when you select a student or group; for now this is just created to avoid null pointer
         this.sessionHandler.startSession(new Student());
         // TODO load from database, then compare with HTTP request and perform necessary updates
+        // TODO as of right now, if I call this method the app crashes.
         //DbHelper.loadFromDb(appContext);
+        // for now im clearing the database each time i start the app...just for testing purposes
     }
 
 }

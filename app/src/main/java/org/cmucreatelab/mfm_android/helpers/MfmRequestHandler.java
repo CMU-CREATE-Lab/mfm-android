@@ -113,9 +113,9 @@ public class MfmRequestHandler {
                     for (User user: users) {
                         user.setStudent(student);
                     }
-                    // update the school object
-                    School school = globalHandler.mfmLoginHandler.getSchool();
-                    school.addStudent(student);
+                    // update the school object and database
+                    //School school = globalHandler.mfmLoginHandler.getSchool();
+                    //school.addStudent(student);
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for updateStudent");
                 }
@@ -157,8 +157,8 @@ public class MfmRequestHandler {
                     }
                     group.setStudents(result);
 
-                    School school = globalHandler.mfmLoginHandler.getSchool();
-                    school.addGroup(group);
+                    //School school = globalHandler.mfmLoginHandler.getSchool();
+                    //school.addGroup(group);
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for updateGroup");
                 } catch (Exception e) {

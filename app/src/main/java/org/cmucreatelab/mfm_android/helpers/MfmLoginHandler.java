@@ -76,7 +76,7 @@ public class MfmLoginHandler {
 
     public void logout() {
         // write to database
-        globalHandler.addStudentsAndGroupsToDatabase();
+        //globalHandler.addStudentsAndGroupsToDatabase();
 
         this.kioskIsLoggedIn = false;
         if (this.kiosk != null) {

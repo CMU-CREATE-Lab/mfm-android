@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
+import org.cmucreatelab.mfm_android.activities.LoginActivity;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
@@ -46,6 +48,8 @@ public class StudentDbHelper {
             Log.e(Constants.LOG_TAG, "Failed to read from cursor! cursor.toString()=" + cursor.toString());
             throw e;
         }
+
+        Log.i(Constants.LOG_TAG, "I go by the name of " + result.getFirstName());
 
         return result;
     }
@@ -133,7 +137,7 @@ public class StudentDbHelper {
             contentValues.put(StudentContract.COLUMN_UPDATED_AT, student.getUpdatedAt());
 
             // perform update
-            result = db.update(GroupContract.TABLE_NAME, contentValues, selection, selectionArgs);
+            result = db.update(StudentContract.TABLE_NAME, contentValues, selection, selectionArgs);
             if (result == 1) {
                 Log.i(Constants.LOG_TAG, "updated student _id=" + student.getDatabaseId());
             } else {
@@ -158,14 +162,13 @@ public class StudentDbHelper {
 
         String[] projection = {
                 "_id",
-                StudentContract.COLUMN_FIRST_NAME, StudentContract.COLUMN_LAST_NAME,
-                StudentContract.COLUMN_STUDENT_ID, StudentContract.COLUMN_PHOTO_URL,
-                StudentContract.COLUMN_UPDATED_AT,
+                StudentContract.COLUMN_STUDENT_ID,StudentContract.COLUMN_FIRST_NAME,
+                StudentContract.COLUMN_LAST_NAME, StudentContract.COLUMN_PHOTO_URL,
+                StudentContract.COLUMN_UPDATED_AT
         };
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
         Cursor cursor;
-
         mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
         db = mDbHelper.getWritableDatabase();
         cursor = db.query(StudentContract.TABLE_NAME, projection,
@@ -174,8 +177,12 @@ public class StudentDbHelper {
                 StudentContract.COLUMN_STUDENT_ID + " ASC" // sort order
         );
 
+        Log.i(Constants.LOG_TAG, String.format("%d", cursor.getColumnCount()));
+        Log.i(Constants.LOG_TAG, String.format("%b", cursor.isAfterLast()));
         cursor.moveToFirst();
+        Log.i(Constants.LOG_TAG, String.format("%b", cursor.isAfterLast()));
         while (!cursor.isAfterLast()) {
+            Log.i(Constants.LOG_TAG, "Attempting to generate student from record.");
             try {
                 result.add(generateStudentFromRecord(context, cursor));
             } catch (Exception e) {

@@ -18,6 +18,8 @@ import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
+import org.cmucreatelab.mfm_android.helpers.static_classes.database.DbHelper;
+
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import android.annotation.TargetApi;
@@ -28,6 +30,8 @@ import java.util.ArrayList;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity {
+
+    private GlobalHandler globalHandler;
 
     private EditText mUsernameView;
     private EditText mPasswordView;
@@ -45,18 +49,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void loginSuccess() {
-        GlobalHandler.getInstance(getApplicationContext()).refreshStudents(this);
-    }
-
-
-    public void loginFailure() {
-        // TODO Have more possible failures instead of just username or password being invalid.
-        showProgress(false);
-        Toast.makeText(this.getApplicationContext(), R.string.error_invalid_credentials, Toast.LENGTH_LONG).show();
-    }
-
-
     public void populateStudentsSuccess() {
         GlobalHandler.getInstance(getApplicationContext()).refreshGroups(this);
     }
@@ -69,8 +61,19 @@ public class LoginActivity extends AppCompatActivity {
 
     public void requestListSchoolsSuccess(ArrayList<School> schools) {
         // TODO fix so I am not just using the first school
-        final GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
+        globalHandler = GlobalHandler.getInstance(getApplicationContext());
         globalHandler.mfmRequestHandler.login(this, username, password, schools.get(0).getId().toString());
+    }
+
+    public void loginSuccess() {
+        GlobalHandler.getInstance(getApplicationContext()).refreshStudents(this);
+    }
+
+
+    public void loginFailure() {
+        // TODO Have more possible failures instead of just username or password being invalid.
+        showProgress(false);
+        Toast.makeText(this.getApplicationContext(), R.string.error_invalid_credentials, Toast.LENGTH_LONG).show();
     }
 
 

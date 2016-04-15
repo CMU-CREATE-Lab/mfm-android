@@ -1,6 +1,7 @@
 package org.cmucreatelab.mfm_android.helpers.static_classes.database;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.School;
@@ -75,6 +76,16 @@ public class DbHelper {
         for (Student mStudent : flatStudents) {
             StudentDbHelper.addToDatabase(context, mStudent);
         }
+    }
+
+
+    public static void clearAll(Context context) {
+        MessageFromMeSQLLiteOpenHelper md = new MessageFromMeSQLLiteOpenHelper(context);
+        SQLiteDatabase db = md.getWritableDatabase();
+        db.delete(GroupContract.TABLE_NAME, null, null);
+        db.delete(StudentContract.TABLE_NAME, null, null);
+        db.delete(StudentGroupContract.TABLE_NAME, null, null);
+        db.delete(UserContract.TABLE_NAME, null, null);
     }
 
 

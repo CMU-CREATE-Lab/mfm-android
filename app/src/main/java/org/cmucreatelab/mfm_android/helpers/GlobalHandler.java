@@ -1,6 +1,7 @@
 package org.cmucreatelab.mfm_android.helpers;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.util.Log;
 import org.cmucreatelab.mfm_android.activities.LoginActivity;
@@ -13,6 +14,8 @@ import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.ListHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.DbHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.GroupDbHelper;
+import org.cmucreatelab.mfm_android.helpers.static_classes.database.MessageFromMeSQLLiteOpenHelper;
+import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentContract;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentDbHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentGroupDbHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.UserDbHelper;
@@ -48,6 +51,9 @@ public class GlobalHandler {
         if (mfmLoginHandler.kioskIsLoggedIn) {
             School school = mfmLoginHandler.getSchool();
             ArrayList<Student> studentsFromDB = school.getStudents();
+
+           // Log.i(Constants.LOG_TAG, studentsFromDB.get(0).getFirstName());
+
             for (Student mfmStudent : studentsFromMfmRequest) {
                 try {
                     Student dbStudent = ListHelper.findStudentWithId(studentsFromDB, mfmStudent.getId());
@@ -55,7 +61,6 @@ public class GlobalHandler {
                     // does the api only update at a fixed interval of time?
                     if (!dbStudent.getUpdatedAt().equals(mfmStudent.getUpdatedAt())) {
                         mfmRequestHandler.updateStudent(dbStudent);
-                        DbHelper.update(appContext, dbStudent);
                     }
                     // For now we have to call this because the list of users within a student will not be populated.
                     // Basically, loading from the database does not populate the list of users. It just populates fields
@@ -66,9 +71,6 @@ public class GlobalHandler {
                     school.addStudent(mfmStudent);
                     DbHelper.addToDatabase(appContext, mfmStudent);
                     mfmRequestHandler.updateStudent(mfmStudent); // still calling this to populate the rest of the attributes
-
-                    //removing for now because I have a ton of duplicates I think.
-                    DbHelper.destroy(appContext, mfmStudent);
                 }
             }
             login.populateStudentsSuccess();
@@ -95,8 +97,6 @@ public class GlobalHandler {
                     school.addGroup(mfmGroup);
                     DbHelper.addToDatabase(appContext, mfmGroup);
                     mfmRequestHandler.updateGroup(mfmGroup);
-
-                    DbHelper.destroy(appContext, mfmGroup);
                 }
             }
             login.populateGroupsSuccess();
@@ -153,10 +153,6 @@ public class GlobalHandler {
         Kiosk.ioSVersion = Build.VERSION.RELEASE;
         // TODO sessions will need to be created when you select a student or group; for now this is just created to avoid null pointer
         this.sessionHandler.startSession(new Student());
-        // TODO load from database, then compare with HTTP request and perform necessary updates
-        // TODO as of right now, if I call this method the app crashes.
-        //DbHelper.loadFromDb(appContext);
-        // for now im clearing the database each time i start the app...just for testing purposes
     }
 
 }

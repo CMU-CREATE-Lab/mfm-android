@@ -7,6 +7,7 @@ import android.util.Log;
 import org.cmucreatelab.mfm_android.classes.Kiosk;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
+import org.cmucreatelab.mfm_android.helpers.static_classes.database.DbHelper;
 
 /**
  * Created by mike on 3/30/16.
@@ -71,6 +72,9 @@ public class MfmLoginHandler {
         editor.putString(Constants.PreferencesKeys.kioskUid, kioskUid);
         editor.putString(Constants.PreferencesKeys.kioskSchoolName, school.getName());
         editor.apply();
+
+        // load from database
+        DbHelper.loadFromDb(globalHandler.appContext);
     }
 
 

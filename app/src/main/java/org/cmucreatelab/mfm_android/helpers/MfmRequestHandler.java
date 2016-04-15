@@ -12,6 +12,7 @@ import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.JSONParser;
 import org.cmucreatelab.mfm_android.helpers.static_classes.ListHelper;
+import org.cmucreatelab.mfm_android.helpers.static_classes.database.DbHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -113,9 +114,8 @@ public class MfmRequestHandler {
                     for (User user: users) {
                         user.setStudent(student);
                     }
-                    // update the school object and database
-                    //School school = globalHandler.mfmLoginHandler.getSchool();
-                    //school.addStudent(student);
+                    DbHelper.update(globalHandler.appContext, student);
+                    DbHelper.destroy(globalHandler.appContext, student); // temporary
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for updateStudent");
                 }
@@ -156,9 +156,8 @@ public class MfmRequestHandler {
                         result.add(student);
                     }
                     group.setStudents(result);
-
-                    //School school = globalHandler.mfmLoginHandler.getSchool();
-                    //school.addGroup(group);
+                    DbHelper.update(globalHandler.appContext, group);
+                    DbHelper.destroy(globalHandler.appContext, group); // temporary
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for updateGroup");
                 } catch (Exception e) {
@@ -210,9 +209,13 @@ public class MfmRequestHandler {
             public void onResponse(JSONObject response) {
                 Log.i(Constants.LOG_TAG, "requestListSchools onResponse");
                 try {
-                    ArrayList<School> schools = JSONParser.parseSchoolsFromJSON(response);
-                    // TODO we probably will send this to an Activity to display, rather than storing in GH
-                   login.requestListSchoolsSuccess(schools);
+                    String success = response.getString("success");
+                    if (success.equals("true")) {
+                        ArrayList<School> schools = JSONParser.parseSchoolsFromJSON(response);
+                        login.requestListSchoolsSuccess(schools);
+                    } else {
+                        login.loginFailure();
+                    }
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for requestListSchools.");
                 }

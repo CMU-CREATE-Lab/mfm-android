@@ -45,9 +45,6 @@ public class UserDbHelper {
             result.setLastName(lastName);
             result.setStudentUserRole(studentUserRole);
             result.setId(Integer.parseInt(userId));
-            // The only way I can think of getting the student with the structure layed out so far, is by accessing the kiosk.
-            // Right now the student is a null pointer.
-            //result.getStudent().setId(Integer.parseInt(studentId));
             result.setPhotoUrl(photoURL);
             result.setUpdatedAt(updatedAt);
         } catch (Exception e) {

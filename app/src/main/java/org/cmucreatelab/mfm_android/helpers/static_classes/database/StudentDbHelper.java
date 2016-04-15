@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import org.cmucreatelab.mfm_android.activities.LoginActivity;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
@@ -48,8 +47,6 @@ public class StudentDbHelper {
             Log.e(Constants.LOG_TAG, "Failed to read from cursor! cursor.toString()=" + cursor.toString());
             throw e;
         }
-
-        Log.i(Constants.LOG_TAG, "I go by the name of " + result.getFirstName());
 
         return result;
     }
@@ -177,10 +174,7 @@ public class StudentDbHelper {
                 StudentContract.COLUMN_STUDENT_ID + " ASC" // sort order
         );
 
-        Log.i(Constants.LOG_TAG, String.format("%d", cursor.getColumnCount()));
-        Log.i(Constants.LOG_TAG, String.format("%b", cursor.isAfterLast()));
         cursor.moveToFirst();
-        Log.i(Constants.LOG_TAG, String.format("%b", cursor.isAfterLast()));
         while (!cursor.isAfterLast()) {
             Log.i(Constants.LOG_TAG, "Attempting to generate student from record.");
             try {

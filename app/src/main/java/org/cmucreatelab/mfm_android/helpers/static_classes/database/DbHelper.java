@@ -136,6 +136,7 @@ public class DbHelper {
         if (mfmLoginHandler.kioskIsLoggedIn) {
             // ASSERT: the students/groups list in school is empty
             School school = mfmLoginHandler.getSchool();
+            Log.i(Constants.LOG_TAG, school.getName());
             ArrayList<Student> dbStudents;
             ArrayList<Group> dbGroups;
 

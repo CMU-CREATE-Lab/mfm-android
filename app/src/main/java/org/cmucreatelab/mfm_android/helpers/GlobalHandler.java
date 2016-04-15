@@ -52,8 +52,6 @@ public class GlobalHandler {
             School school = mfmLoginHandler.getSchool();
             ArrayList<Student> studentsFromDB = school.getStudents();
 
-           // Log.i(Constants.LOG_TAG, studentsFromDB.get(0).getFirstName());
-
             for (Student mfmStudent : studentsFromMfmRequest) {
                 try {
                     Student dbStudent = ListHelper.findStudentWithId(studentsFromDB, mfmStudent.getId());
@@ -62,10 +60,6 @@ public class GlobalHandler {
                     if (!dbStudent.getUpdatedAt().equals(mfmStudent.getUpdatedAt())) {
                         mfmRequestHandler.updateStudent(dbStudent);
                     }
-                    // For now we have to call this because the list of users within a student will not be populated.
-                    // Basically, loading from the database does not populate the list of users. It just populates fields
-                    // like FirstName and LastName.
-//                    mfmRequestHandler.updateStudent(dbStudent);
                 } catch (Exception e) {
                     Log.i(Constants.LOG_TAG, "No student found in the database that matched the mfmRequest. Adding to database");
                     school.addStudent(mfmStudent);
@@ -89,9 +83,7 @@ public class GlobalHandler {
                     Group dbGroup = ListHelper.findGroupWithId(groupsFromDB, mfmGroup.getId());
                     if (!dbGroup.getUpdatedAt().equals(mfmGroup.getUpdatedAt())) {
                         mfmRequestHandler.updateGroup(dbGroup);
-//                        DbHelper.update(appContext, dbGroup);
                     }
-//                    mfmRequestHandler.updateGroup(dbGroup);
                 } catch (Exception e) {
                     Log.i(Constants.LOG_TAG, "No student found in the database that matched the mfmRequest. Adding to database");
                     school.addGroup(mfmGroup);

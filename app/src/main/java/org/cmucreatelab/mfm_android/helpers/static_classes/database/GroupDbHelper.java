@@ -66,10 +66,10 @@ public class GroupDbHelper {
         db = mDbHelper.getWritableDatabase();
         resultInt = db.delete(GroupContract.TABLE_NAME, selection, selectionArgs);
         if (resultInt == 1) {
-            Log.i(Constants.LOG_TAG, "deleted group with _id=" + group.getId());
+            Log.i(Constants.LOG_TAG, "deleted group with _id=" + group.getDatabaseId());
         } else {
             Log.w(Constants.LOG_TAG, "Attempted to delete group with _id=" +
-                group.getId() + " but deleted " + resultInt + " items.");
+                group.getDatabaseId() + " but deleted " + resultInt + " items.");
         }
         result = (resultInt > 0);
 

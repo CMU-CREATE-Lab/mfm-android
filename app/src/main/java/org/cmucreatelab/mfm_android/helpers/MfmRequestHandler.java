@@ -115,7 +115,7 @@ public class MfmRequestHandler {
                         user.setStudent(student);
                     }
                     DbHelper.update(globalHandler.appContext, student);
-                    DbHelper.destroy(globalHandler.appContext, student); // temporary
+//                    DbHelper.destroy(globalHandler.appContext, student); // temporary
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for updateStudent");
                 }
@@ -157,7 +157,7 @@ public class MfmRequestHandler {
                     }
                     group.setStudents(result);
                     DbHelper.update(globalHandler.appContext, group);
-                    DbHelper.destroy(globalHandler.appContext, group); // temporary
+//                    DbHelper.destroy(globalHandler.appContext, group); // temporary
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for updateGroup");
                 } catch (Exception e) {

@@ -29,6 +29,7 @@ public class MfmLoginHandler {
         this.globalHandler = globalHandler;
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(globalHandler.appContext);
         this.kioskIsLoggedIn = sharedPreferences.getBoolean(Constants.PreferencesKeys.kioskIsLoggedIn, (Boolean) Constants.DEFAULT_SETTINGS.get(Constants.PreferencesKeys.kioskIsLoggedIn));
+        Log.i(Constants.LOG_TAG, String.format("%b", this.kioskIsLoggedIn));
         if (this.kioskIsLoggedIn) {
             String kioskUid = sharedPreferences.getString(Constants.PreferencesKeys.kioskUid, (String) Constants.DEFAULT_SETTINGS.get(Constants.PreferencesKeys.kioskUid));
             String schoolName = sharedPreferences.getString(Constants.PreferencesKeys.kioskSchoolName, (String) Constants.DEFAULT_SETTINGS.get(Constants.PreferencesKeys.kioskSchoolName));
@@ -79,8 +80,6 @@ public class MfmLoginHandler {
 
 
     public void logout() {
-        // write to database
-        //globalHandler.addStudentsAndGroupsToDatabase();
 
         this.kioskIsLoggedIn = false;
         if (this.kiosk != null) {

@@ -14,7 +14,7 @@ import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 
 import butterknife.ButterKnife;
 
-public class RecordMessageActivity extends AppCompatActivity {
+public class SessionActivity extends AppCompatActivity {
 
     Student mStudent;
 
@@ -31,7 +31,7 @@ public class RecordMessageActivity extends AppCompatActivity {
         if (sender.getSenderType() == Sender.Type.Student) {
             mStudent = (Student)sender;
         } else {
-            Log.e(Constants.LOG_TAG, "RecordMessageActivity onCreate: Sender is not of Type Student.");
+            Log.e(Constants.LOG_TAG, "SessionActivity onCreate: Sender is not of Type Student.");
         }
         MessageAdapter adapter = new MessageAdapter(this, mStudent);
     }

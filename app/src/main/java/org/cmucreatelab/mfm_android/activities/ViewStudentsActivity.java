@@ -39,7 +39,7 @@ public class ViewStudentsActivity extends ListActivity {
 
         Student student = mStudents.get(position);
         globalHandler.sessionHandler.startSession(student);
-        Intent intent = new Intent(this, RecordMessageActivity.class);
+        Intent intent = new Intent(this, SessionActivity.class);
         startActivity(intent);
     }
 

@@ -38,7 +38,7 @@
                 android:value=".activities.MainScreenActivity" />
         </activity>
         <activity
-            android:name=".activities.RecordMessageActivity"
+            android:name=".activities.SessionActivity"
             android:label="@string/title_activity_record_message"
             android:parentActivityName=".activities.ViewStudentsActivity"
             android:theme="@style/AppTheme.NoActionBar">

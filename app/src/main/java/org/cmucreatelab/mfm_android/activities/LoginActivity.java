@@ -18,7 +18,6 @@ import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
-import org.cmucreatelab.mfm_android.helpers.static_classes.database.DbHelper;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -42,6 +41,11 @@ public class LoginActivity extends AppCompatActivity {
 
 
     // Class methods
+    private void startMainActivity() {
+
+    }
+
+
     private void populateStudentAndGroupSuccess() {
         showProgress(false);
         Intent intent = new Intent(this, MainScreenActivity.class);
@@ -102,6 +106,16 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        this.globalHandler = GlobalHandler.getInstance(getApplicationContext());
+        Log.i(Constants.LOG_TAG, String.format("%b", this.globalHandler.mfmLoginHandler.kioskIsLoggedIn));
+        if (this.globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
+            showProgress(true);
+            School school  = this.globalHandler.mfmLoginHandler.getSchool();
+            String id = this.globalHandler.mfmLoginHandler.getKioskUid();
+            this.globalHandler.mfmLoginHandler.login(school, id);
+            this.loginSuccess();
+        }
     }
 
 
@@ -184,7 +198,6 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            // TODO this is okay for now, but in the future we will want to do a "requestListSchools" then use its first response as our school to log in from
             GlobalHandler.getInstance(getApplicationContext()).mfmRequestHandler.requestListSchools(this, username, password);
         }
     }

@@ -14,6 +14,17 @@ import butterknife.OnClick;
 public class MainScreenActivity extends AppCompatActivity {
 
 
+    public void logoutSuccess() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+
+    public void logoutFailure() {
+        // TODO
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +50,9 @@ public class MainScreenActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.logout) {
-            GlobalHandler.getInstance(this.getApplicationContext()).mfmRequestHandler.logout();
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            GlobalHandler.getInstance(this.getApplicationContext()).mfmRequestHandler.logout(this);
+            /*Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);*/
             return true;
         }
 

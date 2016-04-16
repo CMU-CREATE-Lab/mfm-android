@@ -55,8 +55,6 @@ public class GlobalHandler {
             for (Student mfmStudent : studentsFromMfmRequest) {
                 try {
                     Student dbStudent = ListHelper.findStudentWithId(studentsFromDB, mfmStudent.getId());
-                    // should we compare based off of some threshold?
-                    // does the api only update at a fixed interval of time?
                     if (!dbStudent.getUpdatedAt().equals(mfmStudent.getUpdatedAt())) {
                         mfmRequestHandler.updateStudent(dbStudent);
                     }
@@ -64,7 +62,7 @@ public class GlobalHandler {
                     Log.i(Constants.LOG_TAG, "No student found in the database that matched the mfmRequest. Adding to database");
                     school.addStudent(mfmStudent);
                     DbHelper.addToDatabase(appContext, mfmStudent);
-                    mfmRequestHandler.updateStudent(mfmStudent); // still calling this to populate the rest of the attributes
+                    mfmRequestHandler.updateStudent(mfmStudent);
                 }
             }
             login.populateStudentsSuccess();
@@ -81,11 +79,12 @@ public class GlobalHandler {
             for (Group mfmGroup : groupsFromMfmRequest) {
                 try {
                     Group dbGroup = ListHelper.findGroupWithId(groupsFromDB, mfmGroup.getId());
+                    Log.i(Constants.LOG_TAG, dbGroup.getUpdatedAt() + " " + mfmGroup.getUpdatedAt());
                     if (!dbGroup.getUpdatedAt().equals(mfmGroup.getUpdatedAt())) {
                         mfmRequestHandler.updateGroup(dbGroup);
                     }
                 } catch (Exception e) {
-                    Log.i(Constants.LOG_TAG, "No student found in the database that matched the mfmRequest. Adding to database");
+                    Log.i(Constants.LOG_TAG, "No group found in the database that matched the mfmRequest. Adding to database");
                     school.addGroup(mfmGroup);
                     DbHelper.addToDatabase(appContext, mfmGroup);
                     mfmRequestHandler.updateGroup(mfmGroup);
@@ -95,27 +94,6 @@ public class GlobalHandler {
         } else {
             Log.e(Constants.LOG_TAG, "Tried to checkAndUpdateGroups with Kiosk not logged in");
         }
-    }
-
-
-    // We probably do not need this method anymore
-    public void addStudentsAndGroupsToDatabase() {
-        Log.i(Constants.LOG_TAG, mfmLoginHandler.getSchool().toString());
-        ArrayList<Group> groups = mfmLoginHandler.getSchool().getGroups();
-        ArrayList<Student> students = mfmLoginHandler.getSchool().getStudents();
-
-        Log.v(Constants.LOG_TAG, groups.toString());
-        Log.v(Constants.LOG_TAG, students.toString());
-
-        // groups and students in each of those groups
-        for (Group group : groups) {
-            DbHelper.addToDatabase(appContext, group);
-        }
-        // students and users for each of those students
-        for (Student student : students) {
-            DbHelper.addToDatabase(appContext, student);
-        }
-
     }
 
 
@@ -144,7 +122,7 @@ public class GlobalHandler {
         this.sessionHandler = new SessionHandler(this);
         Kiosk.ioSVersion = Build.VERSION.RELEASE;
         // TODO sessions will need to be created when you select a student or group; for now this is just created to avoid null pointer
-        this.sessionHandler.startSession(new Student());
+        //this.sessionHandler.startSession(new Student());
     }
 
 }

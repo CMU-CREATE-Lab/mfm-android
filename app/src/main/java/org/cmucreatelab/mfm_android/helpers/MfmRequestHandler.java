@@ -4,6 +4,7 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import org.cmucreatelab.mfm_android.activities.LoginActivity;
+import org.cmucreatelab.mfm_android.activities.MainScreenActivity;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Kiosk;
 import org.cmucreatelab.mfm_android.classes.School;
@@ -115,7 +116,6 @@ public class MfmRequestHandler {
                         user.setStudent(student);
                     }
                     DbHelper.update(globalHandler.appContext, student);
-//                    DbHelper.destroy(globalHandler.appContext, student); // temporary
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for updateStudent");
                 }
@@ -157,7 +157,6 @@ public class MfmRequestHandler {
                     }
                     group.setStudents(result);
                     DbHelper.update(globalHandler.appContext, group);
-//                    DbHelper.destroy(globalHandler.appContext, group); // temporary
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for updateGroup");
                 } catch (Exception e) {
@@ -268,7 +267,7 @@ public class MfmRequestHandler {
     }
 
 
-    public void logout() {
+    public void logout(final MainScreenActivity mainScreenActivity) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;
@@ -279,6 +278,7 @@ public class MfmRequestHandler {
             @Override
             public void onResponse(JSONObject response) {
                 globalHandler.mfmLoginHandler.logout();
+                mainScreenActivity.logoutSuccess();
                 Log.i(Constants.LOG_TAG, "logout onResponse");
             }
         };

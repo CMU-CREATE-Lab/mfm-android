@@ -38,16 +38,13 @@ public class GlobalHandler {
     public SessionHandler sessionHandler;
 
 
-    public void refreshStudents(final LoginActivity login) {
-        mfmRequestHandler.requestListStudents(login);
-    }
-
-    public void refreshGroups(final LoginActivity login) {
-        mfmRequestHandler.requestListGroups(login);
+    public void refreshStudentsAndGroups() {
+        mfmRequestHandler.requestListStudents();
+        mfmRequestHandler.requestListGroups();
     }
 
 
-    public void checkAndUpdateStudents(final LoginActivity login, ArrayList<Student> studentsFromMfmRequest) {
+    public void checkAndUpdateStudents(ArrayList<Student> studentsFromMfmRequest) {
         if (mfmLoginHandler.kioskIsLoggedIn) {
             School school = mfmLoginHandler.getSchool();
             ArrayList<Student> studentsFromDB = school.getStudents();
@@ -65,14 +62,13 @@ public class GlobalHandler {
                     mfmRequestHandler.updateStudent(mfmStudent);
                 }
             }
-            login.populateStudentsSuccess();
         } else {
             Log.e(Constants.LOG_TAG, "Tried to checkAndUpdateStudents with Kiosk not logged in");
         }
     }
 
 
-    public void checkAndUpdateGroups(final LoginActivity login, ArrayList<Group> groupsFromMfmRequest) {
+    public void checkAndUpdateGroups(ArrayList<Group> groupsFromMfmRequest) {
         if (mfmLoginHandler.kioskIsLoggedIn) {
             School school = mfmLoginHandler.getSchool();
             ArrayList<Group> groupsFromDB = school.getGroups();
@@ -90,7 +86,6 @@ public class GlobalHandler {
                     mfmRequestHandler.updateGroup(mfmGroup);
                 }
             }
-            login.populateGroupsSuccess();
         } else {
             Log.e(Constants.LOG_TAG, "Tried to checkAndUpdateGroups with Kiosk not logged in");
         }
@@ -122,7 +117,7 @@ public class GlobalHandler {
         this.sessionHandler = new SessionHandler(this);
         Kiosk.ioSVersion = Build.VERSION.RELEASE;
         // TODO sessions will need to be created when you select a student or group; for now this is just created to avoid null pointer
-        //this.sessionHandler.startSession(new Student());
+        this.sessionHandler.startSession(new Student());
     }
 
 }

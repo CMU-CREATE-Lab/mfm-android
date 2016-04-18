@@ -182,7 +182,6 @@ public class JSONParser {
         result.setStudentIds(studentIds);
         result.setUpdatedAt(updatedAt);
         result.setPhotoUrl(thumbPhotoUrl);
-        result.setStudentIds(studentIds);
 
         return result;
     }

@@ -40,29 +40,6 @@ public class LoginActivity extends AppCompatActivity {
     private String password;
 
 
-    // Class methods
-    private void startMainActivity() {
-
-    }
-
-
-    private void populateStudentAndGroupSuccess() {
-        showProgress(false);
-        Intent intent = new Intent(this, MainScreenActivity.class);
-        startActivity(intent);
-    }
-
-
-    public void populateStudentsSuccess() {
-        GlobalHandler.getInstance(getApplicationContext()).refreshGroups(this);
-    }
-
-
-    public void populateGroupsSuccess() {
-        this.populateStudentAndGroupSuccess();
-    }
-
-
     public void requestListSchoolsSuccess(ArrayList<School> schools) {
         // TODO fix so I am not just using the first school
         globalHandler = GlobalHandler.getInstance(getApplicationContext());
@@ -70,7 +47,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void loginSuccess() {
-        GlobalHandler.getInstance(getApplicationContext()).refreshStudents(this);
+        GlobalHandler.getInstance(getApplicationContext()).refreshStudentsAndGroups();
+        showProgress(false);
+        Intent intent = new Intent(this, MainScreenActivity.class);
+        startActivity(intent);
     }
 
 

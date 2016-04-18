@@ -38,7 +38,7 @@ public class MfmRequestHandler {
 
 
     // May make a Callback interface since other activities may want to call this
-    public void requestListStudents(final LoginActivity login) {
+    public void requestListStudents() {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;
@@ -50,7 +50,7 @@ public class MfmRequestHandler {
             public void onResponse(JSONObject response) {
                 try {
                     ArrayList<Student> students = JSONParser.parseStudentsFromJson(response);
-                    globalHandler.checkAndUpdateStudents(login, students);
+                    globalHandler.checkAndUpdateStudents(students);
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for requestListStudents");
                 }
@@ -62,7 +62,7 @@ public class MfmRequestHandler {
 
 
     // May make a Callback interface since other activities may want to call this
-    public void requestListGroups(final LoginActivity login) {
+    public void requestListGroups() {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;
@@ -75,7 +75,7 @@ public class MfmRequestHandler {
                 Log.i(Constants.LOG_TAG, "requestListGroups onResponse");
                 try {
                     ArrayList<Group> groups = JSONParser.parseGroupsFromJson(response);
-                    globalHandler.checkAndUpdateGroups(login, groups);
+                    globalHandler.checkAndUpdateGroups(groups);
                 } catch (JSONException ex) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for requestListGroups");
                 }
@@ -151,8 +151,16 @@ public class MfmRequestHandler {
 
                     ArrayList<Student> result = new ArrayList<>();
                     ArrayList<Integer> ids = group.getStudentIds();
-                    for (int i = 0; i < ids.size(); i++) {
+                    /*for (int i = 0; i < ids.size(); i++) {
                         Student student = ListHelper.findStudentWithId(globalHandler.mfmLoginHandler.getSchool().getStudents(), ids.get(i));
+                        result.add(student);
+                    }*/
+                    // I figured this is a better way to populate the students in the groups.
+                    // This way we do not have to wait for the http request of the students list to finish
+                    for (int i = 0; i < ids.size(); i++) {
+                        Student student = new Student();
+                        student.setId(ids.get(i));
+                        globalHandler.mfmRequestHandler.updateStudent(student);
                         result.add(student);
                     }
                     group.setStudents(result);

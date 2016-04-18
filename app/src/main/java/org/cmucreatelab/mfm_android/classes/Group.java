@@ -16,7 +16,7 @@ public class Group implements Sender {
     private String photoUrl;
     private String updatedAt;
     private ArrayList<Student> students = new ArrayList<>();
-    private ArrayList<Integer> studentIds;
+    private ArrayList<Integer> studentIds;  // do we need this attribute???
 
     // getters/setters
     public long getDatabaseId() { return databaseId; }

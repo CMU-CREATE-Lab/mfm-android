@@ -111,6 +111,13 @@ public class StudentGroupDbHelper {
         // set group's list of students
         // TODO order the list of students (by name, most likely)
         group.setStudents(result);
+
+        // populate the student ids array list
+        ArrayList<Integer> ids = new ArrayList<>();
+        for (Student student : result) {
+            ids.add(student.getId());
+        }
+        group.setStudentIds(ids);
     }
 
 }

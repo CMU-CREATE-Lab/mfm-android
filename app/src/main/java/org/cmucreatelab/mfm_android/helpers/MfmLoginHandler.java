@@ -75,7 +75,7 @@ public class MfmLoginHandler {
         editor.apply();
 
         // load from database
-        //DbHelper.loadFromDb(globalHandler.appContext);
+        DbHelper.loadFromDb(globalHandler.appContext);
     }
 
 

@@ -51,8 +51,6 @@ public class MainScreenActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.logout) {
             GlobalHandler.getInstance(this.getApplicationContext()).mfmRequestHandler.logout(this);
-            /*Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);*/
             return true;
         }
 
@@ -62,7 +60,8 @@ public class MainScreenActivity extends AppCompatActivity {
 
     @OnClick(R.id.studentListButton)
     public void startStudentActivity(View view) {
-        Intent intent = new Intent(this, ViewStudentsActivity.class);
+        // TODO temporarily changed the class to view students and groups
+        Intent intent = new Intent(this, ViewStudentsAndGroupsActivity.class);
         startActivity(intent);
     }
 

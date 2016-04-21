@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activities.ViewStudentsAndGroupsActivity"
+    tools:showIn="@layout/activity_view_students_and_groups" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Students"
+        android:id="@+id/studentTitleLabel"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:textColor="#ffffffff"
+        android:textSize="30sp"/>
+
+    <fragment android:name="org.cmucreatelab.mfm_android.activities.fragments.StudentFragment"
+        android:id="@+id/studentFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/studentTitleLabel"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Groups"
+        android:id="@+id/groupTitleLabel"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ffffffff"
+        android:textSize="30sp"
+        android:layout_below="@id/studentFragment"
+        android:layout_alignParentLeft="true"/>
+
+
+    <fragment android:name="org.cmucreatelab.mfm_android.activities.fragments.GroupFragment"
+        android:id="@+id/groupFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/groupTitleLabel" />
+
+</RelativeLayout>

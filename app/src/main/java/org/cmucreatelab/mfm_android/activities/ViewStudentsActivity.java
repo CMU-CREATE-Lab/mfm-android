@@ -3,9 +3,14 @@ package org.cmucreatelab.mfm_android.activities;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.adapters.StudentAdapter;
 import org.cmucreatelab.mfm_android.classes.Student;
@@ -23,7 +28,7 @@ public class ViewStudentsActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_students);
-        Intent intent = getIntent();
+
         GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
 
         if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
@@ -31,7 +36,6 @@ public class ViewStudentsActivity extends ListActivity {
         }
         StudentAdapter adapter = new StudentAdapter(this, mStudents);
         setListAdapter(adapter);
-
     }
 
 

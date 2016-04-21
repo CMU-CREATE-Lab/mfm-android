@@ -27,5 +27,13 @@
     <string name="action_sign_in">Sign in</string>
     <string name="error_invalid_credentials">Username or password is invalid</string>
     <string name="error_field_required">This field is required</string>
+    <string name="title_activity_view_students_and_groups">ViewStudentsAndGroupsActivity</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment_student">Hello blank student fragment</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment_group">Hello blank group fragment</string>
 
 </resources>

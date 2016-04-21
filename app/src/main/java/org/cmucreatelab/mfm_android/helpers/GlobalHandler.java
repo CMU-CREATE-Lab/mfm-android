@@ -96,7 +96,7 @@ public class GlobalHandler {
 
 
     private static GlobalHandler classInstance;
-    protected Context appContext;
+    public Context appContext;
 
 
     // Only public way to get instance of class (synchronized means thread-safe)

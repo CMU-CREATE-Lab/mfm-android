@@ -61,7 +61,15 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.MainScreenActivity"
-            android:label="@string/title_activity_main_screen"></activity>
+            android:label="@string/title_activity_main_screen" />
+        <activity
+            android:name=".activities.ViewStudentsAndGroupsActivity"
+            android:label="@string/title_activity_view_students_and_groups"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.ViewStudentsAndGroupsActivity"
+            android:label="@string/title_activity_view_students_and_groups"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

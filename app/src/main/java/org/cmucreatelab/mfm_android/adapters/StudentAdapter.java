@@ -5,7 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import org.cmucreatelab.mfm_android.R;
@@ -53,7 +57,7 @@ public class StudentAdapter extends BaseAdapter {
 
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(int position, View view, ViewGroup viewGroup) {
         ViewHolder holder;
 
         if (view == null) {
@@ -61,20 +65,19 @@ public class StudentAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.studentPhotoView = (ImageView) view.findViewById(R.id.studentPhotoImageView);
             holder.studentName = (TextView) view.findViewById(R.id.studentNameTextView);
-
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
 
-        Student student  = mStudents.get(i);
+        Student student  = mStudents.get(position);
         String photoUrl = student.getPhotoUrl();
         String url = Constants.MFM_API_URL + photoUrl;
 
         holder.studentName.setText(student.getFirstName() + " " + student.getLastName());
-        Picasso.with(mContext)
-                .load(url)
-                .into(holder.studentPhotoView);
+        Picasso.with(mContext).load(url).into(holder.studentPhotoView);
+
+        view.setId(position);
 
         return view;
     }

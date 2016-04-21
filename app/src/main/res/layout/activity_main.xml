@@ -20,7 +20,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Students"
+            android:text="S's and G's"
             android:id="@+id/studentListButton"
             android:layout_weight="1"
             android:background="#40FFFFFF"/>

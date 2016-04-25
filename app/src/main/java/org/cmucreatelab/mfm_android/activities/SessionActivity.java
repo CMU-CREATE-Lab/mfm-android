@@ -34,6 +34,7 @@ public class SessionActivity extends AppCompatActivity {
             Log.e(Constants.LOG_TAG, "SessionActivity onCreate: Sender is not of Type Student.");
         }
         MessageAdapter adapter = new MessageAdapter(this, mStudent);
+        Log.i(Constants.LOG_TAG, "Finished creation of Session");
     }
 
 }

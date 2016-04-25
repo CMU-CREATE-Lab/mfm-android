@@ -29,11 +29,10 @@
             android:textColor="#ffffffff"
             android:textSize="30sp"/>
 
-        <fragment android:name="org.cmucreatelab.mfm_android.activities.fragments.StudentFragment"
-            android:id="@+id/studentFragment"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/studentTitleLabel"/>
+            android:id="@+id/studentFragmentContainer"></FrameLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -43,15 +42,13 @@
             android:layout_centerHorizontal="true"
             android:textColor="#ffffffff"
             android:textSize="30sp"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/studentFragment"/>
+            android:layout_alignParentLeft="true"/>
 
 
-        <fragment android:name="org.cmucreatelab.mfm_android.activities.fragments.GroupFragment"
-            android:id="@+id/groupFragment"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/groupTitleLabel"/>
+            android:id="@+id/groupFragmentContainer"></FrameLayout>
 
     </LinearLayout>
 

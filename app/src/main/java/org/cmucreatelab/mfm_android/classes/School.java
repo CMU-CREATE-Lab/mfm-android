@@ -1,5 +1,7 @@
 package org.cmucreatelab.mfm_android.classes;
 
+import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
+import org.cmucreatelab.mfm_android.helpers.static_classes.database.DbHelper;
 import java.util.ArrayList;
 
 /**
@@ -29,6 +31,22 @@ public class School {
 
     public void addGroup(Group group) {
         this.groups.add(group);
+    }
+
+
+    // This checks for a student in the school. If the student DNE, it will update it and add it to the DB.
+    public synchronized Student checkForStudent(int studentId, GlobalHandler globalHandler) {
+        for (Student student : students) {
+            if (student.getId() == studentId) {
+                return student;
+            }
+        }
+
+        Student student = new Student();
+        student.setId(studentId);
+        DbHelper.addToDatabase(globalHandler.appContext, student);
+        globalHandler.mfmRequestHandler.updateStudent(student);
+        return student;
     }
 
 

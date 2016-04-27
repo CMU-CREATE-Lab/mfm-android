@@ -5,6 +5,7 @@ import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
+import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -163,7 +164,7 @@ public class JSONParser {
     }
 
 
-    public static Group parseGroupBasedOffId(JSONObject row) throws JSONException {
+    public static Group parseGroupBasedOffId(JSONObject row, GlobalHandler globalHandler) throws JSONException {
         // parse values
         Log.i(Constants.LOG_TAG, "parseGroupBasedOffId");
         Log.i(Constants.LOG_TAG, row.toString());
@@ -178,9 +179,14 @@ public class JSONParser {
         Group result = new Group();
         result.setId(id);
         result.setName(name);
-        result.setStudentIds(studentIds);
         result.setUpdatedAt(updatedAt);
         result.setPhotoUrl(thumbPhotoUrl);
+
+        ArrayList<Student> groupStudents = new ArrayList<>();
+        for (int i = 0; i < studentIds.size(); i++) {
+            groupStudents.add(globalHandler.mfmLoginHandler.getSchool().checkForStudent(studentIds.get(i),globalHandler));
+        }
+        result.setStudents(groupStudents);
 
         return result;
     }

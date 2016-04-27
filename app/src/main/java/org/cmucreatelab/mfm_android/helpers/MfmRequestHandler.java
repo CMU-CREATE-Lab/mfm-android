@@ -139,30 +139,13 @@ public class MfmRequestHandler {
                 Log.i(Constants.LOG_TAG, "updateGroup onResponse");
                 try {
                     // create temporary object
-                    Group temp = JSONParser.parseGroupBasedOffId(response);
+                    Group temp = JSONParser.parseGroupBasedOffId(response, globalHandler);
 
                     // set values
                     group.setName(temp.getName());
-                    group.setStudentIds(temp.getStudentIds());
                     group.setPhotoUrl(temp.getPhotoUrl());
                     group.setUpdatedAt(temp.getUpdatedAt());
-                    group.setStudentIds(temp.getStudentIds());
-
-                    ArrayList<Student> result = new ArrayList<>();
-                    ArrayList<Integer> ids = group.getStudentIds();
-                    /*for (int i = 0; i < ids.size(); i++) {
-                        Student student = ListHelper.findStudentWithId(globalHandler.mfmLoginHandler.getSchool().getStudents(), ids.get(i));
-                        result.add(student);
-                    }*/
-                    // I figured this is a better way to populate the students in the groups.
-                    // This way we do not have to wait for the http request of the students list to finish
-                    for (int i = 0; i < ids.size(); i++) {
-                        Student student = new Student();
-                        student.setId(ids.get(i));
-                        globalHandler.mfmRequestHandler.updateStudent(student);
-                        result.add(student);
-                    }
-                    group.setStudents(result);
+                    group.setStudents(temp.getStudents());
                     DbHelper.update(globalHandler.appContext, group);
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for updateGroup");

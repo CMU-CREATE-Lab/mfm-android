@@ -18,11 +18,9 @@ import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
-
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import android.annotation.TargetApi;
-
 import java.util.ArrayList;
 
 /**
@@ -31,7 +29,6 @@ import java.util.ArrayList;
 public class LoginActivity extends AppCompatActivity {
 
     private GlobalHandler globalHandler;
-
     private EditText mUsernameView;
     private EditText mPasswordView;
     private View mProgressView;
@@ -45,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         globalHandler = GlobalHandler.getInstance(getApplicationContext());
         globalHandler.mfmRequestHandler.login(this, username, password, schools.get(0).getId().toString());
     }
+
 
     public void loginSuccess() {
         GlobalHandler.getInstance(getApplicationContext()).refreshStudentsAndGroups();

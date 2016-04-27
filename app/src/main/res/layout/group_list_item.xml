@@ -8,6 +8,7 @@
     android:paddingTop="4dp"
     android:paddingBottom="4dp"
     tools:background = "#ffaa00"
+    android:isScrollContainer="false"
     >
 
     <ImageView

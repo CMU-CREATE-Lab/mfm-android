@@ -42,7 +42,7 @@ public class ViewStudentsInGroupActivity extends FragmentActivity {
 
         FragmentTransaction ft = this.getFragmentManager().beginTransaction();
         Fragment student = StudentFragment.newInstance(group.getStudents());
-        ft.add(R.id.studentInGroupContainer, student, "students in group");
+        ft.add(R.id.studentsScrollable, student, "students in group");
         ft.commit();
     }
 

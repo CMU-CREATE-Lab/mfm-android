@@ -59,6 +59,8 @@ public class StudentFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        rootView.setScrollContainer(false);
+        container.setScrollContainer(false);
 
         return rootView;
     }

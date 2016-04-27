@@ -73,6 +73,7 @@ public class GroupAdapter extends BaseAdapter {
 
         holder.groupName.setText(group.getName());
         Picasso.with(mContext).load(url).into(holder.groupPhotoView);
+        view.setScrollContainer(false);
 
         return view;
     }

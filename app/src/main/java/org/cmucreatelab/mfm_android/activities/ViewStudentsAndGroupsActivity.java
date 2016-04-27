@@ -22,8 +22,8 @@ public class ViewStudentsAndGroupsActivity extends FragmentActivity {
         FragmentTransaction ft = this.getFragmentManager().beginTransaction();
         Fragment students = StudentFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getStudents());
         Fragment groups = GroupFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getGroups());
-        ft.add(R.id.studentFragmentContainer, students, "student fragment");
-        ft.add(R.id.groupFragmentContainer, groups, "group fragment");
+        ft.add(R.id.studentsAndGroupsScrollable, students, "student fragment");
+        ft.add(R.id.studentsAndGroupsScrollable, groups, "group fragment");
         ft.commit();
     }
 

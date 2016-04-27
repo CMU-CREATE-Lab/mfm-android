@@ -16,7 +16,6 @@ import org.cmucreatelab.mfm_android.helpers.static_classes.ListHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.DbHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 /**
@@ -175,6 +174,7 @@ public class MfmRequestHandler {
 
         globalHandler.httpRequestHandler.sendJsonRequest(requestMethod, requestURL, null, response);
     }
+
 
     public void ping() {
         int requestMethod;

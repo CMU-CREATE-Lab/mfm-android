@@ -1,6 +1,5 @@
 package org.cmucreatelab.mfm_android.activities.fragments;
 
-
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,14 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import org.cmucreatelab.mfm_android.adapters.StudentAdapter;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
-
 import java.util.ArrayList;
 
 /**
@@ -26,7 +23,6 @@ import java.util.ArrayList;
 public class StudentFragment extends Fragment {
 
     private static final String SERIALIZABLE_KEY = "student_key";
-
     private View rootView;
     private GridView gridView;
     private ArrayList<Student> mStudents;
@@ -35,6 +31,7 @@ public class StudentFragment extends Fragment {
     public StudentFragment() {
 
     }
+
 
     public static final Fragment newInstance(ArrayList<Student> students) {
         StudentFragment studentFragment = new StudentFragment();

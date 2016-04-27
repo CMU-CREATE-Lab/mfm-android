@@ -47,8 +47,10 @@ public class Group implements Sender {
         return senderType;
     }
 
+
     @Override
     public String getName() {
         return this.name;
     }
+
 }

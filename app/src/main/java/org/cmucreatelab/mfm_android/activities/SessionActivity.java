@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.adapters.MessageAdapter;
 import org.cmucreatelab.mfm_android.classes.Sender;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
-
 import butterknife.ButterKnife;
 
 public class SessionActivity extends AppCompatActivity {

@@ -1,24 +1,15 @@
 package org.cmucreatelab.mfm_android.helpers;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.util.Log;
-import org.cmucreatelab.mfm_android.activities.LoginActivity;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Kiosk;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
-import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.ListHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.DbHelper;
-import org.cmucreatelab.mfm_android.helpers.static_classes.database.GroupDbHelper;
-import org.cmucreatelab.mfm_android.helpers.static_classes.database.MessageFromMeSQLLiteOpenHelper;
-import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentContract;
-import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentDbHelper;
-import org.cmucreatelab.mfm_android.helpers.static_classes.database.StudentGroupDbHelper;
-import org.cmucreatelab.mfm_android.helpers.static_classes.database.UserDbHelper;
 import java.util.ArrayList;
 
 /**

@@ -1,7 +1,6 @@
 package org.cmucreatelab.mfm_android.helpers.static_classes;
 
 import android.util.Log;
-
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;

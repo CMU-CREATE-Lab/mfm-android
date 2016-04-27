@@ -1,7 +1,6 @@
 package org.cmucreatelab.mfm_android.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,7 @@ public class GroupAdapter extends BaseAdapter {
 
     private Context mContext;
     private ArrayList<Group> mGroups;
+
 
     private static class ViewHolder {
         ImageView groupPhotoView;

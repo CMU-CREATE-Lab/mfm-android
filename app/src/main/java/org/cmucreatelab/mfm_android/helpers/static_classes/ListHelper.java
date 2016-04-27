@@ -1,7 +1,6 @@
 package org.cmucreatelab.mfm_android.helpers.static_classes;
 
 import android.util.Log;
-
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Student;
 import java.util.ArrayList;
@@ -27,6 +26,7 @@ public class ListHelper {
         Log.e(Constants.LOG_TAG, "could not find studentId="+studentId+" in findStudentWithId");
         throw new Exception();
     }
+
 
     public static Group findGroupWithId(ArrayList<Group> groups, int groupId) throws Exception {
         for (Group group : groups) {

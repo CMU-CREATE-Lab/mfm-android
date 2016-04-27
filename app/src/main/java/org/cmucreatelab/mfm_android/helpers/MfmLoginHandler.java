@@ -3,7 +3,6 @@ package org.cmucreatelab.mfm_android.helpers;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
 import org.cmucreatelab.mfm_android.classes.Kiosk;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;

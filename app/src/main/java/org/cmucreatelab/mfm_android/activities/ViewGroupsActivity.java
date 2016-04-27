@@ -10,7 +10,6 @@ import org.cmucreatelab.mfm_android.adapters.GroupAdapter;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
-
 import java.util.ArrayList;
 
 public class ViewGroupsActivity extends ListActivity{

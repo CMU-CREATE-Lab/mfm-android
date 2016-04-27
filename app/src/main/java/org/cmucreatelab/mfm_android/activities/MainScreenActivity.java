@@ -66,13 +66,6 @@ public class MainScreenActivity extends AppCompatActivity {
     }
 
 
-    @OnClick(R.id.groupListButton)
-    public void startGroupActivity(View view) {
-        Intent intent = new Intent(this, ViewGroupsActivity.class);
-        startActivity(intent);
-    }
-
-
     @OnClick(R.id.cameraButton)
     public void startCameraActivity(View view) {
         Intent intent = new Intent(this, CameraActivity.class);

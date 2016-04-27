@@ -29,28 +29,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.ViewStudentsActivity"
-            android:label="@string/title_activity_view_students"
-            android:parentActivityName=".activities.MainScreenActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MainScreenActivity" />
-        </activity>
-        <activity
-            android:name=".activities.SessionActivity"
-            android:label="@string/title_activity_record_message"
-            android:parentActivityName=".activities.ViewStudentsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.cmucreatelab.mfm_android.activities.ViewStudentsActivity" />
-        </activity>
-        <activity
-            android:name=".activities.ViewGroupsActivity"
-            android:label="@string/title_activity_view_groups"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".activities.CameraActivity"
             android:label="@string/title_activity_camera"
             android:screenOrientation="portrait"

@@ -58,17 +58,10 @@ public class MainScreenActivity extends AppCompatActivity {
     }
 
 
-    @OnClick(R.id.studentListButton)
-    public void startStudentActivity(View view) {
+    @OnClick(R.id.studentAndGroupsButton)
+    public void startStudentsAndGroupsActivity(View view) {
         // TODO temporarily changed the class to view students and groups
         Intent intent = new Intent(this, ViewStudentsAndGroupsActivity.class);
-        startActivity(intent);
-    }
-
-
-    @OnClick(R.id.groupListButton)
-    public void startGroupActivity(View view) {
-        Intent intent = new Intent(this, ViewGroupsActivity.class);
         startActivity(intent);
     }
 

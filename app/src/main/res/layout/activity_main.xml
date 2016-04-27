@@ -21,18 +21,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="S's and G's"
-            android:id="@+id/studentListButton"
+            android:id="@+id/studentAndGroupsButton"
             android:layout_weight="1"
             android:background="#40FFFFFF"/>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Groups"
-            android:id="@+id/groupListButton"
-            android:layout_weight="1"
-            android:background="#40FFFFFF"
-            android:layout_marginLeft="2dp"/>
 
         <Button
             android:layout_width="match_parent"

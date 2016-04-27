@@ -19,8 +19,6 @@ import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 
 public class ViewStudentsAndGroupsActivity extends FragmentActivity {
 
-    private Fragment studentFragment;
-    private Fragment groupFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

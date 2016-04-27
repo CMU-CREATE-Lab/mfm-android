@@ -1,11 +1,12 @@
 package org.cmucreatelab.mfm_android.classes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by mike on 1/28/16.
  */
-public class Group implements Sender {
+public class Group implements Sender, Serializable {
 
     private static final Sender.Type senderType = Sender.Type.Group;
 

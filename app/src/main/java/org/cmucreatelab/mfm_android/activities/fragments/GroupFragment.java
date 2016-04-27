@@ -10,7 +10,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import org.cmucreatelab.mfm_android.R;
-import org.cmucreatelab.mfm_android.activities.SessionActivity;
+import org.cmucreatelab.mfm_android.activities.ViewStudentsInGroupActivity;
 import org.cmucreatelab.mfm_android.adapters.GroupAdapter;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
@@ -22,7 +22,8 @@ import java.util.ArrayList;
  */
 public class GroupFragment extends Fragment {
 
-    private static final String SERIALIZABLE_KEY = "group_key";
+
+    private static final String SERIALIZABLE_GROUP_KEY = "group_key";
     private View rootView;
     private GridView gridView;
     private ArrayList<Group> mGroups;
@@ -36,7 +37,7 @@ public class GroupFragment extends Fragment {
     public static final GroupFragment newInstance(ArrayList<Group> groups) {
         GroupFragment studentFragment = new GroupFragment();
         Bundle bdl = new Bundle(1);
-        bdl.putSerializable(SERIALIZABLE_KEY, groups);
+        bdl.putSerializable(SERIALIZABLE_GROUP_KEY, groups);
         studentFragment.setArguments(bdl);
         return studentFragment;
     }
@@ -53,11 +54,11 @@ public class GroupFragment extends Fragment {
         this.gridView = (GridView) rootView.findViewById(R.id.gridViewGroup);
         this.gridView.setAdapter(new GroupAdapter(rootView.getContext(), this.mGroups));
 
-        // I forget what happens when you click on a group, does the list of students in the group
-        // appear and then you select a student?
         this.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Intent intent = new Intent(rootView.getContext(), SessionActivity.class);
+                Intent intent = new Intent(rootView.getContext(), ViewStudentsInGroupActivity.class);
+                Bundle bundle = ViewStudentsInGroupActivity.setArguments(mGroups.get(position));
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });

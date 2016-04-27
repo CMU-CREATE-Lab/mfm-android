@@ -52,7 +52,6 @@ public class StudentFragment extends Fragment {
 
         if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
             mStudents = (ArrayList<Student>) this.getArguments().getSerializable(SERIALIZABLE_KEY);
-            Log.i(Constants.LOG_TAG, mStudents.toString());
         }
         this.gridView = (GridView) rootView.findViewById(R.id.gridViewStudent);
         this.gridView.setAdapter(new StudentAdapter(rootView.getContext(), this.mStudents));

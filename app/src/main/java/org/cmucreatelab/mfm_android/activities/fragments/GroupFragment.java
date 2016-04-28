@@ -7,12 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridView;
+
 import org.cmucreatelab.mfm_android.R;
+import org.cmucreatelab.mfm_android.views.ExtendedHeightGridView;
 import org.cmucreatelab.mfm_android.activities.ViewStudentsInGroupActivity;
 import org.cmucreatelab.mfm_android.adapters.GroupAdapter;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
+
 import java.util.ArrayList;
 
 /**
@@ -23,7 +25,7 @@ public class GroupFragment extends Fragment {
 
     private static final String SERIALIZABLE_GROUP_KEY = "group_key";
     private View rootView;
-    private GridView gridView;
+    private ExtendedHeightGridView gridView;
     private ArrayList<Group> mGroups;
 
 
@@ -49,7 +51,7 @@ public class GroupFragment extends Fragment {
         if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
             mGroups = globalHandler.mfmLoginHandler.getSchool().getGroups();
         }
-        this.gridView = (GridView) rootView.findViewById(R.id.gridViewGroup);
+        this.gridView = (ExtendedHeightGridView) rootView.findViewById(R.id.gridViewGroup);
         this.gridView.setAdapter(new GroupAdapter(rootView.getContext(), this.mGroups));
 
         this.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -60,8 +62,6 @@ public class GroupFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        rootView.setScrollContainer(false);
-        container.setScrollContainer(false);
 
         return rootView;
     }

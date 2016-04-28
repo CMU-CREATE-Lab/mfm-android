@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Students"
             android:id="@+id/studentTitleLabel"
@@ -16,12 +16,12 @@
             android:textColor="#ffffffff"
             android:textSize="30sp"/>
 
-        <GridView
+        <org.cmucreatelab.mfm_android.views.ExtendedHeightGridView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/gridViewStudent"
-            android:numColumns="auto_fit"
-            android:isScrollContainer="false"/>
+            android:numColumns="auto_fit">
+        </org.cmucreatelab.mfm_android.views.ExtendedHeightGridView>
 
 
 </LinearLayout>

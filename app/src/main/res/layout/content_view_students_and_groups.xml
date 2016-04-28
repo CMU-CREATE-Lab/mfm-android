@@ -10,8 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activities.ViewStudentsAndGroupsActivity"
-    tools:showIn="@layout/activity_view_students_and_groups"
-    android:fillViewport="false">
+    tools:showIn="@layout/activity_view_students_and_groups">
 
         <LinearLayout
             android:id="@+id/studentsAndGroupsScrollable"

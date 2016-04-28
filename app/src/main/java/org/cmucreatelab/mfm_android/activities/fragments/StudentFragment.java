@@ -3,28 +3,28 @@ package org.cmucreatelab.mfm_android.activities.fragments;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridView;
+
 import org.cmucreatelab.mfm_android.R;
+import org.cmucreatelab.mfm_android.views.ExtendedHeightGridView;
 import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import org.cmucreatelab.mfm_android.adapters.StudentAdapter;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
-import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
+
 import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class StudentFragment extends Fragment {
+public class StudentFragment extends Fragment  {
 
     private static final String SERIALIZABLE_KEY = "student_key";
     private View rootView;
-    private GridView gridView;
+    private ExtendedHeightGridView gridView;
     private ArrayList<Student> mStudents;
 
 
@@ -50,7 +50,7 @@ public class StudentFragment extends Fragment {
         if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
             mStudents = (ArrayList<Student>) this.getArguments().getSerializable(SERIALIZABLE_KEY);
         }
-        this.gridView = (GridView) rootView.findViewById(R.id.gridViewStudent);
+        this.gridView = (ExtendedHeightGridView) rootView.findViewById(R.id.gridViewStudent);
         this.gridView.setAdapter(new StudentAdapter(rootView.getContext(), this.mStudents));
 
         this.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -59,8 +59,6 @@ public class StudentFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        rootView.setScrollContainer(false);
-        container.setScrollContainer(false);
 
         return rootView;
     }

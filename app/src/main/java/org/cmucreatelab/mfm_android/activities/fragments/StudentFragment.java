@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import org.cmucreatelab.mfm_android.R;
+import org.cmucreatelab.mfm_android.helpers.SessionHandler;
 import org.cmucreatelab.mfm_android.views.ExtendedHeightGridView;
 import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import org.cmucreatelab.mfm_android.adapters.StudentAdapter;
@@ -45,7 +46,7 @@ public class StudentFragment extends Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.rootView = inflater.inflate(R.layout.fragment_student, container, false);
-        GlobalHandler globalHandler = GlobalHandler.getInstance(rootView.getContext());
+        final GlobalHandler globalHandler = GlobalHandler.getInstance(rootView.getContext());
 
         if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
             mStudents = (ArrayList<Student>) this.getArguments().getSerializable(SERIALIZABLE_KEY);
@@ -55,6 +56,7 @@ public class StudentFragment extends Fragment  {
 
         this.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                globalHandler.sessionHandler.startSession(mStudents.get(position));
                 Intent intent = new Intent(rootView.getContext(), SessionActivity.class);
                 startActivity(intent);
             }

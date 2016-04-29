@@ -22,6 +22,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_record_message"/>
+    <include layout="@layout/content_session"/>
 
 </android.support.design.widget.CoordinatorLayout>

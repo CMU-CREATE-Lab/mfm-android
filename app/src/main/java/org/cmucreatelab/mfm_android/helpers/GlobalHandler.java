@@ -46,6 +46,7 @@ public class GlobalHandler {
                     if (!dbStudent.getUpdatedAt().equals(mfmStudent.getUpdatedAt())) {
                         mfmRequestHandler.updateStudent(dbStudent);
                     }
+
                 } catch (Exception e) {
                     Log.i(Constants.LOG_TAG, "No student found in the database that matched the mfmRequest. Adding to database");
                     school.addStudent(mfmStudent);
@@ -107,8 +108,6 @@ public class GlobalHandler {
         this.mfmRequestHandler = new MfmRequestHandler(this);
         this.sessionHandler = new SessionHandler(this);
         Kiosk.ioSVersion = Build.VERSION.RELEASE;
-        // TODO sessions will need to be created when you select a student or group; for now this is just created to avoid null pointer
-        this.sessionHandler.startSession(new Student());
     }
 
 }

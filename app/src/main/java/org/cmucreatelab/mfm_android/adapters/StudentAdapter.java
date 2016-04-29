@@ -72,7 +72,6 @@ public class StudentAdapter extends BaseAdapter {
 
         holder.studentName.setText(student.getFirstName() + " " + student.getLastName());
         Picasso.with(mContext).load(url).into(holder.studentPhotoView);
-        view.setScrollContainer(false);
 
         return view;
     }

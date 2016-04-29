@@ -65,18 +65,4 @@ public class MainScreenActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-    @OnClick(R.id.cameraButton)
-    public void startCameraActivity(View view) {
-        Intent intent = new Intent(this, CameraActivity.class);
-        startActivity(intent);
-    }
-
-
-    @OnClick(R.id.audioButton)
-    public void startAudioActivity(View view) {
-        Intent intent = new Intent(this, AudioActivity.class);
-        startActivity(intent);
-    }
-
 }

@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.adapters.MessageAdapter;
 import org.cmucreatelab.mfm_android.classes.Sender;
@@ -11,6 +14,7 @@ import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class SessionActivity extends AppCompatActivity {
 
@@ -33,6 +37,19 @@ public class SessionActivity extends AppCompatActivity {
         }
         MessageAdapter adapter = new MessageAdapter(this, mStudent);
         Log.i(Constants.LOG_TAG, "Finished creation of Session");
+    }
+
+    @OnClick(R.id.cameraButton)
+    public void startCameraActivity(View view) {
+        Intent intent = new Intent(this, CameraActivity.class);
+        startActivity(intent);
+    }
+
+
+    @OnClick(R.id.audioButton)
+    public void startAudioActivity(View view) {
+        Intent intent = new Intent(this, AudioActivity.class);
+        startActivity(intent);
     }
 
 }

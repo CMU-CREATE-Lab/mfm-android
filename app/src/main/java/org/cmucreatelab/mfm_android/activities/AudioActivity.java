@@ -100,7 +100,7 @@ public class AudioActivity extends AppCompatActivity {
 
     @OnClick(R.id.playbackAudio)
     public void onPlayback() {
-        if (audioFile != null) {
+        if (audioFile != null && mediaRecorder == null) {
             Uri.Builder uriBuilder = new Uri.Builder();
             uriBuilder.appendPath(audioFile.getAbsolutePath());
             Uri uri = uriBuilder.build();

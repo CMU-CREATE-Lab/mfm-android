@@ -48,10 +48,6 @@
             android:name=".activities.ViewStudentsAndGroupsActivity"
             android:label="@string/title_activity_view_students_and_groups"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activities.ViewStudentsInGroupActivity"
-            android:label="@string/title_activity_view_students_in_group"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

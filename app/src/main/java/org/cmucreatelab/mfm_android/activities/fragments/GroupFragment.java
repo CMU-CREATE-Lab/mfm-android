@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import org.cmucreatelab.mfm_android.R;
-import org.cmucreatelab.mfm_android.views.ExtendedHeightGridView;
-import org.cmucreatelab.mfm_android.activities.ViewStudentsInGroupActivity;
+import org.cmucreatelab.mfm_android.activities.SessionActivity;
+import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 import org.cmucreatelab.mfm_android.adapters.GroupAdapter;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
@@ -46,7 +46,7 @@ public class GroupFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.rootView = inflater.inflate(R.layout.fragment_group, container, false);
-        GlobalHandler globalHandler = GlobalHandler.getInstance(rootView.getContext());
+        final GlobalHandler globalHandler = GlobalHandler.getInstance(rootView.getContext());
 
         if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
             mGroups = globalHandler.mfmLoginHandler.getSchool().getGroups();
@@ -56,9 +56,8 @@ public class GroupFragment extends Fragment {
 
         this.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Intent intent = new Intent(rootView.getContext(), ViewStudentsInGroupActivity.class);
-                Bundle bundle = ViewStudentsInGroupActivity.setArguments(mGroups.get(position));
-                intent.putExtras(bundle);
+                globalHandler.sessionHandler.startSession(mGroups.get(position));
+                Intent intent = new Intent(rootView.getContext(), SessionActivity.class);
                 startActivity(intent);
             }
         });

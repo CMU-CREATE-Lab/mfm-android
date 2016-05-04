@@ -1,4 +1,4 @@
-package org.cmucreatelab.mfm_android.views;
+package org.cmucreatelab.mfm_android.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;

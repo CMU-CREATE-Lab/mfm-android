@@ -23,8 +23,8 @@ import butterknife.OnClick;
 
 public class SessionActivity extends FragmentActivity {
 
-    Student mStudent;
-    Group mGroup;
+    private Student mStudent;
+    private Group mGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,20 +33,17 @@ public class SessionActivity extends FragmentActivity {
         ButterKnife.bind(this);
         GlobalHandler globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
 
-        FragmentManager fm= this.getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
         Sender sender = globalHandler.sessionHandler.getMessageSender();
         if (sender.getSenderType() == Sender.Type.Student) {
+            FragmentManager fm= this.getFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
             mStudent = (Student)sender;
             Fragment user = UserFragment.newInstance(mStudent.getUsers());
-            ft.add(R.id.usersScrollable, user, "user fragment");
+            ft.add(R.id.itemScrollable, user, "user fragment");
+            ft.commit();
         } else {
             mGroup = (Group) sender;
-            Fragment student = StudentFragment.newInstance(mGroup.getStudents());
-            ft.add(R.id.studentsScrollable, student, "student fragment");
         }
-        ft.commit();
-
 
 
     }

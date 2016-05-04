@@ -9,8 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import org.cmucreatelab.mfm_android.R;
-import org.cmucreatelab.mfm_android.helpers.SessionHandler;
-import org.cmucreatelab.mfm_android.views.ExtendedHeightGridView;
+import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import org.cmucreatelab.mfm_android.adapters.StudentAdapter;
 import org.cmucreatelab.mfm_android.classes.Student;

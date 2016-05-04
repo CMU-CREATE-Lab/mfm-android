@@ -1,6 +1,7 @@
 package org.cmucreatelab.mfm_android.activities.fragments;
 
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +18,6 @@ import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +28,7 @@ public class UserFragment extends Fragment {
     private View rootView;
     private ExtendedHeightGridView gridView;
     private ArrayList<User> users;
-    private Collection<User> selectedUsers;
+    private ArrayList<User> selectedUsers;
 
 
     public UserFragment() {
@@ -65,9 +65,11 @@ public class UserFragment extends Fragment {
                 if (gridView.isItemChecked(position)) {
                     selectedUsers.add(users.get(position));
                     Log.i(Constants.LOG_TAG, "Selected " + users.get(position).toString() + " to be added to the recipients list.");
+                    v.setBackgroundColor(Color.GRAY);
                 } else {
                     selectedUsers.remove(users.get(position));
-                    Log.i(Constants.LOG_TAG, "Removed " + users.get(position).toString() + " to be added to the recipients list.");
+                    Log.i(Constants.LOG_TAG, "Deselected " + users.get(position).toString() + " to be added to the recipients list.");
+                    v.setBackgroundColor(Color.alpha(0));
                 }
                 globalHandler.sessionHandler.setMessageRecipients(selectedUsers);
             }

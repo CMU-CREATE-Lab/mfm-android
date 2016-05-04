@@ -10,28 +10,48 @@ import android.util.Log;
 import android.view.View;
 
 import org.cmucreatelab.mfm_android.R;
-import org.cmucreatelab.mfm_android.activities.fragments.GroupFragment;
-import org.cmucreatelab.mfm_android.activities.fragments.StudentFragment;
 import org.cmucreatelab.mfm_android.activities.fragments.UserFragment;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Sender;
 import org.cmucreatelab.mfm_android.classes.Student;
+import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SessionActivity extends FragmentActivity {
 
+    private GlobalHandler globalHandler;
     private Student mStudent;
     private Group mGroup;
+
+    // class methods
+
+    // Only used for groups.
+    private void setRecipients() {
+        ArrayList<User> users = new ArrayList<>();
+        for (Student student : mGroup.getStudents()) {
+            ArrayList<User> tempUsers = student.getUsers();
+            for (User user : tempUsers) {
+                users.add(user);
+                Log.i(Constants.LOG_TAG, "Added " + user.toString() + " to the collection of recipients.");
+            }
+        }
+        globalHandler.sessionHandler.setMessageRecipients(users);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session);
         ButterKnife.bind(this);
-        GlobalHandler globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
+        globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
 
         Sender sender = globalHandler.sessionHandler.getMessageSender();
         if (sender.getSenderType() == Sender.Type.Student) {
@@ -43,6 +63,7 @@ public class SessionActivity extends FragmentActivity {
             ft.commit();
         } else {
             mGroup = (Group) sender;
+            setRecipients();
         }
 
 
@@ -63,7 +84,7 @@ public class SessionActivity extends FragmentActivity {
 
     @OnClick(R.id.sendMessageButton)
     public void sendMessage() {
-        // TODO
+        globalHandler.sessionHandler.sendMessage();
     }
 
 }

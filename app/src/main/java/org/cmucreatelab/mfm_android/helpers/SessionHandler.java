@@ -1,7 +1,6 @@
 package org.cmucreatelab.mfm_android.helpers;
 
-import android.media.MediaPlayer;
-import android.net.Uri;
+
 import android.util.Log;
 import org.cmucreatelab.mfm_android.classes.Message;
 import org.cmucreatelab.mfm_android.classes.Sender;

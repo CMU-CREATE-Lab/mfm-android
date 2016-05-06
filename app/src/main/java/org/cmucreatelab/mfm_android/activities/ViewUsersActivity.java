@@ -28,7 +28,7 @@ public class ViewUsersActivity extends AppCompatActivity {
         FragmentManager fm= this.getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         Fragment usersFragment = UserFragment.newInstance(users);
-        ft.add(R.id.usersScrollable, usersFragment, "user fragment");
+        ft.add(R.id.usersScrollable, usersFragment, "user_fragment");
         ft.commit();
     }
 }

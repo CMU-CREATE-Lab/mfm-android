@@ -30,6 +30,7 @@ import butterknife.OnClick;
  */
 public class UserFragment extends Fragment  {
 
+    private static final String USERS_KEY = "users_key";
     private GlobalHandler globalHandler;
     private View rootView;
     private ExtendedHeightGridView gridView;
@@ -45,7 +46,7 @@ public class UserFragment extends Fragment  {
     public static final Fragment newInstance(ArrayList<User> users) {
         UserFragment userFragment = new UserFragment();
         Bundle bdl = new Bundle(1);
-        bdl.putSerializable(StudentFragment.USERS_KEY, users);
+        bdl.putSerializable(USERS_KEY, users);
         userFragment.setArguments(bdl);
         return userFragment;
     }
@@ -59,7 +60,7 @@ public class UserFragment extends Fragment  {
         ButterKnife.bind(this, rootView);
 
         if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
-            mUsers = (ArrayList<User>) this.getArguments().getSerializable(StudentFragment.USERS_KEY);
+            mUsers = (ArrayList<User>) this.getArguments().getSerializable(USERS_KEY);
         }
         this.gridView = (ExtendedHeightGridView) rootView.findViewById(R.id.gridViewUser);
         this.gridView.setAdapter(new UserAdapter(rootView.getContext(), mUsers));

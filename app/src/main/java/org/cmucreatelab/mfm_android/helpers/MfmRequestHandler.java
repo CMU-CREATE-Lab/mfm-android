@@ -108,7 +108,7 @@ public class MfmRequestHandler {
         }
 
         // Do we use the parameters field to pass the files?
-        globalHandler.httpRequestHandler.sendJsonRequest(requestMethod, requestUrl, params, response);
+        //globalHandler.httpRequestHandler.sendJsonRequest(requestMethod, requestUrl, params, response);
     }
 
 
@@ -334,7 +334,7 @@ public class MfmRequestHandler {
     }
 
 
-    public void logout(final ViewStudentsAndGroupsActivity intermediateActivity) {
+    public void logout(final ViewStudentsAndGroupsActivity activity) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;
@@ -345,7 +345,7 @@ public class MfmRequestHandler {
             @Override
             public void onResponse(JSONObject response) {
                 globalHandler.mfmLoginHandler.logout();
-                intermediateActivity.logoutSuccess();
+                activity.logoutSuccess();
                 Log.i(Constants.LOG_TAG, "logout onResponse");
             }
         };

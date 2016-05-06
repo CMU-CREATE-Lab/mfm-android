@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class StudentFragment extends Fragment  {
 
     public static final String USERS_KEY = "users_key";
-    private static final String SERIALIZABLE_KEY = "student_key";
+    private static final String STUDENTDS_KEY = "student_key";
     private View rootView;
     private ExtendedHeightGridView gridView;
     private ArrayList<Student> mStudents;
@@ -37,7 +37,7 @@ public class StudentFragment extends Fragment  {
     public static final Fragment newInstance(ArrayList<Student> students) {
         StudentFragment studentFragment = new StudentFragment();
         Bundle bdl = new Bundle(1);
-        bdl.putSerializable(SERIALIZABLE_KEY, students);
+        bdl.putSerializable(STUDENTDS_KEY, students);
         studentFragment.setArguments(bdl);
         return studentFragment;
     }
@@ -49,7 +49,7 @@ public class StudentFragment extends Fragment  {
         final GlobalHandler globalHandler = GlobalHandler.getInstance(rootView.getContext());
 
         if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
-            mStudents = (ArrayList<Student>) this.getArguments().getSerializable(SERIALIZABLE_KEY);
+            mStudents = (ArrayList<Student>) this.getArguments().getSerializable(STUDENTDS_KEY);
         }
         this.gridView = (ExtendedHeightGridView) rootView.findViewById(R.id.gridViewStudent);
         this.gridView.setAdapter(new StudentAdapter(rootView.getContext(), this.mStudents));

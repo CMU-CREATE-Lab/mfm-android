@@ -31,11 +31,13 @@ public class SessionHandler {
 
     private void sendStudentMessage() {
         // TODO student message actions
+        globalHandler.mfmRequestHandler.sendMessageStudent(message);
     }
 
 
     private void sendGroupMessage() {
         // TODO group message actions
+        globalHandler.mfmRequestHandler.sendMessageGroup(message);
     }
 
 

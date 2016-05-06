@@ -47,8 +47,9 @@ public class LoginActivity extends AppCompatActivity {
     public void loginSuccess() {
         GlobalHandler.getInstance(getApplicationContext()).refreshStudentsAndGroups();
         showProgress(false);
-        Intent intent = new Intent(this, MainScreenActivity.class);
+        Intent intent = new Intent(this, ViewStudentsAndGroupsActivity.class);
         startActivity(intent);
+        finish();
     }
 
 

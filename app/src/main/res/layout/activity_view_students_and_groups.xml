@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".activities.ViewStudentsAndGroupsActivity"
+    tools:context="org.cmucreatelab.mfm_android.activities.ViewStudentsAndGroupsActivity"
     android:background="#FC970B">
 
     <android.support.design.widget.AppBarLayout

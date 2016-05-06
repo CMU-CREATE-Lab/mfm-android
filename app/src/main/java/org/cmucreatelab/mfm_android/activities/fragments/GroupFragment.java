@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import org.cmucreatelab.mfm_android.R;
+import org.cmucreatelab.mfm_android.activities.CameraActivity;
 import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 import org.cmucreatelab.mfm_android.adapters.GroupAdapter;
@@ -57,7 +58,7 @@ public class GroupFragment extends Fragment {
         this.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 globalHandler.sessionHandler.startSession(mGroups.get(position));
-                Intent intent = new Intent(rootView.getContext(), SessionActivity.class);
+                Intent intent = new Intent(rootView.getContext(), CameraActivity.class);
                 startActivity(intent);
             }
         });

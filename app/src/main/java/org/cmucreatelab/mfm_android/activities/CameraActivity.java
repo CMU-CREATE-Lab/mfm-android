@@ -1,5 +1,6 @@
 package org.cmucreatelab.mfm_android.activities;
 
+import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -129,6 +130,8 @@ public class CameraActivity extends AppCompatActivity {
 
                     // We may not need to save the image to any directory if we do this.
                     globalHandler.sessionHandler.setMessagePhoto(picture);
+                    Intent intent = new Intent(globalHandler.appContext, AudioActivity.class);
+                    startActivity(intent);
                 } catch (FileNotFoundException e) {
                     Log.e(Constants.LOG_TAG, "File not found: " + e.getMessage());
                 } catch (IOException e) {

@@ -13,9 +13,6 @@ import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import java.util.ArrayList;
 
-/**
- * Created by mohaknahta on 2/20/16.
- */
 public class StudentAdapter extends BaseAdapter {
 
     private Context mContext;

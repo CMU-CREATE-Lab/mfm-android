@@ -22,4 +22,12 @@
         android:numColumns="auto_fit">
     </org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView>
 
+    <Button
+        android:id="@+id/finishedSelectingUsers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Done"
+        android:background="#40FFFFFF"/>
+
+
 </LinearLayout>

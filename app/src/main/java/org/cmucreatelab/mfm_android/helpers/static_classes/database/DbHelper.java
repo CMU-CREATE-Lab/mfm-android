@@ -142,6 +142,9 @@ public class DbHelper {
             dbStudents = StudentDbHelper.fetchFromDatabase(context);
             for (Student student : dbStudents) {
                 school.addStudent(student);
+                ArrayList<User> users = student.getUsers();
+                User one = new User();
+                one.setFirstName("jerry");
             }
             dbGroups = GroupDbHelper.fetchFromDatabaseWithStudents(context, dbStudents);
             for (Group group : dbGroups) {

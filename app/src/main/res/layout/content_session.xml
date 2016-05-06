@@ -14,57 +14,14 @@
     tools:showIn="@layout/activity_session"
     android:background="#fc970b">
 
-    <ScrollView
-        android:id="@+id/sessionScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
 
-        <LinearLayout
-            android:id="@+id/itemScrollable"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-        </LinearLayout>
-
-    </ScrollView>
-
-
-    <LinearLayout
-        android:orientation="horizontal"
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Camera"
-            android:id="@+id/cameraButton"
-            android:layout_weight="1"
-            android:background="#40FFFFFF"
-            android:layout_marginLeft="2dp" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Audio"
-            android:id="@+id/audioButton"
-            android:layout_weight="1"
-            android:background="#40FFFFFF"
-            android:layout_marginLeft="2dp" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="SendMessage"
-            android:id="@+id/sendMessageButton"
-            android:layout_weight="1"
-            android:background="#40FFFFFF"
-            android:layout_marginLeft="2dp" />
-
-    </LinearLayout>
+        android:text="SendMessage"
+        android:id="@+id/sendMessageButton"
+        android:layout_weight="1"
+        android:background="#40FFFFFF"
+        android:layout_marginLeft="2dp" />
 
 </RelativeLayout>

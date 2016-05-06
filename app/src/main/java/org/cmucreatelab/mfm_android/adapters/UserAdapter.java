@@ -7,23 +7,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.squareup.picasso.Picasso;
-
 import org.cmucreatelab.mfm_android.R;
-import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
-
 import java.util.ArrayList;
 
-/**
- * Created by mohaknahta on 2/21/16.
- */
 public class UserAdapter extends BaseAdapter {
 
     private Context mContext;
-    private ArrayList<User> users;
+    private ArrayList<User> mUsers;
 
     //allows to reuse views when the list is long
     private static class ViewHolder {
@@ -34,19 +27,19 @@ public class UserAdapter extends BaseAdapter {
 
     public UserAdapter(Context context, ArrayList<User> users) {
         mContext = context;
-        this.users = users;
+        mUsers = users;
     }
 
 
     @Override
     public int getCount() {
-        return users.size();
+        return mUsers.size();
     }
 
 
     @Override
     public Object getItem(int i) {
-        return users.get(i);
+        return mUsers.get(i);
     }
 
 
@@ -57,7 +50,7 @@ public class UserAdapter extends BaseAdapter {
 
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(int position, View view, ViewGroup viewGroup) {
         ViewHolder holder;
 
         if (view == null) {
@@ -65,13 +58,12 @@ public class UserAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.userPhotoView = (ImageView) view.findViewById(R.id.userPhotoImageView);
             holder.userName = (TextView) view.findViewById(R.id.userNameTextView);
-
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
 
-        User user = users.get(i);
+        User user  = mUsers.get(position);
         String photoUrl = user.getPhotoUrl();
         String url = Constants.MFM_API_URL + photoUrl;
 

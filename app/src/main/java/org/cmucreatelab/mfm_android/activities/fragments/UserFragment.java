@@ -1,80 +1,96 @@
 package org.cmucreatelab.mfm_android.activities.fragments;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.GridView;
 
 import org.cmucreatelab.mfm_android.R;
+import org.cmucreatelab.mfm_android.activities.CameraActivity;
 import org.cmucreatelab.mfm_android.adapters.UserAdapter;
 import org.cmucreatelab.mfm_android.classes.User;
-import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
+import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 
 import java.util.ArrayList;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserFragment extends Fragment {
+public class UserFragment extends Fragment  {
 
-    private static final String SERIALIZABLE_KEY = "user_key";
+    private GlobalHandler globalHandler;
     private View rootView;
     private ExtendedHeightGridView gridView;
-    private ArrayList<User> users;
-    private ArrayList<User> selectedUsers;
+    private ArrayList<User> mUsers;
+    private ArrayList<User> selected;
 
 
     public UserFragment() {
-        // Required empty public constructor
+
     }
 
 
     public static final Fragment newInstance(ArrayList<User> users) {
         UserFragment userFragment = new UserFragment();
         Bundle bdl = new Bundle(1);
-        bdl.putSerializable(SERIALIZABLE_KEY, users);
+        bdl.putSerializable(StudentFragment.USERS_KEY, users);
         userFragment.setArguments(bdl);
         return userFragment;
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.rootView = inflater.inflate(R.layout.fragment_user, container, false);
-        final GlobalHandler globalHandler = GlobalHandler.getInstance(rootView.getContext());
-        this.selectedUsers = new ArrayList<>();
+        globalHandler = GlobalHandler.getInstance(rootView.getContext());
+        selected = new ArrayList<>();
+        ButterKnife.bind(this, rootView);
 
         if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
-            users = (ArrayList<User>) this.getArguments().getSerializable(SERIALIZABLE_KEY);
+            mUsers = (ArrayList<User>) this.getArguments().getSerializable(StudentFragment.USERS_KEY);
         }
         this.gridView = (ExtendedHeightGridView) rootView.findViewById(R.id.gridViewUser);
-        this.gridView.setAdapter(new UserAdapter(rootView.getContext(), this.users));
-        this.gridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
+        this.gridView.setAdapter(new UserAdapter(rootView.getContext(), mUsers));
+        this.gridView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 
-        // TODO Should we add a button to confirm when we have selected the users we want?
-        // For now I will just update the recipients each time a user is selected or deselcted
         this.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if (gridView.isItemChecked(position)) {
-                    selectedUsers.add(users.get(position));
-                    Log.i(Constants.LOG_TAG, "Selected " + users.get(position).toString() + " to be added to the recipients list.");
-                    v.setBackgroundColor(Color.GRAY);
+                    selected.add(mUsers.get(position));
+                    Log.i(Constants.LOG_TAG, "Selected " + mUsers.get(position).getId() + " to be added to the recipients list.");
+                    GradientDrawable drawable = new GradientDrawable();
+                    drawable.setShape(GradientDrawable.RECTANGLE);
+                    drawable.setStroke(5, Color.GREEN);
+                    v.setBackgroundDrawable(drawable);
                 } else {
-                    selectedUsers.remove(users.get(position));
-                    Log.i(Constants.LOG_TAG, "Deselected " + users.get(position).toString() + " to be added to the recipients list.");
+                    selected.remove(mUsers.get(position));
+                    Log.i(Constants.LOG_TAG, "Deselected " + mUsers.get(position).getId() + " to be added to the recipients list.");
                     v.setBackgroundColor(Color.alpha(0));
                 }
-                globalHandler.sessionHandler.setMessageRecipients(selectedUsers);
             }
         });
+
         return rootView;
+    }
+
+
+    @OnClick(R.id.finishedSelectingUsers)
+    public void finishedSelecting() {
+        globalHandler.sessionHandler.setMessageRecipients(selected);
+        Intent intent = new Intent(rootView.getContext(), CameraActivity.class);
+        startActivity(intent);
     }
 
 }

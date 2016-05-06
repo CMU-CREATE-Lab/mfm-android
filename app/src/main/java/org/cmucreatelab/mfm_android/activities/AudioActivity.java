@@ -1,6 +1,7 @@
 package org.cmucreatelab.mfm_android.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -63,6 +64,9 @@ public class AudioActivity extends AppCompatActivity {
         String message = "Audio file has been saved.";
         Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
         toast.show();
+
+        Intent intent = new Intent(this, SessionActivity.class);
+        startActivity(intent);
     }
 
 
@@ -92,24 +96,7 @@ public class AudioActivity extends AppCompatActivity {
             startRecording();
         } else {
             this.isRecording = false;
-            this.recorderButton.setText(R.string.button_audio_start);
             stopRecording();
-        }
-    }
-
-
-    @OnClick(R.id.playbackAudio)
-    public void onPlayback() {
-        if (audioFile != null && mediaRecorder == null) {
-            Uri.Builder uriBuilder = new Uri.Builder();
-            uriBuilder.appendPath(audioFile.getAbsolutePath());
-            Uri uri = uriBuilder.build();
-            MediaPlayer mediaPlayer = MediaPlayer.create(context, uri);
-            mediaPlayer.start(); // no need to call prepare(); create() does that for you
-        } else{
-            String message = "There has been no recent audio recording.\nClick Start Recording to record audio.";
-            Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-            toast.show();
         }
     }
 

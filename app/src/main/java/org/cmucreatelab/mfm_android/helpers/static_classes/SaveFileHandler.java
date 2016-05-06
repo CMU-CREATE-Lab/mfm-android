@@ -42,10 +42,10 @@ public class SaveFileHandler {
 
         if (type == MEDIA_TYPE_IMAGE) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + timeStamp + ".jpg");
+                    "IMG_" + student.getFirstName() + ".jpg");
         } else if (type == MEDIA_TYPE_AUDIO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "AUDIO_" + timeStamp + ".wav");
+                    "AUDIO_" + student.getFirstName() + ".wav");
         } else {
             return null;
         }

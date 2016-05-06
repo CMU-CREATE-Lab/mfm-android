@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import org.cmucreatelab.mfm_android.R;
+import org.cmucreatelab.mfm_android.activities.ViewUsersActivity;
 import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
-import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import org.cmucreatelab.mfm_android.adapters.StudentAdapter;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
@@ -22,6 +22,7 @@ import java.util.ArrayList;
  */
 public class StudentFragment extends Fragment  {
 
+    public static final String USERS_KEY = "users_key";
     private static final String SERIALIZABLE_KEY = "student_key";
     private View rootView;
     private ExtendedHeightGridView gridView;
@@ -56,7 +57,10 @@ public class StudentFragment extends Fragment  {
         this.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 globalHandler.sessionHandler.startSession(mStudents.get(position));
-                Intent intent = new Intent(rootView.getContext(), SessionActivity.class);
+                Intent intent = new Intent(rootView.getContext(), ViewUsersActivity.class);
+                Bundle b = new Bundle();
+                b.putSerializable(USERS_KEY, mStudents.get(position).getUsers());
+                intent.putExtras(b); //Put your id to your next Intent
                 startActivity(intent);
             }
         });

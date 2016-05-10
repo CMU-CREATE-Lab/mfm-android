@@ -36,81 +36,6 @@ public class MfmRequestHandler {
     }
 
 
-    /*// TODO I may combine these two methods and just add a conditional since they are almost exactly the same
-    *//* curl -X POST \
-        -F "audio=@./audio.wav" -F "photo=@./photo.jpg" \
-        -F "message_type=student" -F "sender_id=$STUDENT_ID" \
-        -F "recipients=$RECIPIENTS" \
-        "dev.messagefromme.org/api/v2/message?kiosk_uid=$KIOSK_UID"*//*
-    public void sendMessageStudent(final Message message) {
-        int requestMethod;
-        String requestUrl;
-        Response.Listener<JSONObject> response;
-        Bitmap bitmapImage, bitmapAudio;
-        JSONObject params = new JSONObject();
-
-        requestMethod = Request.Method.POST;
-        requestUrl = Constants.MFM_API_URL + "/api/v2/message?kiosk_uid=" + globalHandler.mfmLoginHandler.getKioskUid();
-        response = new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.i(Constants.LOG_TAG, "sendMessageStudent onResponse");
-            }
-        };
-
-        try {
-            params.put("audio", message.getAudio().getAbsolutePath());
-            params.put("photo", message.getPhoto().getAbsolutePath());
-            params.put("message_type", "student");
-            params.put("sender_id", message.getSender().getId());
-
-            for (User user : message.getRecipients()) {
-                params.put("recipients", user.getId());
-            }
-        } catch (JSONException e) {
-            Log.e(Constants.LOG_TAG, "JSONException in sendMessageStudent");
-        }
-
-        // Do we use the parameters field to pass the files?
-        //globalHandler.httpRequestHandler.sendJsonRequest(requestMethod, requestUrl, params, response);
-    }
-
-
-    *//*curl -X POST \
-            -F "audio=@./audio.wav" -F "photo=@./photo.jpg" \
-            -F "message_type=group" -F "sender_id=$GROUP_ID" \
-            "dev.messagefromme.org/api/v2/message?kiosk_uid=$KIOSK_UID"*//*
-    public void sendMessageGroup(final Message message) {
-        int requestMethod;
-        String requestUrl;
-        Response.Listener<JSONObject> response;
-        Bitmap bitmapImage, bitmapAudio;
-        JSONObject params = new JSONObject();
-
-        requestMethod = Request.Method.POST;
-        requestUrl = Constants.MFM_API_URL + "/api/v2/message?kiosk_uid=" + globalHandler.mfmLoginHandler.getKioskUid();
-        response = new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.i(Constants.LOG_TAG, "sendMessageStudent onResponse");
-            }
-        };
-
-        try {
-            params.put("audio", message.getAudio());
-            params.put("photo", message.getPhoto());
-            params.put("message_type", "group");
-            params.put("sender_id", message.getSender().getId());
-        } catch (JSONException e) {
-            Log.e(Constants.LOG_TAG, "JSONException in sendMessageGroup");
-        }
-
-        // Do we use the parameters field to pass the files?
-        //globalHandler.httpRequestHandler.sendJsonRequest(requestMethod, requestUrl, params, response);
-    }*/
-
-
-    // May make a Callback interface since other activities may want to call this
     public void requestListStudents() {
         int requestMethod;
         String requestUrl;
@@ -134,7 +59,6 @@ public class MfmRequestHandler {
     }
 
 
-    // May make a Callback interface since other activities may want to call this
     public void requestListGroups() {
         int requestMethod;
         String requestUrl;

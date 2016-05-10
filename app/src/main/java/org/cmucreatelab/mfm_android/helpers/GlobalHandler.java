@@ -3,6 +3,14 @@ package org.cmucreatelab.mfm_android.helpers;
 import android.content.Context;
 import android.os.Build;
 import android.util.Log;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
+
+import org.cmucreatelab.mfm_android.classes.FormFile;
+import org.cmucreatelab.mfm_android.classes.FormValue;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Kiosk;
 import org.cmucreatelab.mfm_android.classes.School;
@@ -10,7 +18,11 @@ import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.ListHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.DbHelper;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * Created by mike on 1/28/16.
@@ -27,6 +39,41 @@ public class GlobalHandler {
     public MfmRequestHandler mfmRequestHandler;
     public MfmLoginHandler mfmLoginHandler;
     public SessionHandler sessionHandler;
+
+
+    public void sendPost(byte[] photo, byte[] audio) {
+        int requestMethod = Request.Method.POST;
+        String requestUrl = Constants.MFM_API_URL + "/api/v2/message";
+
+        Response.Listener<JSONObject> response = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i("GlobalHandler", "Got response: "+response.toString());
+            }
+        };
+        Response.ErrorListener error = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("GlobalHandler", "Got ERROR: "+error.toString());
+            }
+        };
+
+        String senderType = sessionHandler.getMessageSender().getSenderType().toString().replace("S", "s");
+        HashMap<String,FormValue> formElements = new HashMap<>();
+        formElements.put("photo", new FormFile("photo.jpg","image/jpeg",photo));
+        formElements.put("audio", new FormFile("audio.wav","application/octet-stream",audio));
+        formElements.put("message_type",new FormValue(senderType));
+        formElements.put("sender_id",new FormValue(Integer.toString(sessionHandler.getMessageSender().getId())));
+        if (senderType.equals("student")) {
+            formElements.put("recipients", new FormValue(Arrays.toString(sessionHandler.getRecipientsIds()).replace("[", "").replace("]", "").replace(" ", "")));
+        }
+        formElements.put("kiosk_uid", new FormValue(mfmLoginHandler.getKioskUid()));
+
+        Log.i(Constants.LOG_TAG, mfmLoginHandler.getKioskUid());
+
+        FormRequestHandler request = new FormRequestHandler(requestMethod,requestUrl,formElements,response,error);
+        Volley.newRequestQueue(appContext).add(request);
+    }
 
 
     public void refreshStudentsAndGroups() {

@@ -10,6 +10,7 @@ import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class SessionActivity extends FragmentActivity {
 
@@ -33,6 +34,12 @@ public class SessionActivity extends FragmentActivity {
         } else {
             mGroup = (Group) sender;
         }
+    }
+
+
+    @OnClick(R.id.sendMessageButton)
+    public void sendMessage() {
+        globalHandler.sessionHandler.sendMessage();
     }
 
 }

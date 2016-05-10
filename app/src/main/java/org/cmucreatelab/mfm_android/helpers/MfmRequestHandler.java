@@ -1,6 +1,5 @@
 package org.cmucreatelab.mfm_android.helpers;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -9,7 +8,6 @@ import org.cmucreatelab.mfm_android.activities.LoginActivity;
 import org.cmucreatelab.mfm_android.activities.ViewStudentsAndGroupsActivity;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Kiosk;
-import org.cmucreatelab.mfm_android.classes.Message;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
@@ -38,12 +36,12 @@ public class MfmRequestHandler {
     }
 
 
-    // TODO I may combine these two methods and just add a conditional since they are almost exactly the same
-    /* curl -X POST \
+    /*// TODO I may combine these two methods and just add a conditional since they are almost exactly the same
+    *//* curl -X POST \
         -F "audio=@./audio.wav" -F "photo=@./photo.jpg" \
         -F "message_type=student" -F "sender_id=$STUDENT_ID" \
         -F "recipients=$RECIPIENTS" \
-        "dev.messagefromme.org/api/v2/message?kiosk_uid=$KIOSK_UID"*/
+        "dev.messagefromme.org/api/v2/message?kiosk_uid=$KIOSK_UID"*//*
     public void sendMessageStudent(final Message message) {
         int requestMethod;
         String requestUrl;
@@ -78,10 +76,10 @@ public class MfmRequestHandler {
     }
 
 
-    /*curl -X POST \
+    *//*curl -X POST \
             -F "audio=@./audio.wav" -F "photo=@./photo.jpg" \
             -F "message_type=group" -F "sender_id=$GROUP_ID" \
-            "dev.messagefromme.org/api/v2/message?kiosk_uid=$KIOSK_UID"*/
+            "dev.messagefromme.org/api/v2/message?kiosk_uid=$KIOSK_UID"*//*
     public void sendMessageGroup(final Message message) {
         int requestMethod;
         String requestUrl;
@@ -109,7 +107,7 @@ public class MfmRequestHandler {
 
         // Do we use the parameters field to pass the files?
         //globalHandler.httpRequestHandler.sendJsonRequest(requestMethod, requestUrl, params, response);
-    }
+    }*/
 
 
     // May make a Callback interface since other activities may want to call this

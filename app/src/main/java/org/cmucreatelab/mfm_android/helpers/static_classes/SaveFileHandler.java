@@ -20,7 +20,6 @@ public class SaveFileHandler {
 
     public static File getOutputMediaFile(Context context, int type, GlobalHandler globalHandler) {
         File mediaStorageDir = new File("","");
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile;
 
         // TODO - change the structure of the folder hierarchy

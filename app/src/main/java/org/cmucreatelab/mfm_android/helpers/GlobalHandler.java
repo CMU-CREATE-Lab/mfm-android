@@ -61,15 +61,13 @@ public class GlobalHandler {
         String senderType = sessionHandler.getMessageSender().getSenderType().toString().replace("S", "s");
         HashMap<String,FormValue> formElements = new HashMap<>();
         formElements.put("photo", new FormFile("photo.jpg","image/jpeg",photo));
-        formElements.put("audio", new FormFile("audio.wav","application/octet-stream",audio));
+        formElements.put("audio", new FormFile("audio.amr-nb","audio/amr-nb",audio));
         formElements.put("message_type",new FormValue(senderType));
         formElements.put("sender_id",new FormValue(Integer.toString(sessionHandler.getMessageSender().getId())));
         if (senderType.equals("student")) {
             formElements.put("recipients", new FormValue(Arrays.toString(sessionHandler.getRecipientsIds()).replace("[", "").replace("]", "").replace(" ", "")));
         }
         formElements.put("kiosk_uid", new FormValue(mfmLoginHandler.getKioskUid()));
-
-        Log.i(Constants.LOG_TAG, mfmLoginHandler.getKioskUid());
 
         FormRequestHandler request = new FormRequestHandler(requestMethod,requestUrl,formElements,response,error);
         Volley.newRequestQueue(appContext).add(request);

@@ -90,19 +90,14 @@ public class SessionHandler {
                 Log.e(Constants.LOG_TAG, "could not match SenderType in SessionHandler");
         }*/
 
-        byte[] photo = new byte[0];
-        byte[] audio = new byte[0];
+        byte[] binPhoto = new byte[0];
+        byte[] binAudio = new byte[0];
         try {
-            photo = FileUtils.readFileToByteArray(message.getPhoto());
-            audio = FileUtils.readFileToByteArray(message.getAudio());
+            binPhoto = FileUtils.readFileToByteArray(message.getPhoto());
+            binAudio = FileUtils.readFileToByteArray(message.getAudio());
         } catch (IOException e) {
             Log.e(Constants.LOG_TAG, "Error in reading a file to a byte array in sendMessage.");
         }
-        String encodedPhoto = Base64.encodeToString(photo, 0);
-        String encodedAudio = Base64.encodeToString(audio, 0);
-
-        byte[] binPhoto = Base64.decode(encodedPhoto, Base64.DEFAULT);
-        byte[] binAudio = Base64.decode(encodedAudio, Base64.DEFAULT);
         globalHandler.sendPost(binPhoto, binAudio);
     }
 

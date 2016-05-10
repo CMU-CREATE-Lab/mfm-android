@@ -44,7 +44,7 @@ public class SaveFileHandler {
                     "IMG_" + student.getFirstName() + ".jpg");
         } else if (type == MEDIA_TYPE_AUDIO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "AUDIO_" + student.getFirstName() + ".wav");
+                    "AUDIO_" + student.getFirstName() + ".amr-nb");
         } else {
             return null;
         }

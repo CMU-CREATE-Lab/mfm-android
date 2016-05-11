@@ -1,8 +1,10 @@
 package org.cmucreatelab.mfm_android.activities.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,8 @@ import android.widget.AdapterView;
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.activities.CameraActivity;
 import org.cmucreatelab.mfm_android.activities.SessionActivity;
+import org.cmucreatelab.mfm_android.activities.ViewStudentsAndGroupsActivity;
+import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 import org.cmucreatelab.mfm_android.adapters.GroupAdapter;
 import org.cmucreatelab.mfm_android.classes.Group;
@@ -28,7 +32,7 @@ public class GroupFragment extends Fragment {
     private View rootView;
     private ExtendedHeightGridView gridView;
     private ArrayList<Group> mGroups;
-
+    private Activity parentActivity;
 
     public GroupFragment() {
         // Required empty public constructor
@@ -45,6 +49,13 @@ public class GroupFragment extends Fragment {
 
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        parentActivity = activity;
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.rootView = inflater.inflate(R.layout.fragment_group, container, false);
         final GlobalHandler globalHandler = GlobalHandler.getInstance(rootView.getContext());
@@ -57,13 +68,21 @@ public class GroupFragment extends Fragment {
 
         this.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                globalHandler.sessionHandler.startSession(mGroups.get(position));
-                Intent intent = new Intent(rootView.getContext(), CameraActivity.class);
-                startActivity(intent);
+                try {
+                    ((GroupListener) parentActivity).onGroupSelected(position);
+                } catch (Exception e) {
+                    Log.e(Constants.LOG_TAG, "Error in GroupFragment setOnItemClickListener: " + e.toString());
+                }
             }
         });
 
         return rootView;
+    }
+
+
+    // This is used by the parent activity to make a decision
+    public interface GroupListener {
+        public void onGroupSelected(int position);
     }
 
 }

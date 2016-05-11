@@ -28,7 +28,7 @@ public class MfmLoginHandler {
         this.globalHandler = globalHandler;
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(globalHandler.appContext);
         this.kioskIsLoggedIn = sharedPreferences.getBoolean(Constants.PreferencesKeys.kioskIsLoggedIn, (Boolean) Constants.DEFAULT_SETTINGS.get(Constants.PreferencesKeys.kioskIsLoggedIn));
-        Log.i(Constants.LOG_TAG, String.format("%b", this.kioskIsLoggedIn));
+        // get shared preference values and initialize the school.
         if (this.kioskIsLoggedIn) {
             String kioskUid = sharedPreferences.getString(Constants.PreferencesKeys.kioskUid, (String) Constants.DEFAULT_SETTINGS.get(Constants.PreferencesKeys.kioskUid));
             String schoolName = sharedPreferences.getString(Constants.PreferencesKeys.kioskSchoolName, (String) Constants.DEFAULT_SETTINGS.get(Constants.PreferencesKeys.kioskSchoolName));

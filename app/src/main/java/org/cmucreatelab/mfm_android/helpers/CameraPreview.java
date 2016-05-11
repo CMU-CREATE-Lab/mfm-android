@@ -10,6 +10,8 @@ import java.io.IOException;
 
 /**
  * Created by Steve on 3/15/2016.
+ *
+ * A helper class that displays the camera.
  */
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -68,7 +70,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         this.mSurfaceHolder.getSurface().release();
-        System.out.println("Destroyed the surface");
+        Log.i(Constants.LOG_TAG, "Destroyed the camera surface");
     }
 
 }

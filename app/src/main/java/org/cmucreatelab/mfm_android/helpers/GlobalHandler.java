@@ -74,6 +74,7 @@ public class GlobalHandler {
     }
 
 
+    // refresh the list of students and groups in a school
     public void refreshStudentsAndGroups() {
         mfmRequestHandler.requestListStudents();
         mfmRequestHandler.requestListGroups();
@@ -85,13 +86,15 @@ public class GlobalHandler {
             School school = mfmLoginHandler.getSchool();
             ArrayList<Student> studentsFromDB = school.getStudents();
 
+            // for ever student in the list of students from - mfmRequestHandler.requestListStudents();
             for (Student mfmStudent : studentsFromMfmRequest) {
                 try {
                     Student dbStudent = ListHelper.findStudentWithId(studentsFromDB, mfmStudent.getId());
+                    // If the student is not updated, then update the student.
                     if (!dbStudent.getUpdatedAt().equals(mfmStudent.getUpdatedAt())) {
                         mfmRequestHandler.updateStudent(dbStudent);
                     }
-
+                    // If the student was not found in the database.
                 } catch (Exception e) {
                     Log.i(Constants.LOG_TAG, "No student found in the database that matched the mfmRequest. Adding to database");
                     school.addStudent(mfmStudent);
@@ -109,13 +112,16 @@ public class GlobalHandler {
         if (mfmLoginHandler.kioskIsLoggedIn) {
             School school = mfmLoginHandler.getSchool();
             ArrayList<Group> groupsFromDB = school.getGroups();
+
+            // for ever group in the list of groups from - mfmRequestHandler.requestListGroups();
             for (Group mfmGroup : groupsFromMfmRequest) {
                 try {
                     Group dbGroup = ListHelper.findGroupWithId(groupsFromDB, mfmGroup.getId());
-                    Log.i(Constants.LOG_TAG, dbGroup.getUpdatedAt() + " " + mfmGroup.getUpdatedAt());
+                    // If the group is not updated, then update the group.
                     if (!dbGroup.getUpdatedAt().equals(mfmGroup.getUpdatedAt())) {
                         mfmRequestHandler.updateGroup(dbGroup);
                     }
+                    // If the group was not found in the database.
                 } catch (Exception e) {
                     Log.i(Constants.LOG_TAG, "No group found in the database that matched the mfmRequest. Adding to database");
                     school.addGroup(mfmGroup);
@@ -153,6 +159,7 @@ public class GlobalHandler {
         this.mfmRequestHandler = new MfmRequestHandler(this);
         this.sessionHandler = new SessionHandler(this);
         Kiosk.ioSVersion = Build.VERSION.RELEASE;
+        DbHelper.clearAll(appContext);
     }
 
 }

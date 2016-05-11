@@ -12,6 +12,9 @@ import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+
+// TODO make the audio and camera activities fragments
+// TODO display the picture after the picture was taken
 public class SessionActivity extends FragmentActivity {
 
     private GlobalHandler globalHandler;

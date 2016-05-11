@@ -13,6 +13,13 @@ import org.cmucreatelab.mfm_android.classes.User;
 
 import java.util.ArrayList;
 
+// TODO - Decide what to do with this activity since nothing goes on in it...it's kind of useless
+// I may just combine the user selection in the ViewStudentsAndGroups Activity and just remove fragments on the fly.
+// I don't like all these activities when they are all part of the same process.
+// In fact, I think I will make a Selection Activity (handles selecting items in lists) and then keep the LoginActivity and the Session Activity.
+// LoginActivity will remain the same.
+// SessionActivity will handle taking the picture, recording audio, and sending the message...since that what a session is.
+// good work steve.
 public class ViewUsersActivity extends AppCompatActivity {
 
     private ArrayList<User> users;

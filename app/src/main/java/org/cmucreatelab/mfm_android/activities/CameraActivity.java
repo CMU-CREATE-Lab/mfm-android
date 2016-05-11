@@ -77,7 +77,8 @@ public class CameraActivity extends AppCompatActivity {
         this.mCamera.setPreviewCallback(null);
         this.mPreview = new CameraPreview(getApplicationContext(), this.mCamera);
 
-        // set the orientation and camera parameters
+        // Set the orientation and camera parameters.
+        // Makes sure the image seen and the picture taken is oriented correctly
         int rotation  = this.getCameraOrientation();
         this.mCamera.setDisplayOrientation(rotation);
         Camera.Parameters params = mCamera.getParameters();

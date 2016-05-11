@@ -11,6 +11,8 @@ import java.util.Date;
 
 /**
  * Created by Steve on 3/18/2016.
+ *
+ * Used to help create and save files of various types.
  */
 public class SaveFileHandler {
 

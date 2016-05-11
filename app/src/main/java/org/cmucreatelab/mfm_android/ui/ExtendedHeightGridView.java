@@ -6,6 +6,9 @@ import android.widget.GridView;
 
 /**
  * Created by Steve on 4/28/2016.
+ *
+ * Used to display the gridview so it appears as one large scrollable view.
+ * TODO - Doesn't seem to do the trick when there are a small number of items in the grid.
  */
 public class ExtendedHeightGridView extends GridView {
 

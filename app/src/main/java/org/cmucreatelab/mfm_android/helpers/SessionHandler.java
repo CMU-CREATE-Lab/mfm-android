@@ -32,22 +32,12 @@ public class SessionHandler {
     }
 
 
-    // TODO We probably don't need these seperate methods since the globalHandler.sendPost handles it
-    private void sendStudentMessage() {
-        // TODO student message actions
-    }
-
-
-    private void sendGroupMessage() {
-        // TODO group message actions
-    }
-
-
     public void startSession(Sender sender) {
         this.message = new Message(sender);
     }
 
 
+    // This is ugly but I need it to send the post message correctly.
     public int[] getRecipientsIds() {
         int size = message.getRecipients().size();
         int[] ids = new int[size];
@@ -79,17 +69,6 @@ public class SessionHandler {
 
 
     public void sendMessage() {
-        /*switch (message.getSender().getSenderType()) {
-            case Student:
-                sendStudentMessage();
-                break;
-            case Group:
-                sendGroupMessage();
-                break;
-            default:
-                Log.e(Constants.LOG_TAG, "could not match SenderType in SessionHandler");
-        }*/
-
         byte[] binPhoto = new byte[0];
         byte[] binAudio = new byte[0];
         try {

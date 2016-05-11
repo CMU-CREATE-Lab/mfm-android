@@ -19,6 +19,8 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
+ *
+ * Used to display a list of students.
  */
 public class StudentFragment extends Fragment  {
 
@@ -30,10 +32,14 @@ public class StudentFragment extends Fragment  {
 
 
     public StudentFragment() {
-
+        // empty
     }
 
 
+    /**
+     * Needs to be called before the fragment is displayed.
+     * Is used to instantiate the list of students.
+     */
     public static final Fragment newInstance(ArrayList<Student> students) {
         StudentFragment studentFragment = new StudentFragment();
         Bundle bdl = new Bundle(1);
@@ -55,6 +61,7 @@ public class StudentFragment extends Fragment  {
         this.gridView.setAdapter(new StudentAdapter(rootView.getContext(), this.mStudents));
 
         this.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            // Starts the user fragments once a student is selected.
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 globalHandler.sessionHandler.startSession(mStudents.get(position));
                 Intent intent = new Intent(rootView.getContext(), ViewUsersActivity.class);

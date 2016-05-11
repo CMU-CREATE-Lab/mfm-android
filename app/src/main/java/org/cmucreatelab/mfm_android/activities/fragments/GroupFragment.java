@@ -24,6 +24,8 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
+ *
+ * Used to display a list of groups.
  */
 public class GroupFragment extends Fragment {
 
@@ -39,6 +41,14 @@ public class GroupFragment extends Fragment {
     }
 
 
+    /**
+    * Needs to be called before the fragment is displayed.
+    * Is used to instantiate the list of groups.
+    *
+    * We might not need to instantiate the groups because there may never be an
+    * instance where a different list of groups is displayed. (it may always be the schools groups)
+    * but I figured this is good practice just in case.
+    */
     public static final GroupFragment newInstance(ArrayList<Group> groups) {
         GroupFragment studentFragment = new GroupFragment();
         Bundle bdl = new Bundle(1);
@@ -80,7 +90,7 @@ public class GroupFragment extends Fragment {
     }
 
 
-    // This is used by the parent activity to make a decision
+    // This is used by the parent activity to make a decision based off of the main_menu
     public interface GroupListener {
         public void onGroupSelected(int position);
     }

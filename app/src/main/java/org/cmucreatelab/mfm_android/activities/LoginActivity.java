@@ -37,22 +37,25 @@ public class LoginActivity extends AppCompatActivity {
     private String password;
 
 
+    // If the user successfully belonged to a school, then this will be called.
     public void requestListSchoolsSuccess(ArrayList<School> schools) {
-        // TODO fix so I am not just using the first school
+        // TODO do we just select the first school in the list?
         globalHandler = GlobalHandler.getInstance(getApplicationContext());
         globalHandler.mfmRequestHandler.login(this, username, password, schools.get(0).getId().toString());
     }
 
 
+    // If the entire loging process was successful then this should be called.
     public void loginSuccess() {
         GlobalHandler.getInstance(getApplicationContext()).refreshStudentsAndGroups();
-        showProgress(false);
         Intent intent = new Intent(this, ViewStudentsAndGroupsActivity.class);
         startActivity(intent);
+        showProgress(false);
         finish();
     }
 
 
+    // If at any point the login process failed, call this method.
     public void loginFailure() {
         // TODO Have more possible failures instead of just username or password being invalid.
         showProgress(false);
@@ -86,8 +89,8 @@ public class LoginActivity extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
+        // skip the login process if the kiosk is still logged in.
         this.globalHandler = GlobalHandler.getInstance(getApplicationContext());
-        Log.i(Constants.LOG_TAG, String.format("%b", this.globalHandler.mfmLoginHandler.kioskIsLoggedIn));
         if (this.globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
             showProgress(true);
             School school  = this.globalHandler.mfmLoginHandler.getSchool();
@@ -169,8 +172,7 @@ public class LoginActivity extends AppCompatActivity {
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+            // Shows a progress bar and starts the background task of logging in.
             showProgress(true);
             GlobalHandler.getInstance(getApplicationContext()).mfmRequestHandler.requestListSchools(this, username, password);
         }

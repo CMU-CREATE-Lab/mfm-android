@@ -15,6 +15,8 @@ import java.util.ArrayList;
 
 /**
  * Created by Steve on 3/10/2016.
+ *
+ * Helps display a group on the fly.
  */
 public class GroupAdapter extends BaseAdapter {
 

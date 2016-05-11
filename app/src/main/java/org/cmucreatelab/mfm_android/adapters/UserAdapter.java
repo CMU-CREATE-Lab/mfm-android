@@ -13,6 +13,7 @@ import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import java.util.ArrayList;
 
+// Helps display a user on the fly.
 public class UserAdapter extends BaseAdapter {
 
     private Context mContext;

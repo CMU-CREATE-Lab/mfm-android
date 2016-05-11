@@ -17,35 +17,48 @@ import org.cmucreatelab.mfm_android.activities.fragments.StudentFragment;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 
+// TODO - should I make an interface class that the fragments inherent and then their parent activities use?
+// TODO - that way the fragments would just be used to display lists, nothing more.
 public class ViewStudentsAndGroupsActivity extends AppCompatActivity implements GroupFragment.GroupListener {
 
+    private boolean isOrderByGroup;
     private Fragment students;
     private Fragment groups;
-    private boolean isOrderByGroup;
     private GlobalHandler globalHandler;
 
 
+    // Shows the students based off of a selected group
     private void orderByGroup() {
         isOrderByGroup = true;
         FragmentManager fm = this.getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(students);
+        if (students != null) {
+            ft.remove(students);
+            students = null;
+        }
+        if (groups == null) {
+            groups = GroupFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getGroups());
+            ft.add(R.id.studentsAndGroupsScrollable, groups, "group_fragment");
+        }
         ft.commit();
     }
 
 
-    private void selectAll() {
+    // Shows all the students and groups in a school
+    private void showAll() {
         isOrderByGroup = false;
         FragmentManager fm= this.getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
 
-        if (students != null) {
-            ft.remove(students);
-        }
         if (groups != null) {
             ft.remove(groups);
+            groups = null;
         }
-        
+        if (students != null) {
+            ft.remove(students);
+            students = null;
+        }
+
         students = StudentFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getStudents());
         groups = GroupFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getGroups());
         ft.add(R.id.studentsAndGroupsScrollable, students, "student_fragment");
@@ -67,7 +80,7 @@ public class ViewStudentsAndGroupsActivity extends AppCompatActivity implements 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
-        selectAll();
+        showAll();
     }
 
 
@@ -94,8 +107,8 @@ public class ViewStudentsAndGroupsActivity extends AppCompatActivity implements 
         } else if (id == R.id.orderByGroup) {
             orderByGroup();
             return true;
-        } else if (id == R.id.selectAll) {
-            selectAll();
+        } else if (id == R.id.showAll) {
+            showAll();
             return true;
         }
 
@@ -103,6 +116,7 @@ public class ViewStudentsAndGroupsActivity extends AppCompatActivity implements 
     }
 
 
+    // Displays the students in the selected group.
     @Override
     public void onGroupSelected(int position) {
         Group group = globalHandler.mfmLoginHandler.getSchool().getGroups().get(position);
@@ -117,6 +131,7 @@ public class ViewStudentsAndGroupsActivity extends AppCompatActivity implements 
             students = StudentFragment.newInstance(group.getStudents());
             ft.add(R.id.studentsAndGroupsScrollable, students, "student_fragment");
             ft.remove(groups);
+            groups = null;
             ft.commit();
         }
     }

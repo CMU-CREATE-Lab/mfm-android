@@ -22,8 +22,8 @@ import butterknife.OnClick;
 
 public class AudioActivity extends AppCompatActivity {
 
-    private Button recorderButton;
     private boolean isRecording;
+    private Button recorderButton;
     private MediaRecorder mediaRecorder;
     private Context context;
     private File audioFile;

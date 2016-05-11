@@ -8,6 +8,6 @@
         android:id="@+id/orderByGroup"
         android:title="Order by Group"/>
     <item
-        android:id="@+id/selectAll"
-        android:title="Select All"/>
+        android:id="@+id/showAll"
+        android:title="Show All"/>
 </menu>

@@ -43,6 +43,10 @@ public class UserFragment extends Fragment  {
     }
 
 
+    /**
+     * Needs to be called before the fragment is displayed.
+     * Is used to instantiate the list of students.
+     */
     public static final Fragment newInstance(ArrayList<User> users) {
         UserFragment userFragment = new UserFragment();
         Bundle bdl = new Bundle(1);

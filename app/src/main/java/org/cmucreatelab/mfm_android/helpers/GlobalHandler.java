@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
+import org.cmucreatelab.mfm_android.activities.LoginActivity;
 import org.cmucreatelab.mfm_android.classes.FormFile;
 import org.cmucreatelab.mfm_android.classes.FormValue;
 import org.cmucreatelab.mfm_android.classes.Group;
@@ -75,13 +76,13 @@ public class GlobalHandler {
 
 
     // refresh the list of students and groups in a school
-    public void refreshStudentsAndGroups() {
-        mfmRequestHandler.requestListStudents();
-        mfmRequestHandler.requestListGroups();
+    public void refreshStudentsAndGroups(final LoginActivity activity) {
+        mfmRequestHandler.requestListStudents(activity);
+        mfmRequestHandler.requestListGroups(activity);
     }
 
 
-    public void checkAndUpdateStudents(ArrayList<Student> studentsFromMfmRequest) {
+    public void checkAndUpdateStudents(ArrayList<Student> studentsFromMfmRequest, final LoginActivity activity) {
         if (mfmLoginHandler.kioskIsLoggedIn) {
             School school = mfmLoginHandler.getSchool();
             ArrayList<Student> studentsFromDB = school.getStudents();
@@ -105,10 +106,14 @@ public class GlobalHandler {
         } else {
             Log.e(Constants.LOG_TAG, "Tried to checkAndUpdateStudents with Kiosk not logged in");
         }
+        // To make sure the list of students and groups are populated before displaying them.
+        // I would get empty lists every so often and would have to refresh the activity.
+        activity.isStudentsDone = true;
+        activity.populatedGroupsAndStudentsList();
     }
 
 
-    public void checkAndUpdateGroups(ArrayList<Group> groupsFromMfmRequest) {
+    public void checkAndUpdateGroups(ArrayList<Group> groupsFromMfmRequest, final LoginActivity activity) {
         if (mfmLoginHandler.kioskIsLoggedIn) {
             School school = mfmLoginHandler.getSchool();
             ArrayList<Group> groupsFromDB = school.getGroups();
@@ -132,6 +137,10 @@ public class GlobalHandler {
         } else {
             Log.e(Constants.LOG_TAG, "Tried to checkAndUpdateGroups with Kiosk not logged in");
         }
+        // To make sure the list of students and groups are populated before displaying them.
+        // I would get empty lists every so often and would have to refresh the activity.
+        activity.isGroupsDone = true;
+        activity.populatedGroupsAndStudentsList();
     }
 
 

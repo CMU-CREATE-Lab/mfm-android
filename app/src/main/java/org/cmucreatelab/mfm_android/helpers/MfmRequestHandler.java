@@ -36,7 +36,7 @@ public class MfmRequestHandler {
     }
 
 
-    public void requestListStudents() {
+    public void requestListStudents(final LoginActivity activity) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;
@@ -48,7 +48,7 @@ public class MfmRequestHandler {
             public void onResponse(JSONObject response) {
                 try {
                     ArrayList<Student> students = JSONParser.parseStudentsFromJson(response);
-                    globalHandler.checkAndUpdateStudents(students);
+                    globalHandler.checkAndUpdateStudents(students, activity);
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for requestListStudents");
                 }
@@ -59,7 +59,7 @@ public class MfmRequestHandler {
     }
 
 
-    public void requestListGroups() {
+    public void requestListGroups(final LoginActivity activity) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;
@@ -72,7 +72,7 @@ public class MfmRequestHandler {
                 Log.i(Constants.LOG_TAG, "requestListGroups onResponse");
                 try {
                     ArrayList<Group> groups = JSONParser.parseGroupsFromJson(response);
-                    globalHandler.checkAndUpdateGroups(groups);
+                    globalHandler.checkAndUpdateGroups(groups, activity);
                 } catch (JSONException ex) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for requestListGroups");
                 }

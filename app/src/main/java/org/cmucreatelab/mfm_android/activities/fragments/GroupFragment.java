@@ -2,7 +2,6 @@ package org.cmucreatelab.mfm_android.activities.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,9 +10,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import org.cmucreatelab.mfm_android.R;
-import org.cmucreatelab.mfm_android.activities.CameraActivity;
-import org.cmucreatelab.mfm_android.activities.SessionActivity;
-import org.cmucreatelab.mfm_android.activities.ViewStudentsAndGroupsActivity;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 import org.cmucreatelab.mfm_android.adapters.GroupAdapter;

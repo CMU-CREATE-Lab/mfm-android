@@ -17,8 +17,6 @@ import org.cmucreatelab.mfm_android.activities.fragments.StudentFragment;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 
-// TODO - should I make an interface class that the fragments inherent and then their parent activities use?
-// TODO - that way the fragments would just be used to display lists, nothing more.
 public class ViewStudentsAndGroupsActivity extends AppCompatActivity implements GroupFragment.GroupListener {
 
     private boolean isOrderByGroup;
@@ -123,7 +121,7 @@ public class ViewStudentsAndGroupsActivity extends AppCompatActivity implements 
 
         if (!isOrderByGroup) {
             globalHandler.sessionHandler.startSession(group);
-            Intent intent = new Intent(this, CameraActivity.class);
+            Intent intent = new Intent(this, SessionActivity.class);
             startActivity(intent);
         } else {
             FragmentManager fm= this.getFragmentManager();

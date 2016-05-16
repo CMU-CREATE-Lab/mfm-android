@@ -28,6 +28,8 @@ import java.util.ArrayList;
  */
 public class LoginActivity extends AppCompatActivity {
 
+    public boolean isStudentsDone;
+    public boolean isGroupsDone;
     private GlobalHandler globalHandler;
     private EditText mUsernameView;
     private EditText mPasswordView;
@@ -35,6 +37,16 @@ public class LoginActivity extends AppCompatActivity {
     private View mLoginFormView;
     private String username;
     private String password;
+
+
+    public void populatedGroupsAndStudentsList() {
+        if (isStudentsDone && isGroupsDone) {
+            Intent intent = new Intent(this, ViewStudentsAndGroupsActivity.class);
+            startActivity(intent);
+            showProgress(false);
+            finish();
+        }
+    }
 
 
     // If the user successfully belonged to a school, then this will be called.
@@ -47,11 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // If the entire loging process was successful then this should be called.
     public void loginSuccess() {
-        GlobalHandler.getInstance(getApplicationContext()).refreshStudentsAndGroups();
-        Intent intent = new Intent(this, ViewStudentsAndGroupsActivity.class);
-        startActivity(intent);
-        showProgress(false);
-        finish();
+        GlobalHandler.getInstance(getApplicationContext()).refreshStudentsAndGroups(this);
     }
 
 
@@ -71,6 +79,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        isGroupsDone = false;
+        isStudentsDone = false;
 
         // Set up the login form.
         mUsernameView = (EditText) findViewById(R.id.username);
@@ -105,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
      * Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
+    public void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.

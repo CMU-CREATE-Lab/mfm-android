@@ -1,27 +1,35 @@
-package org.cmucreatelab.mfm_android.activities;
+package org.cmucreatelab.mfm_android.activities.fragments;
 
+
+import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
-import android.media.AudioFormat;
-import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+
 import org.cmucreatelab.mfm_android.R;
+import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.SaveFileHandler;
+
 import java.io.File;
 import java.io.IOException;
+
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AudioActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class AudioFragment extends Fragment {
 
+    private View rootView;
     private boolean isRecording;
     private Button recorderButton;
     private MediaRecorder mediaRecorder;
@@ -29,11 +37,8 @@ public class AudioActivity extends AppCompatActivity {
     private File audioFile;
 
 
-    // Class methods
-
-
     private void startRecording() {
-        GlobalHandler globalHandler = GlobalHandler.getInstance(getApplicationContext());
+        GlobalHandler globalHandler = GlobalHandler.getInstance(this.getActivity().getApplicationContext());
         this.audioFile = SaveFileHandler.getOutputMediaFile(context, SaveFileHandler.MEDIA_TYPE_AUDIO, globalHandler);
         this.mediaRecorder = new MediaRecorder();
         this.mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -65,26 +70,32 @@ public class AudioActivity extends AppCompatActivity {
         Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
         toast.show();
 
-        Intent intent = new Intent(this, SessionActivity.class);
-        startActivity(intent);
+        ((SessionActivity) this.getActivity()).audioRecorded();
     }
 
 
-    // Activity methods and listeners
+    public static Fragment newInstance() {
+        return new AudioFragment();
+    }
+
+
+    public AudioFragment() {
+        // Required empty public constructor
+    }
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_audio);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ButterKnife.bind(this);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        rootView =  inflater.inflate(R.layout.fragment_audio, container, false);
+        ButterKnife.bind(this, rootView);
 
-        this.recorderButton = (Button) findViewById(R.id.recordAudio);
+        this.recorderButton = (Button) rootView.findViewById(R.id.recordAudio);
         this.isRecording = false;
         this.mediaRecorder = null;
-        this.context = this.getApplicationContext();
+        this.context = this.getActivity().getApplicationContext();
+
+        return rootView;
     }
 
 

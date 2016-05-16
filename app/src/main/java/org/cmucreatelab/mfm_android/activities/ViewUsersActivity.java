@@ -19,7 +19,8 @@ import java.util.ArrayList;
 // In fact, I think I will make a Selection Activity (handles selecting items in lists) and then keep the LoginActivity and the Session Activity.
 // LoginActivity will remain the same.
 // SessionActivity will handle taking the picture, recording audio, and sending the message...since that what a session is.
-// good work steve.
+
+// I'm having second thoughts on making the camera and audio fragments.
 public class ViewUsersActivity extends AppCompatActivity {
 
     private ArrayList<User> users;

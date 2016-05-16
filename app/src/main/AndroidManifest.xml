@@ -33,15 +33,6 @@
             android:label="@string/title_activity_record_message"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.CameraActivity"
-            android:label="@string/title_activity_camera"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activities.AudioActivity"
-            android:label="@string/title_activity_audio"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".activities.ViewUsersActivity"
             android:label="@string/title_activity_view_users"
             android:theme="@style/AppTheme.NoActionBar" />

@@ -13,7 +13,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 
 import org.cmucreatelab.mfm_android.R;
-import org.cmucreatelab.mfm_android.activities.CameraActivity;
+import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import org.cmucreatelab.mfm_android.adapters.UserAdapter;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
@@ -94,7 +94,7 @@ public class UserFragment extends Fragment  {
     @OnClick(R.id.finishedSelectingUsers)
     public void finishedSelecting() {
         globalHandler.sessionHandler.setMessageRecipients(selected);
-        Intent intent = new Intent(rootView.getContext(), CameraActivity.class);
+        Intent intent = new Intent(rootView.getContext(), SessionActivity.class);
         startActivity(intent);
     }
 

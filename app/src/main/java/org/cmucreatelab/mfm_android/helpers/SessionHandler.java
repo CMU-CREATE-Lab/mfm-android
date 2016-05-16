@@ -11,6 +11,7 @@ import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -47,10 +48,20 @@ public class SessionHandler {
         return ids;
     }
 
+    public ArrayList<User> getRecipients() {
+        return message.getRecipients();
+    }
+
 
     public Sender getMessageSender() {
         return message.getSender();
     }
+
+
+    public File getMessagePhoto() { return this.message.getPhoto(); }
+
+
+    public File getMessageAudio() { return this.message.getAudio(); }
 
 
     public void setMessagePhoto(File photo) {

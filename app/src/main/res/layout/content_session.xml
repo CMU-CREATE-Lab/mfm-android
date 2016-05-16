@@ -14,14 +14,22 @@
     tools:showIn="@layout/activity_session"
     android:background="#fc970b">
 
-
-    <Button
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/cameraFragment"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SendMessage"
-        android:id="@+id/sendMessageButton"
-        android:layout_weight="1"
-        android:background="#40FFFFFF"
-        android:layout_marginLeft="2dp" />
+        android:orientation="vertical"></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sessionInfoFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/audioFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"></LinearLayout>
 
 </RelativeLayout>

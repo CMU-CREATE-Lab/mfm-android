@@ -16,9 +16,10 @@
         android:textSize="30sp"/>
 
     <org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView
+        android:id="@+id/gridViewStudent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/gridViewStudent"
+        android:stretchMode="columnWidth"
         android:numColumns="auto_fit">
     </org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView>
 

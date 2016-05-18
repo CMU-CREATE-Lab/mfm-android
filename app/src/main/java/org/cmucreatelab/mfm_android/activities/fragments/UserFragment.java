@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.activities.SessionActivity;
@@ -59,9 +61,10 @@ public class UserFragment extends Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.rootView = inflater.inflate(R.layout.fragment_user, container, false);
+        ButterKnife.bind(this, this.getActivity().findViewById(R.id.finishedSelectingUsers));
         globalHandler = GlobalHandler.getInstance(rootView.getContext());
         selected = new ArrayList<>();
-        ButterKnife.bind(this, rootView);
+        final ImageView chooseButton = (ImageView) this.getActivity().findViewById(R.id.finishedSelectingUsers);
 
         if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
             mUsers = (ArrayList<User>) this.getArguments().getSerializable(USERS_KEY);
@@ -69,7 +72,6 @@ public class UserFragment extends Fragment  {
         this.gridView = (ExtendedHeightGridView) rootView.findViewById(R.id.gridViewUser);
         this.gridView.setAdapter(new UserAdapter(rootView.getContext(), mUsers));
         this.gridView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
-
         this.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if (gridView.isItemChecked(position)) {
@@ -84,8 +86,15 @@ public class UserFragment extends Fragment  {
                     Log.i(Constants.LOG_TAG, "Deselected " + mUsers.get(position).getId() + " to be added to the recipients list.");
                     v.setBackgroundColor(Color.alpha(0));
                 }
+
+                if (!selected.isEmpty()) {
+                    chooseButton.setImageResource(R.drawable.choose_up_160x181px);
+                } else {
+                    chooseButton.setImageResource(R.drawable.choose_disabled_160x181px);
+                }
             }
         });
+        chooseButton.setImageResource(R.drawable.choose_disabled_160x181px);
 
         return rootView;
     }
@@ -93,9 +102,11 @@ public class UserFragment extends Fragment  {
 
     @OnClick(R.id.finishedSelectingUsers)
     public void finishedSelecting() {
-        globalHandler.sessionHandler.setMessageRecipients(selected);
-        Intent intent = new Intent(rootView.getContext(), SessionActivity.class);
-        startActivity(intent);
+        if (!selected.isEmpty()) {
+            globalHandler.sessionHandler.setMessageRecipients(selected);
+            Intent intent = new Intent(rootView.getContext(), SessionActivity.class);
+            startActivity(intent);
+        }
     }
 
 }

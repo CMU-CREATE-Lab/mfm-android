@@ -70,7 +70,7 @@ public class AudioFragment extends Fragment {
         Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
         toast.show();
 
-        ((SessionActivity) this.getActivity()).audioRecorded();
+        //((SessionActivity) this.getActivity()).audioRecorded();
     }
 
 

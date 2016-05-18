@@ -10,14 +10,30 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activities.ViewStudentsAndGroupsActivity"
-    tools:showIn="@layout/activity_view_students_and_groups">
+    tools:context=".activities.SelectionActivity"
+    tools:showIn="@layout/activity_selection">
 
     <LinearLayout
-        android:id="@+id/studentsAndGroupsScrollable"
+        android:id="@+id/selection_scrollView_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/selection_students_scrollable_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/selection_groups_scrollable_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        </LinearLayout>
 
     </LinearLayout>
 

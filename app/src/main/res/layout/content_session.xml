@@ -15,19 +15,7 @@
     android:background="#fc970b">
 
     <LinearLayout
-        android:id="@+id/cameraFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"></LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/sessionInfoFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"></LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/audioFragment"
+        android:id="@+id/session_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"></LinearLayout>

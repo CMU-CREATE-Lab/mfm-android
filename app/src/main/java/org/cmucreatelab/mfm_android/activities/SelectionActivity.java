@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,8 +17,11 @@ import org.cmucreatelab.mfm_android.activities.fragments.GroupFragment;
 import org.cmucreatelab.mfm_android.activities.fragments.StudentFragment;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
+import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 
-public class ViewStudentsAndGroupsActivity extends AppCompatActivity implements GroupFragment.GroupListener {
+
+// TODO make two containers for the group and student fragments
+public class SelectionActivity extends AppCompatActivity implements GroupFragment.GroupListener {
 
     private boolean isOrderByGroup;
     private Fragment students;
@@ -25,9 +29,33 @@ public class ViewStudentsAndGroupsActivity extends AppCompatActivity implements 
     private GlobalHandler globalHandler;
 
 
+    private void addFragment(int id, Fragment fragment) {
+        FragmentTransaction ft = this.getFragmentManager().beginTransaction();
+        ft.add(id, fragment);
+        ft.show(fragment);
+        ft.commit();
+    }
+
+
+    private void replaceFragment(int id, Fragment fragment) {
+        FragmentTransaction ft = this.getFragmentManager().beginTransaction();
+        ft.replace(id, fragment);
+        ft.show(fragment);
+        ft.commit();
+    }
+
+
+    private void hideFragment(Fragment fragment) {
+        FragmentTransaction ft = this.getFragmentManager().beginTransaction();
+        ft.hide(fragment);
+        ft.commit();
+        Log.i(Constants.LOG_TAG, String.format("%b", students.isHidden()));
+    }
+
+
     // Shows the students based off of a selected group
     private void orderByGroup() {
-        isOrderByGroup = true;
+        /*isOrderByGroup = true;
         FragmentManager fm = this.getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         if (students != null) {
@@ -38,30 +66,19 @@ public class ViewStudentsAndGroupsActivity extends AppCompatActivity implements 
             groups = GroupFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getGroups());
             ft.add(R.id.studentsAndGroupsScrollable, groups, "group_fragment");
         }
-        ft.commit();
+        ft.commit();*/
+        isOrderByGroup = true;
+        hideFragment(students);
     }
 
 
     // Shows all the students and groups in a school
     private void showAll() {
         isOrderByGroup = false;
-        FragmentManager fm= this.getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-
-        if (groups != null) {
-            ft.remove(groups);
-            groups = null;
-        }
-        if (students != null) {
-            ft.remove(students);
-            students = null;
-        }
-
         students = StudentFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getStudents());
         groups = GroupFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getGroups());
-        ft.add(R.id.studentsAndGroupsScrollable, students, "student_fragment");
-        ft.add(R.id.studentsAndGroupsScrollable, groups, "group_fragment");
-        ft.commit();
+        replaceFragment(R.id.selection_students_scrollable_container, students);
+        replaceFragment(R.id.selection_groups_scrollable_container, groups);
     }
 
 
@@ -74,11 +91,17 @@ public class ViewStudentsAndGroupsActivity extends AppCompatActivity implements 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_students_and_groups);
+        setContentView(R.layout.activity_selection);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
-        showAll();
+
+        if (savedInstanceState == null) {
+            students = StudentFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getStudents());
+            groups = GroupFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getGroups());
+            addFragment(R.id.selection_students_scrollable_container, students);
+            addFragment(R.id.selection_groups_scrollable_container, groups);
+        }
     }
 
 
@@ -117,7 +140,7 @@ public class ViewStudentsAndGroupsActivity extends AppCompatActivity implements 
     // Displays the students in the selected group.
     @Override
     public void onGroupSelected(int position) {
-        Group group = globalHandler.mfmLoginHandler.getSchool().getGroups().get(position);
+        /*Group group = globalHandler.mfmLoginHandler.getSchool().getGroups().get(position);
 
         if (!isOrderByGroup) {
             globalHandler.sessionHandler.startSession(group);
@@ -131,6 +154,18 @@ public class ViewStudentsAndGroupsActivity extends AppCompatActivity implements 
             ft.remove(groups);
             groups = null;
             ft.commit();
+        }*/
+
+        Group group = globalHandler.mfmLoginHandler.getSchool().getGroups().get(position);
+
+        if (!isOrderByGroup) {
+            globalHandler.sessionHandler.startSession(group);
+            Intent intent = new Intent(this, SessionActivity.class);
+            startActivity(intent);
+        } else {
+            hideFragment(groups);
+            students = StudentFragment.newInstance(group.getStudents());
+            addFragment(R.id.selection_students_scrollable_container, students);
         }
     }
 }

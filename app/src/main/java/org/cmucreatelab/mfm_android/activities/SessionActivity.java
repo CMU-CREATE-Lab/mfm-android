@@ -27,53 +27,42 @@ public class SessionActivity extends FragmentActivity {
     private GlobalHandler globalHandler;
     private Fragment camera;
     private Fragment sessionInfo;
-    private Fragment audio;
 
     // class methods
 
 
-    private void startTimer(final FragmentActivity activity) {
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fm = this.getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.session_fragment, fragment);
+        ft.commit();
+    }
+
+
+    private void startTimer() {
         timer = new Timer();
 
         task = new TimerTask() {
             @Override
             public void run() {
-                FragmentManager fm = activity.getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.remove(sessionInfo);
-                ft.add(R.id.cameraFragment, camera, "camera");
-                ft.commit();
+                startCamera();
             }
         };
 
-        timer.schedule(task, 500);
+        timer.schedule(task, 100);
     }
 
 
-    public void pictureTaken() {
-        FragmentManager fm = this.getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(camera);
-        ft.add(R.id.sessionInfoFragment, sessionInfo, "session_info");
-        ft.commit();
+    public void startCamera() {
+        camera = new CameraFragment().newInstance();
+        replaceFragment(camera);
     }
 
 
-    public void recordAudio() {
-        FragmentManager fm = this.getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(sessionInfo);
-        ft.add(R.id.audioFragment, audio, "audio");
-        ft.commit();
-    }
 
-
-    public void audioRecorded() {
-        FragmentManager fm = this.getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.remove(audio);
-        ft.add(R.id.sessionInfoFragment, sessionInfo, "session_info");
-        ft.commit();
+    public void pictureTakenOrCancelled() {
+        sessionInfo = SessionInfoFragment.newInstance();
+        replaceFragment(sessionInfo);
     }
 
 
@@ -82,16 +71,12 @@ public class SessionActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session);
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
-        FragmentManager fm = this.getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
 
-        sessionInfo = SessionInfoFragment.newInstance();
-        camera = CameraFragment.newInstance();
-        audio = AudioFragment.newInstance();
-        ft.add(R.id.sessionInfoFragment, sessionInfo, "session_info");
-        ft.commit();
-
-        startTimer(this);
+        if (savedInstanceState == null) {
+            sessionInfo = SessionInfoFragment.newInstance();
+            replaceFragment(sessionInfo);
+            startTimer();
+        }
     }
 
 }

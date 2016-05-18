@@ -4,26 +4,29 @@ package org.cmucreatelab.mfm_android.activities.fragments;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.activities.SessionActivity;
+import org.cmucreatelab.mfm_android.classes.AudioRecorder;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Sender;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
+import org.cmucreatelab.mfm_android.ui.SquareImageView;
 
 import java.io.File;
 
@@ -38,8 +41,11 @@ public class SessionInfoFragment extends Fragment {
     private Student mStudent;
     private Group mGroup;
     private View rootView;
+    private ImageView audioPhoto;
     private GlobalHandler globalHandler;
+    private AudioRecorder audioRecorder;
     private boolean isReadyToSend;
+    private boolean isReadyToRecordAudio;
 
 
     public static Fragment newInstance() {
@@ -61,59 +67,68 @@ public class SessionInfoFragment extends Fragment {
         File messagePhoto = globalHandler.sessionHandler.getMessagePhoto();
         File messageAudio = globalHandler.sessionHandler.getMessageAudio();
         isReadyToSend = false;
-
+        isReadyToRecordAudio = false;
+        audioRecorder = new AudioRecorder(globalHandler.appContext);
         Sender sender = globalHandler.sessionHandler.getMessageSender();
-        TextView fromName = (TextView) rootView.findViewById(R.id.fromText);
-        LinearLayout toImages = (LinearLayout) rootView.findViewById(R.id.toImagesLinearLayout);
+        LinearLayout toLinearLayout = (LinearLayout) rootView.findViewById(R.id.toLinearLayout);
+        TextView fromText = (TextView) rootView.findViewById(R.id.fromText);
+
         if (sender.getSenderType() == Sender.Type.Student) {
             mStudent = (Student)sender;
             String photoUrl = mStudent.getPhotoUrl();
             String url = Constants.MFM_API_URL + photoUrl;
-            Picasso.with(this.getActivity().getApplicationContext()).load(url).into((ImageView) rootView.findViewById(R.id.fromImage));
-            fromName.setText("From: " + mStudent.getFirstName());
+            Picasso.with(globalHandler.appContext).load(url).into((ImageView) rootView.findViewById(R.id.fromImage));
+            fromText.setText(mStudent.getFirstName());
 
             for (User user : globalHandler.sessionHandler.getRecipients()) {
+                LinearLayout toUsersLayout = new LinearLayout(globalHandler.appContext);
+                toUsersLayout.setOrientation(LinearLayout.VERTICAL);
                 ImageView image = new ImageView(this.getActivity());
                 TextView name = new TextView(this.getActivity());
-                name.setText(" " + user.getFirstName());
-                Picasso.with(this.getActivity().getApplicationContext()).load(url).into(image);
-                toImages.addView(name);
-                toImages.addView(image);
+                photoUrl = user.getPhotoUrl();
+                url = Constants.MFM_API_URL + photoUrl;
+
+                name.setText(user.getFirstName());
+                Picasso.with(globalHandler.appContext).load(url).into(image);
+                toUsersLayout.addView(image);
+                toUsersLayout.addView(name);
+                toLinearLayout.addView(toUsersLayout);
             }
         } else {
+            LinearLayout toUsersLayout = new LinearLayout(globalHandler.appContext);
+            TextView name = new TextView(this.getActivity());
+            ImageView image = new ImageView(this.getActivity());
             mGroup = (Group) sender;
             String photoUrl = mGroup.getPhotoUrl();
             String url = Constants.MFM_API_URL + photoUrl;
-            Picasso.with(this.getActivity().getApplicationContext()).load(url).into((ImageView) rootView.findViewById(R.id.fromImage));
-            fromName.setText("From: " + mGroup.getName());
-            ImageView image = new ImageView(this.getActivity());
-            Picasso.with(this.getActivity().getApplicationContext()).load(url).into(image);
-            TextView toName = new TextView(this.getActivity());
-            toName.setText(" " + mGroup.getName());
-            toImages.addView(toName);
-            toImages.addView(image);
+
+            fromText.setText(mGroup.getName());
+            Picasso.with(globalHandler.appContext).load(url).into((ImageView) rootView.findViewById(R.id.fromImage));
+            Picasso.with(globalHandler.appContext).load(url).into(image);
+            name.setText(mGroup.getName());
+            toUsersLayout.addView(image);
+            toUsersLayout.addView(name);
+            toLinearLayout.addView(toUsersLayout);
         }
 
         // TODO - change the images to appropriate ones
         ImageView picture = (ImageView) rootView.findViewById(R.id.pictureTaken);
         if (messagePhoto != null) {
-            Matrix matrix = new Matrix();
             Bitmap bitmap = BitmapFactory.decodeFile(globalHandler.sessionHandler.getMessagePhoto().getAbsolutePath());
-            matrix.postRotate(90);
-            Bitmap rotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-            picture.setImageBitmap(rotated);
+            picture.setImageBitmap(bitmap);
+            isReadyToRecordAudio = true;
         } else {
             picture.setImageResource(R.drawable.button_disabled_photo_193x216px);
         }
 
-        ImageView audio = (ImageView) rootView.findViewById(R.id.audioRecorded);
+        audioPhoto = (ImageView) rootView.findViewById(R.id.audioRecorded);
         if (messagePhoto != null && messageAudio != null) {
             isReadyToSend = true;
         } else if (messagePhoto != null) {
-            // TODO - update the audio picture to be able to record a message.
-            audio.setImageResource(R.drawable.soundwave_final);
+            audioPhoto.setImageResource(R.drawable.button_up_talk);
+            isReadyToRecordAudio = true;
         } else {
-            audio.setImageResource(R.drawable.soundwave_mask);
+            audioPhoto.setImageResource(R.drawable.button_disabled_talk_193x216px);
         }
 
 
@@ -122,8 +137,14 @@ public class SessionInfoFragment extends Fragment {
 
 
     @OnClick(R.id.audioRecorded)
-    public void recordMessage() {
-        ((SessionActivity) this.getActivity()).recordAudio();
+    public void audioListener() {
+        if (isReadyToRecordAudio && !audioRecorder.isRecording) {
+            audioPhoto.setImageResource(R.drawable.button_up_talkstop);
+            audioRecorder.startRecording();
+        } else if (audioRecorder.isRecording) {
+            audioPhoto.setImageResource(R.drawable.soundwave_final);
+            audioRecorder.stopRecording();
+        }
     }
 
 
@@ -131,6 +152,14 @@ public class SessionInfoFragment extends Fragment {
     public void sendMessage() {
         if (isReadyToSend){
             globalHandler.sessionHandler.sendMessage();
+        }
+    }
+
+
+    @OnClick(R.id.pictureTaken)
+    public void takePicture() {
+        if (globalHandler.sessionHandler.getMessagePhoto() == null) {
+            ((SessionActivity) this.getActivity()).startCamera();
         }
     }
 

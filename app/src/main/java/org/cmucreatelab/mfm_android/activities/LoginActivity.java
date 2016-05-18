@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void populatedGroupsAndStudentsList() {
         if (isStudentsDone && isGroupsDone) {
-            Intent intent = new Intent(this, ViewStudentsAndGroupsActivity.class);
+            Intent intent = new Intent(this, SelectionActivity.class);
             startActivity(intent);
             showProgress(false);
             finish();

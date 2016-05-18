@@ -1,33 +1,32 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.cmucreatelab.mfm_android.activities.fragments.UserFragment"
-    android:orientation="vertical">
+    tools:context="org.cmucreatelab.mfm_android.activities.fragments.UserFragment">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Users"
-        android:id="@+id/studentTitleLabel"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:textColor="#ffffffff"
-        android:textSize="30sp"/>
+        android:orientation="vertical">
 
-    <org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/gridViewUser"
-        android:numColumns="auto_fit">
-    </org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Users"
+            android:id="@+id/studentTitleLabel"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:textColor="#ffffffff"
+            android:textSize="30sp" />
 
-    <Button
-        android:id="@+id/finishedSelectingUsers"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Done"
-        android:background="#40FFFFFF"/>
+        <org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView
+            android:id="@+id/gridViewUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:stretchMode="columnWidth"
+            android:numColumns="auto_fit">
+        </org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView>
 
+    </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>

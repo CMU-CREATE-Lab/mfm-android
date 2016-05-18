@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="org.cmucreatelab.mfm_android.activities.ViewStudentsAndGroupsActivity"
+    tools:context=".activities.SelectionActivity"
     android:background="#FC970B">
 
     <android.support.design.widget.AppBarLayout
@@ -22,6 +22,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_view_students_and_groups" />
+    <include layout="@layout/content_selection" />
 
 </android.support.design.widget.CoordinatorLayout>

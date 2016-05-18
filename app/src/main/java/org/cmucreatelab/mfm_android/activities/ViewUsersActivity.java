@@ -19,8 +19,6 @@ import java.util.ArrayList;
 // In fact, I think I will make a Selection Activity (handles selecting items in lists) and then keep the LoginActivity and the Session Activity.
 // LoginActivity will remain the same.
 // SessionActivity will handle taking the picture, recording audio, and sending the message...since that what a session is.
-
-// I'm having second thoughts on making the camera and audio fragments.
 public class ViewUsersActivity extends AppCompatActivity {
 
     private ArrayList<User> users;
@@ -33,10 +31,12 @@ public class ViewUsersActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         users = (ArrayList<User>) b.getSerializable(StudentFragment.USERS_KEY);
 
-        FragmentManager fm= this.getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        Fragment usersFragment = UserFragment.newInstance(users);
-        ft.add(R.id.usersScrollable, usersFragment, "user_fragment");
-        ft.commit();
+        if (savedInstanceState == null) {
+            FragmentManager fm= this.getFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            Fragment usersFragment = UserFragment.newInstance(users);
+            ft.add(R.id.usersScrollable, usersFragment, "user_fragment");
+            ft.commit();
+        }
     }
 }

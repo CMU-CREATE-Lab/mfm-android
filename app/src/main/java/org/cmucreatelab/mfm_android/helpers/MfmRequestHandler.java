@@ -5,7 +5,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 
 import org.cmucreatelab.mfm_android.activities.LoginActivity;
-import org.cmucreatelab.mfm_android.activities.ViewStudentsAndGroupsActivity;
+import org.cmucreatelab.mfm_android.activities.SelectionActivity;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Kiosk;
 import org.cmucreatelab.mfm_android.classes.School;
@@ -256,7 +256,7 @@ public class MfmRequestHandler {
     }
 
 
-    public void logout(final ViewStudentsAndGroupsActivity activity) {
+    public void logout(final SelectionActivity activity) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;

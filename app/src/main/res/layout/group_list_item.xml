@@ -9,24 +9,23 @@
     android:paddingBottom="4dp"
     tools:background = "#ffaa00">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <org.cmucreatelab.mfm_android.ui.SquareImageView
         android:id="@+id/groupPhotoImageView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:paddingLeft="10dp"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"/>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/groupNameTextView"
-        android:layout_centerVertical="true"
-        android:layout_below="@+id/groupPhotoImageView"
-        android:textColor="#ffffffff"
-        android:textSize="20sp"
-        android:text = "ThisIsALongName Seriously"
-        android:paddingLeft="10dp"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:layout_gravity="bottom"
+        android:textColor="@android:color/white"
+        android:background="#55000000"/>
 
 </RelativeLayout>

@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -22,15 +22,46 @@
                 android:id="@+id/cameraPreview"
                 android:screenOrientation="portrait"></FrameLayout>
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/photoNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"/>
 
-        <Button
+            <ImageView
+                android:id="@+id/photoYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/takePicture"
+            android:orientation="horizontal"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:text="@string/button_camera"/>
+            android:layout_centerHorizontal="true">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/takePicture"
+                android:text="@string/button_camera"
+                android:layout_weight="1"
+                android:background="#40FFFFFF"
+                android:layout_marginRight="2dp"/>
+
+            <Button
+                android:id="@+id/cancelCamera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:layout_weight="1"
+                android:background="#40FFFFFF"/>
+
+
+        </LinearLayout>
 
     </RelativeLayout>
 

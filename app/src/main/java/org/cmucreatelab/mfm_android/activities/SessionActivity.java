@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentActivity;
 
 
 import org.cmucreatelab.mfm_android.R;
-import org.cmucreatelab.mfm_android.activities.fragments.AudioFragment;
 import org.cmucreatelab.mfm_android.activities.fragments.CameraFragment;
 import org.cmucreatelab.mfm_android.activities.fragments.SessionInfoFragment;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
@@ -31,14 +30,6 @@ public class SessionActivity extends FragmentActivity {
     // class methods
 
 
-    private void replaceFragment(Fragment fragment) {
-        FragmentManager fm = this.getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.session_fragment, fragment);
-        ft.commit();
-    }
-
-
     private void startTimer() {
         timer = new Timer();
 
@@ -49,7 +40,15 @@ public class SessionActivity extends FragmentActivity {
             }
         };
 
-        timer.schedule(task, 100);
+        timer.schedule(task, 250);
+    }
+
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fm = this.getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.session_fragment, fragment);
+        ft.commit();
     }
 
 

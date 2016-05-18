@@ -1,12 +1,8 @@
 package org.cmucreatelab.mfm_android.activities.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +11,12 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 
 import org.cmucreatelab.mfm_android.R;
-import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import org.cmucreatelab.mfm_android.adapters.UserAdapter;
 import org.cmucreatelab.mfm_android.classes.User;
-import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 
 import java.util.ArrayList;
-
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +24,7 @@ import butterknife.OnClick;
 public class UserFragment extends Fragment  {
 
     private static final String USERS_KEY = "users_key";
+    private Activity parentActivity;
     private GlobalHandler globalHandler;
     private View rootView;
     private ExtendedHeightGridView gridView;
@@ -61,10 +53,10 @@ public class UserFragment extends Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.rootView = inflater.inflate(R.layout.fragment_user, container, false);
-        ButterKnife.bind(this, this.getActivity().findViewById(R.id.finishedSelectingUsers));
         globalHandler = GlobalHandler.getInstance(rootView.getContext());
         selected = new ArrayList<>();
-        final ImageView chooseButton = (ImageView) this.getActivity().findViewById(R.id.finishedSelectingUsers);
+        final ImageView chooseButton = (ImageView) this.getActivity().findViewById(R.id.selection_done_selecting_users);
+        this.parentActivity = this.getActivity();
 
         if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
             mUsers = (ArrayList<User>) this.getArguments().getSerializable(USERS_KEY);
@@ -74,24 +66,7 @@ public class UserFragment extends Fragment  {
         this.gridView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
         this.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                if (gridView.isItemChecked(position)) {
-                    selected.add(mUsers.get(position));
-                    Log.i(Constants.LOG_TAG, "Selected " + mUsers.get(position).getId() + " to be added to the recipients list.");
-                    GradientDrawable drawable = new GradientDrawable();
-                    drawable.setShape(GradientDrawable.RECTANGLE);
-                    drawable.setStroke(5, Color.GREEN);
-                    v.setBackgroundDrawable(drawable);
-                } else {
-                    selected.remove(mUsers.get(position));
-                    Log.i(Constants.LOG_TAG, "Deselected " + mUsers.get(position).getId() + " to be added to the recipients list.");
-                    v.setBackgroundColor(Color.alpha(0));
-                }
-
-                if (!selected.isEmpty()) {
-                    chooseButton.setImageResource(R.drawable.choose_up_160x181px);
-                } else {
-                    chooseButton.setImageResource(R.drawable.choose_disabled_160x181px);
-                }
+                ((UserListener) parentActivity).onUserSelected(mUsers.get(position), gridView.isItemChecked(position), v);
             }
         });
         chooseButton.setImageResource(R.drawable.choose_disabled_160x181px);
@@ -100,13 +75,9 @@ public class UserFragment extends Fragment  {
     }
 
 
-    @OnClick(R.id.finishedSelectingUsers)
-    public void finishedSelecting() {
-        if (!selected.isEmpty()) {
-            globalHandler.sessionHandler.setMessageRecipients(selected);
-            Intent intent = new Intent(rootView.getContext(), SessionActivity.class);
-            startActivity(intent);
-        }
+    // This is used by the parent activity to make a decision based off of the main_menu
+    public interface UserListener {
+        public void onUserSelected(User user, boolean isChecked, View v);
     }
 
 }

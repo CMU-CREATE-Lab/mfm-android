@@ -75,7 +75,7 @@ public class GroupFragment extends Fragment {
         this.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 try {
-                    ((GroupListener) parentActivity).onGroupSelected(position);
+                    ((GroupListener) parentActivity).onGroupSelected(mGroups.get(position));
                 } catch (Exception e) {
                     Log.e(Constants.LOG_TAG, "Error in GroupFragment setOnItemClickListener: " + e.toString());
                 }
@@ -88,7 +88,7 @@ public class GroupFragment extends Fragment {
 
     // This is used by the parent activity to make a decision based off of the main_menu
     public interface GroupListener {
-        public void onGroupSelected(int position);
+        public void onGroupSelected(Group group);
     }
 
 }

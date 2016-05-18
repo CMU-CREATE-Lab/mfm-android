@@ -33,10 +33,6 @@
             android:label="@string/title_activity_record_message"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.ViewUsersActivity"
-            android:label="@string/title_activity_view_users"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".activities.SelectionActivity"
             android:label="@string/title_activity_view_students_and_groups"
             android:theme="@style/AppTheme.NoActionBar"></activity>

@@ -25,12 +25,12 @@ import java.util.ArrayList;
  */
 public class GroupFragment extends Fragment {
 
-
     private static final String SERIALIZABLE_GROUP_KEY = "group_key";
+    private Activity parentActivity;
     private View rootView;
     private ExtendedHeightGridView gridView;
     private ArrayList<Group> mGroups;
-    private Activity parentActivity;
+
 
     public GroupFragment() {
         // Required empty public constructor

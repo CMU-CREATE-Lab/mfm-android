@@ -35,10 +35,10 @@ import butterknife.OnClick;
  */
 public class CameraFragment extends Fragment {
 
+    private GlobalHandler globalHandler;
     private View rootView;
     private Camera mCamera;
     private CameraPreview mPreview;
-    private GlobalHandler globalHandler;
     private byte[] possiblePhoto;
 
 
@@ -84,23 +84,6 @@ public class CameraFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_camera, container, false);
         ButterKnife.bind(this, rootView);
         globalHandler = GlobalHandler.getInstance(rootView.getContext());
-
-        /*this.mCamera = Camera.open(Constants.CAMERA_ID);
-        this.mCamera.setPreviewCallback(null);
-        this.mPreview = new CameraPreview(this.getActivity().getApplicationContext(), this.mCamera);
-
-        // Set the orientation and camera parameters.
-        // Makes sure the image seen and the picture taken is oriented correctly
-        int rotation  = this.getCameraOrientation();
-        this.mCamera.setDisplayOrientation(rotation);
-        Camera.Parameters params = mCamera.getParameters();
-        params.setRotation(rotation);
-        mCamera.setParameters(params);
-
-        FrameLayout preview = (FrameLayout) rootView.findViewById(R.id.cameraPreview);
-        preview.addView(this.mPreview);*/
-
-
         return rootView;
     }
 

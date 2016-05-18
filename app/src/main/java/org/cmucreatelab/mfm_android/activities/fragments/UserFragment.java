@@ -25,11 +25,9 @@ public class UserFragment extends Fragment  {
 
     private static final String USERS_KEY = "users_key";
     private Activity parentActivity;
-    private GlobalHandler globalHandler;
     private View rootView;
     private ExtendedHeightGridView gridView;
     private ArrayList<User> mUsers;
-    private ArrayList<User> selected;
 
 
     public UserFragment() {
@@ -51,12 +49,17 @@ public class UserFragment extends Fragment  {
 
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        parentActivity = activity;
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.rootView = inflater.inflate(R.layout.fragment_user, container, false);
-        globalHandler = GlobalHandler.getInstance(rootView.getContext());
-        selected = new ArrayList<>();
+        GlobalHandler globalHandler = GlobalHandler.getInstance(rootView.getContext());
         final ImageView chooseButton = (ImageView) this.getActivity().findViewById(R.id.selection_done_selecting_users);
-        this.parentActivity = this.getActivity();
 
         if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
             mUsers = (ArrayList<User>) this.getArguments().getSerializable(USERS_KEY);

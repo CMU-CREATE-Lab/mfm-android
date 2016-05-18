@@ -38,12 +38,12 @@ import butterknife.OnClick;
  */
 public class SessionInfoFragment extends Fragment {
 
+    private GlobalHandler globalHandler;
+    private AudioRecorder audioRecorder;
     private Student mStudent;
     private Group mGroup;
     private View rootView;
     private ImageView audioPhoto;
-    private GlobalHandler globalHandler;
-    private AudioRecorder audioRecorder;
     private boolean isReadyToSend;
     private boolean isReadyToRecordAudio;
 

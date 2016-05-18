@@ -50,10 +50,16 @@ public class StudentFragment extends Fragment  {
 
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        parentActivity = activity;
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.rootView = inflater.inflate(R.layout.fragment_student, container, false);
-        final GlobalHandler globalHandler = GlobalHandler.getInstance(rootView.getContext());
-        this.parentActivity = this.getActivity();
+        GlobalHandler globalHandler = GlobalHandler.getInstance(rootView.getContext());
 
         if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
             mStudents = (ArrayList<Student>) this.getArguments().getSerializable(STUDENTDS_KEY);

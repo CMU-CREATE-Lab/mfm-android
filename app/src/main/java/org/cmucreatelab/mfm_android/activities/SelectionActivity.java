@@ -31,7 +31,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-// TODO make two containers for the group and student fragments
 public class SelectionActivity extends AppCompatActivity implements GroupFragment.GroupListener,
                                                                     StudentFragment.StudentListener,
                                                                     UserFragment.UserListener{
@@ -64,7 +63,6 @@ public class SelectionActivity extends AppCompatActivity implements GroupFragmen
         FragmentTransaction ft = this.getFragmentManager().beginTransaction();
         ft.hide(fragment);
         ft.commit();
-        Log.i(Constants.LOG_TAG, String.format("%b", students.isHidden()));
     }
 
 
@@ -168,6 +166,7 @@ public class SelectionActivity extends AppCompatActivity implements GroupFragmen
         hideFragment(students);
         hideFragment(groups);
         addFragment(R.id.selection_users_scrollable_container, users);
+        findViewById(R.id.selection_done_selecting_users).setVisibility(View.VISIBLE);
     }
 
 

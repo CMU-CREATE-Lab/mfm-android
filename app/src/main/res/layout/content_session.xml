@@ -11,13 +11,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activities.SessionActivity"
-    tools:showIn="@layout/activity_session"
-    android:background="#fc970b">
+    tools:showIn="@layout/activity_session">
 
     <LinearLayout
         android:id="@+id/session_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"></LinearLayout>
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"></LinearLayout>
 
 </RelativeLayout>

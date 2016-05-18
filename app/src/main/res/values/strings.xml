@@ -1,16 +1,8 @@
 <resources>
-    <string name="app_name">mfm-android</string>
+    <string name="app_name">Msg From Me</string>
 
     <string name="menu_log_out">Logout</string>
-
-    <string name="title_activity_view_students">ViewStudentsActivity</string>
-    <string name="title_activity_record_message">RecordMessageActivity</string>
-    <string name="title_activity_view_groups">ViewGroupsActivity</string>
-    <string name="title_activity_camera_and_audio">CameraAndAudioActivity</string>
-    <string name="title_activity_camera">CameraActivity</string>
-    <string name="title_activity_audio">AudioActivity</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="title_activity_main_screen">MainScreenActivity</string>
+    <string name="title_mfm">Message From Me</string>
 
     <string name="input_username">Username:</string>
     <string name="input_password">Password:</string>
@@ -29,16 +21,5 @@
     <string name="error_field_required">This field is required</string>
     <string name="title_activity_view_students_and_groups">ViewStudentsAndGroupsActivity</string>
     <string name="action_settings">Settings</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment_student">Hello blank student fragment</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment_group">Hello blank group fragment</string>
-    <string name="title_activity_view_students_in_group">ViewStudentsInGroupActivity</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_view_users">ViewUsersActivity</string>
 
 </resources>

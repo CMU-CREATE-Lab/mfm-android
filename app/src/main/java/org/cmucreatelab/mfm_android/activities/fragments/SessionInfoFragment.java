@@ -4,15 +4,12 @@ package org.cmucreatelab.mfm_android.activities.fragments;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -26,7 +23,6 @@ import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
-import org.cmucreatelab.mfm_android.ui.SquareImageView;
 
 import java.io.File;
 
@@ -59,6 +55,7 @@ public class SessionInfoFragment extends Fragment {
     }
 
 
+    // TODO use an adapter..this is ugly.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView =  inflater.inflate(R.layout.fragment_session_info, container, false);
@@ -70,8 +67,8 @@ public class SessionInfoFragment extends Fragment {
         isReadyToRecordAudio = false;
         audioRecorder = new AudioRecorder(globalHandler.appContext);
         Sender sender = globalHandler.sessionHandler.getMessageSender();
-        LinearLayout toLinearLayout = (LinearLayout) rootView.findViewById(R.id.toLinearLayout);
         TextView fromText = (TextView) rootView.findViewById(R.id.fromText);
+        LinearLayout toUsers = (LinearLayout) rootView.findViewById(R.id.toUsersLinearLayout);
 
         if (sender.getSenderType() == Sender.Type.Student) {
             mStudent = (Student)sender;
@@ -81,8 +78,6 @@ public class SessionInfoFragment extends Fragment {
             fromText.setText(mStudent.getFirstName());
 
             for (User user : globalHandler.sessionHandler.getRecipients()) {
-                LinearLayout toUsersLayout = new LinearLayout(globalHandler.appContext);
-                toUsersLayout.setOrientation(LinearLayout.VERTICAL);
                 ImageView image = new ImageView(this.getActivity());
                 TextView name = new TextView(this.getActivity());
                 photoUrl = user.getPhotoUrl();
@@ -90,12 +85,10 @@ public class SessionInfoFragment extends Fragment {
 
                 name.setText(user.getFirstName());
                 Picasso.with(globalHandler.appContext).load(url).into(image);
-                toUsersLayout.addView(image);
-                toUsersLayout.addView(name);
-                toLinearLayout.addView(toUsersLayout);
+                toUsers.addView(name);
+                toUsers.addView(image);
             }
         } else {
-            LinearLayout toUsersLayout = new LinearLayout(globalHandler.appContext);
             TextView name = new TextView(this.getActivity());
             ImageView image = new ImageView(this.getActivity());
             mGroup = (Group) sender;
@@ -106,12 +99,10 @@ public class SessionInfoFragment extends Fragment {
             Picasso.with(globalHandler.appContext).load(url).into((ImageView) rootView.findViewById(R.id.fromImage));
             Picasso.with(globalHandler.appContext).load(url).into(image);
             name.setText(mGroup.getName());
-            toUsersLayout.addView(image);
-            toUsersLayout.addView(name);
-            toLinearLayout.addView(toUsersLayout);
+            toUsers.addView(name);
+            toUsers.addView(image);
         }
 
-        // TODO - change the images to appropriate ones
         ImageView picture = (ImageView) rootView.findViewById(R.id.pictureTaken);
         if (messagePhoto != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(globalHandler.sessionHandler.getMessagePhoto().getAbsolutePath());

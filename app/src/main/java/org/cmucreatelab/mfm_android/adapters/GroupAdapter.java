@@ -11,6 +11,7 @@ import com.squareup.picasso.Picasso;
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
+
 import java.util.ArrayList;
 
 /**

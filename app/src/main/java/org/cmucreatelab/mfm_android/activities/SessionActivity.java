@@ -10,20 +10,16 @@ import android.support.v4.app.FragmentActivity;
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.activities.fragments.CameraFragment;
 import org.cmucreatelab.mfm_android.activities.fragments.SessionInfoFragment;
-import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 
-// TODO make the audio and camera activities fragments
-// TODO display the picture after the picture was taken
+// TODO - may add interfaces to the fragments that use this activity....similar to SelectionActivity
 public class SessionActivity extends FragmentActivity {
 
-    // used to delay the display of the camera fragment
-    private Timer timer;
+    private Timer timer;    // used to delay the display of the camera fragment
     private TimerTask task;
-    private GlobalHandler globalHandler;
     private Fragment camera;
     private Fragment sessionInfo;
 
@@ -69,7 +65,6 @@ public class SessionActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session);
-        globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
 
         if (savedInstanceState == null) {
             sessionInfo = SessionInfoFragment.newInstance();

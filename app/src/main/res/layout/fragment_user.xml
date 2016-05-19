@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:stretchMode="columnWidth"
-            android:numColumns="auto_fit">
+            android:numColumns="3">
         </org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView>
 
     </LinearLayout>

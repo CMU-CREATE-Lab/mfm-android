@@ -24,7 +24,6 @@ public class JSONParser {
 
     private static Group parseGroupFromJson(JSONObject row) throws JSONException {
         Log.i(Constants.LOG_TAG, "parseGroupFromJson");
-        Log.i(Constants.LOG_TAG, row.toString());
         // parse values
         Integer id = row.getInt("id");
         String updatedAt = row.getString("updated_at");
@@ -47,7 +46,6 @@ public class JSONParser {
 
     private static Student parseStudentFromJson(JSONObject row) throws JSONException {
         Log.i(Constants.LOG_TAG, "parseStudentFromJson");
-        Log.i(Constants.LOG_TAG, row.toString());
         // parse values
         Integer id = row.getInt("id");
         String updatedAt = row.getString("updated_at");
@@ -70,7 +68,6 @@ public class JSONParser {
 
     private static User parseUserFromJson(JSONObject row) throws JSONException {
         Log.i(Constants.LOG_TAG, "parseUserFromJson");
-        Log.i(Constants.LOG_TAG, row.toString());
         // parse values
         Integer id = row.getInt("id");
         String firstName = row.getString("first_name");
@@ -96,7 +93,6 @@ public class JSONParser {
 
     private static ArrayList<Integer> parseStudentIdsInGroup(JSONObject row) throws JSONException {
         Log.i(Constants.LOG_TAG, "parseStudentIdsInGroup");
-        Log.i(Constants.LOG_TAG, row.toString());
         ArrayList<Integer> ids = new ArrayList<>();
 
         // parse values
@@ -116,7 +112,6 @@ public class JSONParser {
         try {
                 Log.i(Constants.LOG_TAG, "parseGroupsFromJson");
                 JSONArray rows = response.getJSONArray("rows");
-                Log.i(Constants.LOG_TAG, rows.toString());
                 int size = rows.length();
                 for (int i = 0; i < size; i++) {
                     results.add(parseStudentFromJson(rows.getJSONObject(i)));
@@ -136,7 +131,6 @@ public class JSONParser {
         try {
             Log.i(Constants.LOG_TAG, "parseGroupsFromJson");
             JSONArray rows = response.getJSONArray("rows");
-            Log.i(Constants.LOG_TAG, rows.toString());
             int size = rows.length();
             for (int i = 0; i < size; i++) {
                 groups.add(parseGroupFromJson(rows.getJSONObject(i)));
@@ -151,7 +145,6 @@ public class JSONParser {
 
     public static ArrayList<User> parseUsersFromJson(JSONArray users) throws JSONException {
         Log.i(Constants.LOG_TAG, "parseUsersFromJson");
-        Log.i(Constants.LOG_TAG, users.toString());
         ArrayList<User> results = new ArrayList<>();
 
         int size = users.length();
@@ -167,7 +160,6 @@ public class JSONParser {
     public static Group parseGroupBasedOffId(JSONObject row, GlobalHandler globalHandler) throws JSONException {
         // parse values
         Log.i(Constants.LOG_TAG, "parseGroupBasedOffId");
-        Log.i(Constants.LOG_TAG, row.toString());
         JSONObject groupJson = row.getJSONObject("student");
         Integer id = groupJson.getInt("id");
         String name = groupJson.getString("name");
@@ -195,7 +187,6 @@ public class JSONParser {
     public static Student parseStudentBasedOffId(JSONObject row) throws JSONException {
         // parse values
         Log.i(Constants.LOG_TAG, "parseStudentBasedOffId");
-        Log.i(Constants.LOG_TAG, row.toString());
         JSONObject studentJson = row.getJSONObject("student");
         Integer id = studentJson.getInt("id");
         String firstName = studentJson.getString("first_name");
@@ -226,7 +217,6 @@ public class JSONParser {
 
     public static ArrayList<School> parseSchoolsFromJSON(JSONObject row) throws JSONException {
         Log.i(Constants.LOG_TAG, "parseSchoolsFromJSON");
-        Log.i(Constants.LOG_TAG, row.toString());
         ArrayList<School> result = new ArrayList<>();
         JSONArray schools = row.getJSONArray("schools");
 

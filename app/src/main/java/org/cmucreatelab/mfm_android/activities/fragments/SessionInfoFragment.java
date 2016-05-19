@@ -55,7 +55,7 @@ public class SessionInfoFragment extends Fragment {
     }
 
 
-    // TODO use an adapter..this is ugly.
+    // TODO use an adapter..this is ugly...very ugly
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView =  inflater.inflate(R.layout.fragment_session_info, container, false);

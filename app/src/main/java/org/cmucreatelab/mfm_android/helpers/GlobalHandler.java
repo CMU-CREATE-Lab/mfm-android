@@ -93,6 +93,7 @@ public class GlobalHandler {
                     Student dbStudent = ListHelper.findStudentWithId(studentsFromDB, mfmStudent.getId());
                     // If the student is not updated, then update the student.
                     if (!dbStudent.getUpdatedAt().equals(mfmStudent.getUpdatedAt())) {
+                        Log.i(Constants.LOG_TAG, "dbStudent not up to date in checkAndUpdateStudents...updating.");
                         mfmRequestHandler.updateStudent(dbStudent);
                     }
                     // If the student was not found in the database.
@@ -124,6 +125,7 @@ public class GlobalHandler {
                     Group dbGroup = ListHelper.findGroupWithId(groupsFromDB, mfmGroup.getId());
                     // If the group is not updated, then update the group.
                     if (!dbGroup.getUpdatedAt().equals(mfmGroup.getUpdatedAt())) {
+                        Log.i(Constants.LOG_TAG, "dbGroup not up to date in checkAndUpdateGroups...updating.");
                         mfmRequestHandler.updateGroup(dbGroup);
                     }
                     // If the group was not found in the database.
@@ -168,7 +170,6 @@ public class GlobalHandler {
         this.mfmRequestHandler = new MfmRequestHandler(this);
         this.sessionHandler = new SessionHandler(this);
         Kiosk.ioSVersion = Build.VERSION.RELEASE;
-        DbHelper.clearAll(appContext);
     }
 
 }

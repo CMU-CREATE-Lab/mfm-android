@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.classes.School;
+import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import butterknife.ButterKnife;

@@ -42,13 +42,13 @@ public class CameraFragment extends Fragment {
     private byte[] possiblePhoto;
 
 
-    private int getCameraOrientation() {
+    public static int getCameraOrientation(Activity activity) {
         int result = 0;
 
         Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(Constants.CAMERA_ID, info);
 
-        int rotation = this.getActivity().getWindowManager().getDefaultDisplay().getRotation();
+        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
         int degrees = 0;
 
         switch (rotation) {
@@ -159,7 +159,7 @@ public class CameraFragment extends Fragment {
         this.mPreview = new CameraPreview(globalHandler.appContext, this.mCamera);
 
         // set the orientation and camera parameters
-        int rotation  = this.getCameraOrientation();
+        int rotation  = getCameraOrientation(this.getActivity());
         this.mCamera.setDisplayOrientation(rotation);
         Camera.Parameters params = mCamera.getParameters();
         params.setRotation(rotation);

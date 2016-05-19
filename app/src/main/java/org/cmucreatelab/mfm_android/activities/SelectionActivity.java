@@ -3,44 +3,28 @@ package org.cmucreatelab.mfm_android.activities;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.activities.fragments.GroupFragment;
 import org.cmucreatelab.mfm_android.activities.fragments.StudentFragment;
-import org.cmucreatelab.mfm_android.activities.fragments.UserFragment;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Student;
-import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
-import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
-
-import java.util.ArrayList;
-
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 
 public class SelectionActivity extends AppCompatActivity implements GroupFragment.GroupListener,
-                                                                    StudentFragment.StudentListener,
-                                                                    UserFragment.UserListener{
+                                                                    StudentFragment.StudentListener{
 
     private boolean isOrderByGroup;
     private Fragment students;
     private Fragment groups;
-    private Fragment users;
     private GlobalHandler globalHandler;
-    private ArrayList<User> selectedUsers;
 
 
     private void addFragment(int id, Fragment fragment) {
@@ -80,10 +64,6 @@ public class SelectionActivity extends AppCompatActivity implements GroupFragmen
         groups = GroupFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getGroups());
         replaceFragment(R.id.selection_students_scrollable_container, students);
         replaceFragment(R.id.selection_groups_scrollable_container, groups);
-        if (users != null) {
-            hideFragment(users);
-            findViewById(R.id.selection_done_selecting_users).setVisibility(View.INVISIBLE);
-        }
     }
 
 
@@ -99,7 +79,6 @@ public class SelectionActivity extends AppCompatActivity implements GroupFragmen
         setContentView(R.layout.activity_selection);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ButterKnife.bind(this);
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
 
         if (savedInstanceState == null) {
@@ -161,45 +140,8 @@ public class SelectionActivity extends AppCompatActivity implements GroupFragmen
     @Override
     public void onStudentSelected(Student student) {
         globalHandler.sessionHandler.startSession(student);
-        selectedUsers = new ArrayList<>();
-        users = UserFragment.newInstance(student.getUsers());
-        hideFragment(students);
-        hideFragment(groups);
-        addFragment(R.id.selection_users_scrollable_container, users);
-        findViewById(R.id.selection_done_selecting_users).setVisibility(View.VISIBLE);
+        Intent intent = new Intent(this, SessionActivity.class);
+        startActivity(intent);
     }
 
-
-    @Override
-    public void onUserSelected(User user, boolean isChecked, View v) {
-        ImageView chooseButton = (ImageView) findViewById(R.id.selection_done_selecting_users);
-        if (isChecked) {
-            selectedUsers.add(user);
-            Log.i(Constants.LOG_TAG, "Selected " + user.getId() + " to be added to the recipients list.");
-            GradientDrawable drawable = new GradientDrawable();
-            drawable.setShape(GradientDrawable.RECTANGLE);
-            drawable.setStroke(5, Color.GREEN);
-            v.setBackgroundDrawable(drawable);
-        } else {
-            selectedUsers.remove(user);
-            Log.i(Constants.LOG_TAG, "Deselected " + user.getId() + " to be added to the recipients list.");
-            v.setBackgroundColor(Color.alpha(0));
-        }
-
-        if (!selectedUsers.isEmpty()) {
-            chooseButton.setImageResource(R.drawable.choose_up_160x181px);
-        } else {
-            chooseButton.setImageResource(R.drawable.choose_disabled_160x181px);
-        }
-    }
-
-
-    @OnClick(R.id.selection_done_selecting_users)
-    public void onDoneSelectingUsers() {
-        if (!selectedUsers.isEmpty()) {
-            globalHandler.sessionHandler.setMessageRecipients(selectedUsers);
-            Intent intent = new Intent(this, SessionActivity.class);
-            startActivity(intent);
-        }
-    }
 }

@@ -13,12 +13,26 @@
     tools:context=".activities.SessionActivity"
     tools:showIn="@layout/activity_session">
 
-    <LinearLayout
-        android:id="@+id/session_fragment"
+    <RelativeLayout
+        android:id="@+id/session_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/session_users"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/session_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></RelativeLayout>
+
+    <ImageView
+        android:id="@+id/selection_done_selecting_users"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"></LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

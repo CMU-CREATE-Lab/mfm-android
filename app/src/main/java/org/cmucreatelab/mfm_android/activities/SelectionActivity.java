@@ -131,7 +131,6 @@ public class SelectionActivity extends OnButtonClickAudio implements GroupFragme
             globalHandler.sessionHandler.startSession(group);
             Intent intent = new Intent(this, SessionActivity.class);
             startActivity(intent);
-            finish();
         } else {
             hideFragment(groups);
             students = StudentFragment.newInstance(group.getStudents());
@@ -146,7 +145,6 @@ public class SelectionActivity extends OnButtonClickAudio implements GroupFragme
         globalHandler.sessionHandler.startSession(student);
         Intent intent = new Intent(this, SessionActivity.class);
         startActivity(intent);
-        finish();
     }
 
 }

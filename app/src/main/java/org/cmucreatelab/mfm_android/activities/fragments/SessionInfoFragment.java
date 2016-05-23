@@ -5,14 +5,18 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.adapters.GroupAdapter;
@@ -21,6 +25,7 @@ import org.cmucreatelab.mfm_android.adapters.UserAdapter;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Sender;
 import org.cmucreatelab.mfm_android.classes.Student;
+import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.AudioPlayer;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
@@ -70,6 +75,31 @@ public class SessionInfoFragment extends Fragment {
         ButterKnife.bind(this, rootView);
 
         if (globalHandler.sessionHandler.getMessageSender().getSenderType() == Sender.Type.student) {
+            /*// From content
+            View fromView = inflater.inflate(R.layout.to_and_from_list, null);
+            ImageView fromImage = (ImageView) fromView.findViewById(R.id.to_and_from_image);
+            Student student = (Student) globalHandler.sessionHandler.getMessageSender();
+            String photoUrl = student.getPhotoUrl();
+            String url = Constants.MFM_API_URL + photoUrl;
+            Picasso.with(globalHandler.appContext).load(url).into(fromImage);
+            TextView fromText = (TextView) fromView.findViewById(R.id.to_and_from_text);
+            fromText.setText(student.getFirstName());
+            ((LinearLayout) rootView.findViewById(R.id.f_session_info_from_container)).addView(fromView);
+
+            // To content
+            FrameLayout toContainer = ((FrameLayout) rootView.findViewById(R.id.f_session_to_frame_layout));
+            toContainer.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 3.0f));
+            for (User user : globalHandler.sessionHandler.getRecipients()) {
+                View toView = inflater.inflate(R.layout.to_and_from_list, null);
+                ImageView toImage = (ImageView) fromView.findViewById(R.id.to_and_from_image);
+                photoUrl = user.getPhotoUrl();
+                url = Constants.MFM_API_URL + photoUrl;
+                Picasso.with(globalHandler.appContext).load(url).into(toImage);
+                TextView toText = (TextView) fromView.findViewById(R.id.to_and_from_text);
+                toText.setText(student.getFirstName());
+                toContainer.addView(toView);
+            }*/
+
             // From content
             ArrayList<Student> studentList = new ArrayList<>();
             studentList.add((Student) globalHandler.sessionHandler.getMessageSender());

@@ -35,7 +35,8 @@ import java.util.TimerTask;
 public class SessionActivity extends OnButtonClickAudio implements UserFragment.UserListener,
                                                                 SessionInfoFragment.SessionInfoListener{
 
-    private final String SELECTED_USERS_KEY = "selected_users";
+    private final String STUDENT_KEY = "student";
+    private final String GROUP_KEY = "group";
 
     private GlobalHandler globalHandler;
     private Timer timer;    // used to delay the display of the camera fragment
@@ -44,7 +45,6 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
     private Fragment sessionInfo;
     private Fragment users;
     private ArrayList<User> selectedUsers;
-    private View selectedUserView;
     private Sender mSender;
     private Student mStudent;
     private Group mGroup;
@@ -115,8 +115,23 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
             audioRecorder = new AudioRecorder(globalHandler.appContext);
         } else {
             selectedUsers = new ArrayList<>();
-
+            mStudent = (Student) savedInstanceState.getSerializable(STUDENT_KEY);
+            mGroup = (Group) savedInstanceState.getSerializable(GROUP_KEY);
+            camera = CameraFragment.newInstance();
+            sessionInfo = SessionInfoFragment.newInstance();
+            replaceFragment(R.id.session_info, sessionInfo);
+            if (mStudent != null) {
+                mSender = (Sender) mStudent;
+            }
+            audioRecorder = new AudioRecorder(globalHandler.appContext);
         }
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle out) {
+        out.putSerializable(STUDENT_KEY, mStudent);
+        out.putSerializable(GROUP_KEY, mGroup);
     }
 
 

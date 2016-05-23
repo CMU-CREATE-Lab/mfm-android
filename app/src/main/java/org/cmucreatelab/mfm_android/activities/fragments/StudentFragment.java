@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import org.cmucreatelab.mfm_android.R;
+import org.cmucreatelab.mfm_android.helpers.AudioPlayer;
 import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 import org.cmucreatelab.mfm_android.adapters.StudentAdapter;
 import org.cmucreatelab.mfm_android.classes.Student;
@@ -26,6 +27,7 @@ public class StudentFragment extends Fragment  {
     public static final String USERS_KEY = "users_key";
     private static final String STUDENTDS_KEY = "student_key";
     private Activity parentActivity;
+    private GlobalHandler globalHandler;
     private View rootView;
     private ExtendedHeightGridView gridView;
     private ArrayList<Student> mStudents;
@@ -53,13 +55,13 @@ public class StudentFragment extends Fragment  {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         parentActivity = activity;
+        globalHandler = GlobalHandler.getInstance(parentActivity.getApplicationContext());
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.rootView = inflater.inflate(R.layout.fragment_student, container, false);
-        GlobalHandler globalHandler = GlobalHandler.getInstance(rootView.getContext());
 
         if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
             mStudents = (ArrayList<Student>) this.getArguments().getSerializable(STUDENTDS_KEY);

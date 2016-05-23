@@ -14,11 +14,12 @@ import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.activities.fragments.GroupFragment;
 import org.cmucreatelab.mfm_android.activities.fragments.StudentFragment;
 import org.cmucreatelab.mfm_android.classes.Group;
+import org.cmucreatelab.mfm_android.classes.OnButtonClickAudio;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 
 
-public class SelectionActivity extends AppCompatActivity implements GroupFragment.GroupListener,
+public class SelectionActivity extends OnButtonClickAudio implements GroupFragment.GroupListener,
                                                                     StudentFragment.StudentListener{
 
     private boolean isOrderByGroup;
@@ -125,10 +126,12 @@ public class SelectionActivity extends AppCompatActivity implements GroupFragmen
     // Displays the students in the selected group.
     @Override
     public void onGroupSelected(Group group) {
+        super.onButtonClick(globalHandler.appContext);
         if (!isOrderByGroup) {
             globalHandler.sessionHandler.startSession(group);
             Intent intent = new Intent(this, SessionActivity.class);
             startActivity(intent);
+            finish();
         } else {
             hideFragment(groups);
             students = StudentFragment.newInstance(group.getStudents());
@@ -139,9 +142,11 @@ public class SelectionActivity extends AppCompatActivity implements GroupFragmen
 
     @Override
     public void onStudentSelected(Student student) {
+        super.onButtonClick(globalHandler.appContext);
         globalHandler.sessionHandler.startSession(student);
         Intent intent = new Intent(this, SessionActivity.class);
         startActivity(intent);
+        finish();
     }
 
 }

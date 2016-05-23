@@ -8,8 +8,8 @@
         android:id="@+id/studentPhotoImageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
-        android:adjustViewBounds="true"/>
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true" />
 
     <TextView
         android:id="@+id/studentNameTextView"
@@ -19,7 +19,7 @@
         android:layout_below="@id/studentPhotoImageView"
         android:textColor="@color/Black"
         android:background="@color/White"
-        android:layout_centerHorizontal="true"/>
-
+        android:layout_alignRight="@id/studentPhotoImageView"
+        android:layout_alignEnd="@+id/studentPhotoImageView" />
 
 </RelativeLayout>

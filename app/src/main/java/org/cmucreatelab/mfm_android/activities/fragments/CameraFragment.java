@@ -3,7 +3,6 @@ package org.cmucreatelab.mfm_android.activities.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +19,7 @@ import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import org.cmucreatelab.mfm_android.helpers.CameraPreview;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
+import org.cmucreatelab.mfm_android.helpers.AudioPlayer;
 import org.cmucreatelab.mfm_android.helpers.static_classes.SaveFileHandler;
 
 import java.io.File;
@@ -35,11 +35,13 @@ import butterknife.OnClick;
  */
 public class CameraFragment extends Fragment {
 
+    private Activity parentActivity;
     private GlobalHandler globalHandler;
     private View rootView;
     private Camera mCamera;
     private CameraPreview mPreview;
     private byte[] possiblePhoto;
+    private AudioPlayer audioPlayer;
 
 
     public static int getCameraOrientation(Activity activity) {
@@ -80,10 +82,18 @@ public class CameraFragment extends Fragment {
 
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        parentActivity = activity;
+        globalHandler = GlobalHandler.getInstance(parentActivity.getApplicationContext());
+        audioPlayer = new AudioPlayer(globalHandler.appContext);
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_camera, container, false);
         ButterKnife.bind(this, rootView);
-        globalHandler = GlobalHandler.getInstance(rootView.getContext());
         return rootView;
     }
 
@@ -101,6 +111,12 @@ public class CameraFragment extends Fragment {
                 photoNo.setImageResource(R.drawable.photo_no);
                 photoYes.setImageResource(R.drawable.photo_yes);
                 possiblePhoto = bytes;
+                audioPlayer.addAudio(R.raw.picture_to_share);
+                try {
+                    audioPlayer.playAudio();
+                } catch (Exception e) {
+                    Log.e(Constants.LOG_TAG, e.toString());
+                }
             }
         };
 
@@ -116,7 +132,7 @@ public class CameraFragment extends Fragment {
 
     @OnClick(R.id.photoNo)
     public void retakePhoto() {
-        ((SessionActivity) this.getActivity()).startCamera();
+        ((SessionInfoFragment.SessionInfoListener) this.getActivity()).onPhoto();
     }
 
 

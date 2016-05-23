@@ -1,32 +1,37 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.cmucreatelab.mfm_android.activities.fragments.UserFragment">
+    tools:context="org.cmucreatelab.mfm_android.activities.fragments.UserFragment"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:text="Users"
+        android:id="@+id/userTitleLabel"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:textColor="#ffffffff"
+        android:textSize="30sp"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Users"
-            android:id="@+id/studentTitleLabel"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:textColor="#ffffffff"
-            android:textSize="30sp" />
+    <org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView
+        android:id="@+id/gridViewUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:stretchMode="columnWidth"
+        android:layout_below="@id/userTitleLabel"
+        android:numColumns="3">
+    </org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView>
 
-        <org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView
-            android:id="@+id/gridViewUser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:stretchMode="columnWidth"
-            android:numColumns="3">
-        </org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView>
-
-    </LinearLayout>
-
-</FrameLayout>
+    <ImageView
+        android:id="@+id/selection_done_selecting_users"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:padding="2dp" />
+    
+</RelativeLayout>

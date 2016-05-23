@@ -7,9 +7,9 @@
     <ImageView
         android:id="@+id/userPhotoImageView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:adjustViewBounds="true"/>
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true" />
 
     <TextView
         android:id="@+id/userNameTextView"
@@ -19,6 +19,7 @@
         android:layout_below="@id/userPhotoImageView"
         android:textColor="@color/Black"
         android:background="@color/White"
-        android:layout_centerHorizontal="true"/>
+        android:layout_alignRight="@+id/userPhotoImageView"
+        android:layout_alignEnd="@+id/userPhotoImageView"/>
 
 </RelativeLayout>

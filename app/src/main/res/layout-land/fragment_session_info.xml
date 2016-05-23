@@ -114,7 +114,7 @@
                     android:id="@+id/sendMessageButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/send_up_160x181px"
+                    android:src="@drawable/send_up"
                     android:layout_centerHorizontal="true"
                     android:layout_margin="2dp"/>
 

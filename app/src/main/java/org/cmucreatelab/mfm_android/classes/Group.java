@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class Group implements Sender, Serializable {
 
-    private static final Sender.Type senderType = Sender.Type.Group;
+    private static final Sender.Type senderType = Type.group;
 
     // class attributes
     private int id;

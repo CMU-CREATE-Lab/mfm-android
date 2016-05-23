@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class Student implements Sender, Serializable {
 
-    private static final Sender.Type senderType = Sender.Type.Student;
+    private static final Sender.Type senderType = Sender.Type.student;
 
     // class attributes
     private int id;
@@ -39,7 +39,7 @@ public class Student implements Sender, Serializable {
 
     @Override
     public Sender.Type getSenderType() {
-        return Sender.Type.Student;
+        return Sender.Type.student;
     }
 
     @Override

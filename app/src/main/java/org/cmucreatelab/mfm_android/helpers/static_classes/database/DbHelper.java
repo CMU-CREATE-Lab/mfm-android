@@ -91,10 +91,10 @@ public class DbHelper {
 
     public static void destroy(Context context, Sender sender) {
         switch(sender.getSenderType()) {
-            case Group:
+            case group:
                 GroupDbHelper.destroy(context, (Group)sender);
                 break;
-            case Student:
+            case student:
                 StudentDbHelper.destroy(context, (Student)sender);
                 break;
             default:
@@ -105,10 +105,10 @@ public class DbHelper {
 
     public static void addToDatabase(Context context, Sender sender) {
         switch(sender.getSenderType()) {
-            case Group:
+            case group:
                 GroupDbHelper.addToDatabase(context, (Group) sender);
                 break;
-            case Student:
+            case student:
                 StudentDbHelper.addToDatabase(context, (Student) sender);
                 break;
             default:
@@ -119,10 +119,10 @@ public class DbHelper {
 
     public static void update(Context context, Sender sender) {
         switch(sender.getSenderType()) {
-            case Group:
+            case group:
                 GroupDbHelper.update(context, (Group) sender);
                 break;
-            case Student:
+            case student:
                 StudentDbHelper.update(context, (Student) sender);
                 break;
             default:

@@ -9,14 +9,15 @@
         android:layout_weight="1"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="2">
+        android:weightSum="10">
 
         <LinearLayout
             android:id="@+id/f_session_info_from_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_weight="3"
+            android:orientation="vertical"
+            android:padding="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -43,9 +44,10 @@
             android:id="@+id/f_session_info_to_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="7"
             android:orientation="vertical"
-            android:weightSum="3">
+            android:weightSum="3"
+            android:padding="5dp">
 
             <ImageView
                 android:id="@+id/f_session_info_to_recipients_button"
@@ -99,7 +101,8 @@
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:padding="2dp">
 
                 <ImageView
                     android:id="@+id/f_session_info_media_photo"
@@ -109,23 +112,27 @@
                     android:adjustViewBounds="true"
                     android:scaleType="centerInside"
                     android:layout_centerVertical="true"
-                    android:padding="2dp" />
+                    android:padding="50dp"
+                    android:background="@drawable/box"/>
 
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:padding="2dp">
 
                 <ImageView
                     android:id="@+id/f_session_info_media_audio"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:src="@drawable/button_disabled_talk"
-                    android:padding="2dp"
+                    android:padding="50dp"
                     android:scaleType="centerInside"
-                    android:layout_centerVertical="true"/>
+                    android:adjustViewBounds="true"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/box"/>
 
             </RelativeLayout>
 

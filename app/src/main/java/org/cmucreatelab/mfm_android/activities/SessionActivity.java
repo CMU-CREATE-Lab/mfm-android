@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 
@@ -145,11 +146,12 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
             GradientDrawable drawable = new GradientDrawable();
             drawable.setShape(GradientDrawable.RECTANGLE);
             drawable.setStroke(5, Color.GREEN);
-            v.setBackgroundDrawable(drawable);
+            Log.i(Constants.LOG_TAG, ((ViewGroup) v).getChildAt(0).toString());
+            ((ViewGroup) v).getChildAt(0).setBackgroundDrawable(drawable);
         } else {
             selectedUsers.remove(user);
             Log.i(Constants.LOG_TAG, "Deselected " + user.getId() + " to be added to the recipients list.");
-            v.setBackgroundColor(Color.alpha(0));
+            ((ViewGroup) v).getChildAt(0).setBackgroundColor(Color.alpha(0));
         }
 
         if (!selectedUsers.isEmpty()) {

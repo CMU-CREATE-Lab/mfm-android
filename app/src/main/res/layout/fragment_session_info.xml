@@ -90,7 +90,8 @@
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:padding="2dp">
 
                 <ImageView
                     android:id="@+id/f_session_info_media_photo"
@@ -99,24 +100,28 @@
                     android:src="@drawable/button_up_photo"
                     android:adjustViewBounds="true"
                     android:scaleType="centerInside"
-                    android:layout_centerVertical="true"
-                    android:padding="2dp" />
+                    android:layout_centerInParent="true"
+                    android:padding="50dp"
+                    android:background="@drawable/box" />
 
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:padding="2dp">
 
                 <ImageView
                     android:id="@+id/f_session_info_media_audio"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:src="@drawable/button_disabled_talk"
-                    android:padding="2dp"
+                    android:adjustViewBounds="true"
+                    android:padding="50dp"
                     android:scaleType="centerInside"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/box" />
 
             </RelativeLayout>
 

@@ -33,6 +33,7 @@ import butterknife.OnClick;
  */
 public class SessionInfoFragment extends Fragment {
 
+    private static final String SERIALIZABLE_AUDIO = "audio_player_key";
     private GlobalHandler globalHandler;
     private Activity parentActivity;
     private View rootView;
@@ -41,8 +42,11 @@ public class SessionInfoFragment extends Fragment {
     private AudioPlayer audioPlayer;
 
 
-    public static Fragment newInstance() {
+    public static Fragment newInstance(AudioPlayer audioPlayer) {
         SessionInfoFragment fragment = new SessionInfoFragment();
+        Bundle bdl = new Bundle(1);
+        bdl.putSerializable(SERIALIZABLE_AUDIO, audioPlayer);
+        fragment.setArguments(bdl);
         return fragment;
     }
 
@@ -52,7 +56,6 @@ public class SessionInfoFragment extends Fragment {
         super.onAttach(activity);
         parentActivity = activity;
         globalHandler = GlobalHandler.getInstance(parentActivity.getApplicationContext());
-        audioPlayer = new AudioPlayer(globalHandler.appContext);
     }
 
 
@@ -62,8 +65,16 @@ public class SessionInfoFragment extends Fragment {
 
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        audioPlayer.stop();
+        super.onHiddenChanged(hidden);
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView =  inflater.inflate(R.layout.fragment_session_info, container, false);
+        this.audioPlayer = (AudioPlayer) this.getArguments().getSerializable(SERIALIZABLE_AUDIO);
         ButterKnife.bind(this, rootView);
 
         if (globalHandler.sessionHandler.getMessageSender().getSenderType() == Sender.Type.student) {

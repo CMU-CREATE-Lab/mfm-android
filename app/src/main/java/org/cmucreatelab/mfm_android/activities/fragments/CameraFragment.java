@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -86,7 +87,6 @@ public class CameraFragment extends Fragment {
         super.onAttach(activity);
         parentActivity = activity;
         globalHandler = GlobalHandler.getInstance(parentActivity.getApplicationContext());
-        audioPlayer = new AudioPlayer(globalHandler.appContext);
     }
 
 
@@ -94,13 +94,24 @@ public class CameraFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_camera, container, false);
         ButterKnife.bind(this, rootView);
+        this.audioPlayer = AudioPlayer.newInstance(globalHandler.appContext);
         return rootView;
+    }
+
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        audioPlayer.stop();
+        super.onHiddenChanged(hidden);
     }
 
 
     @OnClick(R.id.takePicture)
     public void onTakePicture() {
         final GlobalHandler globalHandler = GlobalHandler.getInstance(rootView.getContext());
+        AudioPlayer click = AudioPlayer.newInstance(globalHandler.appContext);
+        click.addAudio(R.raw.button_click);
+        click.playAudio();
 
         // call back for creating the picture
         Camera.PictureCallback jpegCallBack = new Camera.PictureCallback() {
@@ -110,6 +121,8 @@ public class CameraFragment extends Fragment {
                 ImageView photoYes = (ImageView) rootView.findViewById(R.id.photoYes);
                 photoNo.setImageResource(R.drawable.photo_no);
                 photoYes.setImageResource(R.drawable.photo_yes);
+                ((ImageView) rootView.findViewById(R.id.takePicture)).setVisibility(View.INVISIBLE);
+                ((Button) rootView.findViewById(R.id.cancelCamera)).setVisibility(View.INVISIBLE);
                 possiblePhoto = bytes;
                 audioPlayer.addAudio(R.raw.picture_to_share);
                 try {

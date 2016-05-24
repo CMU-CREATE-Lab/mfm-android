@@ -50,6 +50,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
     private Student mStudent;
     private Group mGroup;
     private AudioRecorder audioRecorder;
+    private AudioPlayer audioPlayer;
 
     // class methods
 
@@ -92,7 +93,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
     // TODO listener
     public void pictureTakenOrCancelled() {
         hideFragment(camera);
-        sessionInfo = SessionInfoFragment.newInstance();
+        sessionInfo = SessionInfoFragment.newInstance(this.audioPlayer);
         replaceFragment(R.id.session_info, sessionInfo);
     }
 
@@ -102,6 +103,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session);
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
+        audioPlayer = AudioPlayer.newInstance(globalHandler.appContext);
 
         if (savedInstanceState == null) {
             mSender = globalHandler.sessionHandler.getMessageSender();
@@ -119,7 +121,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
             mStudent = (Student) savedInstanceState.getSerializable(STUDENT_KEY);
             mGroup = (Group) savedInstanceState.getSerializable(GROUP_KEY);
             camera = CameraFragment.newInstance();
-            sessionInfo = SessionInfoFragment.newInstance();
+            sessionInfo = SessionInfoFragment.newInstance(this.audioPlayer);
             replaceFragment(R.id.session_info, sessionInfo);
             if (mStudent != null) {
                 mSender = (Sender) mStudent;
@@ -133,6 +135,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
     protected void onSaveInstanceState(Bundle out) {
         out.putSerializable(STUDENT_KEY, mStudent);
         out.putSerializable(GROUP_KEY, mGroup);
+        audioPlayer.release();
     }
 
 
@@ -166,7 +169,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
         if (!selectedUsers.isEmpty()) {
             super.onButtonClick(globalHandler.appContext);
             globalHandler.sessionHandler.setMessageRecipients(selectedUsers);
-            sessionInfo = SessionInfoFragment.newInstance();
+            sessionInfo = SessionInfoFragment.newInstance(this.audioPlayer);
             hideFragment(users);
             replaceFragment(R.id.session_info, sessionInfo);
             if (globalHandler.sessionHandler.getMessagePhoto() == null)
@@ -180,7 +183,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
             selectedUsers = new ArrayList<>();
             if (sessionInfo != null)
                 hideFragment(sessionInfo);
-            users = UserFragment.newInstance(mStudent.getUsers());
+            users = UserFragment.newInstance(mStudent.getUsers(), this.audioPlayer);
             replaceFragment(R.id.session_users, users);
 
             // reset the message and audio

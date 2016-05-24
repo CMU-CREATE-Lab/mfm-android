@@ -11,6 +11,7 @@ import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -18,9 +19,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * Used to play audio.
  * Make sure to add the audio ids to the queue before calling playAudio().
+ *
  */
-public class AudioPlayer implements MediaPlayer.OnCompletionListener {
+public class AudioPlayer implements MediaPlayer.OnCompletionListener, Serializable {
 
+    private static AudioPlayer classInstance;
     private Context appContext;
     private MediaPlayer mediaPlayer;
     private ConcurrentLinkedQueue<Integer> fileIds;
@@ -36,7 +39,7 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener {
     }
 
 
-    public AudioPlayer(Context context) {
+    private AudioPlayer(Context context) {
         fileIds = new ConcurrentLinkedQueue<>();
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnCompletionListener(this);
@@ -44,12 +47,21 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener {
     }
 
 
-    public void addAudio(Integer fileId) {
+    public static AudioPlayer newInstance(Context context) {
+        if (classInstance == null) {
+            return new AudioPlayer(context);
+        } else {
+            return classInstance;
+        }
+    }
+
+
+    public synchronized void addAudio(Integer fileId) {
         fileIds.add(fileId);
     }
 
 
-    public void playAudio() {
+    public synchronized void playAudio() {
         if (!fileIds.isEmpty() && !mediaPlayer.isPlaying()) {
             try {
                 playNext();
@@ -60,14 +72,16 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener {
     }
 
 
-    public void stop() {
+    public synchronized void stop() {
         if (mediaPlayer != null) {
+            fileIds.clear();
             mediaPlayer.stop();
+            mediaPlayer.reset();
         }
     }
 
 
-    public void release() {
+    public synchronized void release() {
         if (mediaPlayer != null) {
             mediaPlayer.release();
             mediaPlayer = null;
@@ -76,7 +90,7 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener {
 
 
     @Override
-    public void onCompletion(MediaPlayer mediaPlayer) {
+    public synchronized void onCompletion(MediaPlayer mediaPlayer) {
         if (!fileIds.isEmpty()) {
             try {
                 playNext();

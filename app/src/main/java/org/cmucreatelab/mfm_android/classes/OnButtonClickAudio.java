@@ -14,9 +14,8 @@ import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 public abstract class OnButtonClickAudio extends AppCompatActivity{
 
     public void onButtonClick(Context context) {
-        AudioPlayer audio = new AudioPlayer(context);
+        AudioPlayer audio = AudioPlayer.newInstance(context);
         audio.addAudio(R.raw.button_click);
-        Log.i(Constants.LOG_TAG, String.format("%d", R.raw.button_click));
         try {
             audio.playAudio();
         } catch (Exception e) {

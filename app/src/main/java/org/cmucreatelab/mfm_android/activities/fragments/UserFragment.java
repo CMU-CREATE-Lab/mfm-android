@@ -33,7 +33,6 @@ public class UserFragment extends Fragment  {
 
     private Timer timer;
     private TimerTask task;
-    private static final String SERIALIZABLE_AUDIO = "audio_player_key";
     private static final String USERS_KEY = "users_key";
     private GlobalHandler globalHandler;
     private Activity parentActivity;
@@ -71,11 +70,10 @@ public class UserFragment extends Fragment  {
      * Needs to be called before the fragment is displayed.
      * Is used to instantiate the list of students.
      */
-    public static final Fragment newInstance(ArrayList<User> users, AudioPlayer audioPlayer) {
+    public static final Fragment newInstance(ArrayList<User> users) {
         UserFragment userFragment = new UserFragment();
-        Bundle bdl = new Bundle(2);
+        Bundle bdl = new Bundle(1);
         bdl.putSerializable(USERS_KEY, users);
-        bdl.putSerializable(SERIALIZABLE_AUDIO, audioPlayer);
         userFragment.setArguments(bdl);
         return userFragment;
     }
@@ -93,7 +91,7 @@ public class UserFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.rootView = inflater.inflate(R.layout.fragment_user, container, false);
         final ImageView chooseButton = (ImageView) rootView.findViewById(R.id.selection_done_selecting_users);
-        this.audioPlayer = (AudioPlayer) this.getArguments().getSerializable(SERIALIZABLE_AUDIO);
+        this.audioPlayer = AudioPlayer.newInstance(globalHandler.appContext);
         ButterKnife.bind(this, rootView);
 
         if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {

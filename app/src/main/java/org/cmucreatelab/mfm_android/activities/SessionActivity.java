@@ -93,7 +93,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
     // TODO listener
     public void pictureTakenOrCancelled() {
         hideFragment(camera);
-        sessionInfo = SessionInfoFragment.newInstance(this.audioPlayer);
+        sessionInfo = SessionInfoFragment.newInstance();
         replaceFragment(R.id.session_info, sessionInfo);
     }
 
@@ -121,7 +121,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
             mStudent = (Student) savedInstanceState.getSerializable(STUDENT_KEY);
             mGroup = (Group) savedInstanceState.getSerializable(GROUP_KEY);
             camera = CameraFragment.newInstance();
-            sessionInfo = SessionInfoFragment.newInstance(this.audioPlayer);
+            sessionInfo = SessionInfoFragment.newInstance();
             replaceFragment(R.id.session_info, sessionInfo);
             if (mStudent != null) {
                 mSender = (Sender) mStudent;
@@ -169,7 +169,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
         if (!selectedUsers.isEmpty()) {
             super.onButtonClick(globalHandler.appContext);
             globalHandler.sessionHandler.setMessageRecipients(selectedUsers);
-            sessionInfo = SessionInfoFragment.newInstance(this.audioPlayer);
+            sessionInfo = SessionInfoFragment.newInstance();
             hideFragment(users);
             replaceFragment(R.id.session_info, sessionInfo);
             if (globalHandler.sessionHandler.getMessagePhoto() == null)
@@ -183,7 +183,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
             selectedUsers = new ArrayList<>();
             if (sessionInfo != null)
                 hideFragment(sessionInfo);
-            users = UserFragment.newInstance(mStudent.getUsers(), this.audioPlayer);
+            users = UserFragment.newInstance(mStudent.getUsers());
             replaceFragment(R.id.session_users, users);
 
             // reset the message and audio

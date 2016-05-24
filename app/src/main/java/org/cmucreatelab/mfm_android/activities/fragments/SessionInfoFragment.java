@@ -61,17 +61,15 @@ public class SessionInfoFragment extends Fragment {
 
 
     @Override
-    public void onHiddenChanged(boolean hidden) {
-        audioPlayer.stop();
-        super.onHiddenChanged(hidden);
-    }
-
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView =  inflater.inflate(R.layout.fragment_session_info, container, false);
         this.audioPlayer = AudioPlayer.newInstance(globalHandler.appContext);
         ButterKnife.bind(this, rootView);
+
+        // quick hack
+        if (audioPlayer.isPlaying()) {
+            audioPlayer.stop();
+        }
 
         if (globalHandler.sessionHandler.getMessageSender().getSenderType() == Sender.Type.student) {
             // From content
@@ -83,7 +81,6 @@ public class SessionInfoFragment extends Fragment {
             // To content
             recipientsView = (ExtendedHeightGridView) rootView.findViewById(R.id.f_session_info_recipients);
             recipientsView.setAdapter(new UserAdapter(parentActivity.getApplicationContext(), globalHandler.sessionHandler.getRecipients()));
-            rootView.findViewById(R.id.f_session_info_to_recipients_button).setVisibility(View.VISIBLE);
         } else {
             // From content
             ArrayList<Group> groupList = new ArrayList<>();
@@ -94,7 +91,6 @@ public class SessionInfoFragment extends Fragment {
             // To content
             recipientsView = (ExtendedHeightGridView) rootView.findViewById(R.id.f_session_info_recipients);
             recipientsView.setAdapter(new GroupAdapter(parentActivity.getApplicationContext(), groupList));
-            rootView.findViewById(R.id.f_session_info_to_recipients_button).setVisibility(View.INVISIBLE);
         }
 
         // Media content and send
@@ -106,8 +102,6 @@ public class SessionInfoFragment extends Fragment {
             Bitmap rotated = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,false);
             ((ImageView) rootView.findViewById(R.id.f_session_info_media_photo)).setImageBitmap(rotated);
             ((ImageView) rootView.findViewById(R.id.f_session_info_media_audio)).setImageResource(R.drawable.button_up_talk);
-            audioPlayer.addAudio(R.raw.what_did_take);
-            audioPlayer.playAudio();
         }
         if (globalHandler.sessionHandler.getMessageAudio() != null) {
             ((ImageView) rootView.findViewById(R.id.f_session_info_media_audio)).setImageResource(R.drawable.soundwave_final);
@@ -115,15 +109,6 @@ public class SessionInfoFragment extends Fragment {
         }
 
         return rootView;
-    }
-
-
-    @OnClick(R.id.f_session_info_to_recipients_button)
-    public void onClickRecipients() {
-        if (globalHandler.sessionHandler.getMessageSender().getSenderType() == Sender.Type.student) {
-            ((ImageView) rootView.findViewById(R.id.f_session_info_to_recipients_button)).setImageResource(R.drawable.button_down_recipient);
-            ((SessionInfoListener) parentActivity).onRecipients();
-        }
     }
 
 
@@ -138,9 +123,7 @@ public class SessionInfoFragment extends Fragment {
     public void onClickAudio() {
         if (globalHandler.sessionHandler.getMessagePhoto() != null) {
             ((ImageView) rootView.findViewById(R.id.f_session_info_media_audio)).setImageResource(R.drawable.button_down_talk);
-            ((SessionInfoListener) parentActivity).onAudio(audioPlayer);
-        } else {
-            // TODO let the user know to take a picture first
+            ((SessionInfoListener) parentActivity).onAudio();
         }
     }
 
@@ -149,15 +132,12 @@ public class SessionInfoFragment extends Fragment {
     public void onClickSend() {
         if (globalHandler.sessionHandler.getMessageAudio() != null) {
             ((SessionInfoListener) parentActivity).onSend();
-        } else {
-            // TODO Let the user know what they need to do.
         }
     }
 
     public interface SessionInfoListener {
-        public void onRecipients();
         public void onPhoto();
-        public void onAudio(AudioPlayer audioPlayer);
+        public void onAudio();
         public void onSend();
     }
 

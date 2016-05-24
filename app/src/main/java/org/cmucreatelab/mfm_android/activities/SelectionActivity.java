@@ -18,6 +18,8 @@ import org.cmucreatelab.mfm_android.classes.OnButtonClickAudio;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 
+import java.util.ArrayList;
+
 
 public class SelectionActivity extends OnButtonClickAudio implements GroupFragment.GroupListener,
                                                                     StudentFragment.StudentListener{
@@ -26,6 +28,7 @@ public class SelectionActivity extends OnButtonClickAudio implements GroupFragme
     private Fragment students;
     private Fragment groups;
     private GlobalHandler globalHandler;
+    private String schoolName;
 
 
     private void addFragment(int id, Fragment fragment) {
@@ -53,6 +56,7 @@ public class SelectionActivity extends OnButtonClickAudio implements GroupFragme
 
     // Shows the students based off of a selected group
     private void orderByGroup() {
+        this.setTitle(schoolName + " - Groups");
         isOrderByGroup = true;
         hideFragment(students);
     }
@@ -60,6 +64,7 @@ public class SelectionActivity extends OnButtonClickAudio implements GroupFragme
 
     // Shows all the students and groups in a school
     private void showAll() {
+        this.setTitle(schoolName +  " - All Students & Groups");
         isOrderByGroup = false;
         students = StudentFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getStudents());
         groups = GroupFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getGroups());
@@ -81,12 +86,10 @@ public class SelectionActivity extends OnButtonClickAudio implements GroupFragme
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
+        schoolName = globalHandler.mfmLoginHandler.getSchool().getName();
 
         if (savedInstanceState == null) {
-            students = StudentFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getStudents());
-            groups = GroupFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getGroups());
-            addFragment(R.id.selection_students_scrollable_container, students);
-            addFragment(R.id.selection_groups_scrollable_container, groups);
+            showAll();
         }
     }
 
@@ -132,9 +135,15 @@ public class SelectionActivity extends OnButtonClickAudio implements GroupFragme
             Intent intent = new Intent(this, SessionActivity.class);
             startActivity(intent);
         } else {
-            hideFragment(groups);
+            this.isOrderByGroup = false;
+            String groupName = group.getName();
+            this.setTitle(schoolName + " - " + groupName);
+            ArrayList<Group> newGroupsList = new ArrayList<>();
+            newGroupsList.add(group);
+            groups = GroupFragment.newInstance(newGroupsList);
             students = StudentFragment.newInstance(group.getStudents());
-            addFragment(R.id.selection_students_scrollable_container, students);
+            replaceFragment(R.id.selection_students_scrollable_container, students);
+            replaceFragment(R.id.selection_groups_scrollable_container, groups);
         }
     }
 

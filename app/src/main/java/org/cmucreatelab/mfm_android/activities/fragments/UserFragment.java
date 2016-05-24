@@ -48,12 +48,9 @@ public class UserFragment extends Fragment  {
         task = new TimerTask() {
             @Override
             public void run() {
+                Log.i(Constants.LOG_TAG, "adding");
                 audioPlayer.addAudio(id);
-                try {
-                    audioPlayer.playAudio();
-                } catch (Exception e) {
-                    Log.e(Constants.LOG_TAG, e.toString());
-                }
+                audioPlayer.playAudio();
             }
         };
 
@@ -111,13 +108,6 @@ public class UserFragment extends Fragment  {
         startTimer(R.raw.press_the_blue_button, 2000);
 
         return rootView;
-    }
-
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        audioPlayer.stop();
-        super.onHiddenChanged(hidden);
     }
 
 

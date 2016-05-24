@@ -73,7 +73,7 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, Serializab
 
 
     public synchronized void stop() {
-        if (mediaPlayer != null) {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             fileIds.clear();
             mediaPlayer.stop();
             mediaPlayer.reset();
@@ -89,6 +89,11 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, Serializab
     }
 
 
+    public boolean isPlaying() {
+        return mediaPlayer.isPlaying();
+    }
+
+
     @Override
     public synchronized void onCompletion(MediaPlayer mediaPlayer) {
         if (!fileIds.isEmpty()) {
@@ -97,8 +102,6 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, Serializab
             } catch (IOException e) {
                 Log.e(Constants.LOG_TAG, "file I/O error in onCompletion - AudioPlayer.");
             }
-        } else {
-            stop();
         }
     }
 }

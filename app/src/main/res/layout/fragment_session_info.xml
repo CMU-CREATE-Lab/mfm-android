@@ -44,17 +44,7 @@
             android:layout_height="0dp"
             android:orientation="horizontal"
             android:layout_weight="2"
-            android:layout_margin="2dp"
-            android:weightSum="4">
-
-            <ImageView
-                android:id="@+id/f_session_info_to_recipients_button"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:src="@drawable/button_up_recipient"
-                android:adjustViewBounds="true"
-                android:padding="2dp" />
+            android:layout_margin="2dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -63,9 +53,8 @@
                 android:textColor="@color/White"/>
 
             <ScrollView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
                 <org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView
                     android:id="@+id/f_session_info_recipients"

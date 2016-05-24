@@ -99,13 +99,6 @@ public class CameraFragment extends Fragment {
     }
 
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        audioPlayer.stop();
-        super.onHiddenChanged(hidden);
-    }
-
-
     @OnClick(R.id.takePicture)
     public void onTakePicture() {
         final GlobalHandler globalHandler = GlobalHandler.getInstance(rootView.getContext());
@@ -122,14 +115,10 @@ public class CameraFragment extends Fragment {
                 photoNo.setImageResource(R.drawable.photo_no);
                 photoYes.setImageResource(R.drawable.photo_yes);
                 ((ImageView) rootView.findViewById(R.id.takePicture)).setVisibility(View.INVISIBLE);
-                ((Button) rootView.findViewById(R.id.cancelCamera)).setVisibility(View.INVISIBLE);
                 possiblePhoto = bytes;
                 audioPlayer.addAudio(R.raw.picture_to_share);
-                try {
-                    audioPlayer.playAudio();
-                } catch (Exception e) {
-                    Log.e(Constants.LOG_TAG, e.toString());
-                }
+                audioPlayer.playAudio();
+
             }
         };
 
@@ -137,20 +126,16 @@ public class CameraFragment extends Fragment {
     }
 
 
-    @OnClick(R.id.cancelCamera)
-    public void cancelCamera() {
-        ((SessionActivity) this.getActivity()).pictureTakenOrCancelled();
-    }
-
-
     @OnClick(R.id.photoNo)
     public void retakePhoto() {
+        audioPlayer.stop();
         ((SessionInfoFragment.SessionInfoListener) this.getActivity()).onPhoto();
     }
 
 
     @OnClick(R.id.photoYes)
     public void acceptPhoto() {
+        audioPlayer.stop();
         File picture = SaveFileHandler.getOutputMediaFile(rootView.getContext(), SaveFileHandler.MEDIA_TYPE_IMAGE, globalHandler);
 
         if (picture == null) {
@@ -159,7 +144,6 @@ public class CameraFragment extends Fragment {
         }
 
         try {
-            Log.i(Constants.LOG_TAG, picture.getAbsolutePath());
             FileOutputStream fos = new FileOutputStream(picture);
             fos.write(possiblePhoto);
             fos.close();
@@ -170,7 +154,7 @@ public class CameraFragment extends Fragment {
 
             // We may not need to save the image to any directory if we do this.
             globalHandler.sessionHandler.setMessagePhoto(picture);
-            ((SessionActivity) this.getActivity()).pictureTakenOrCancelled();
+            ((SessionActivity) this.getActivity()).pictureTaken();
 
         } catch (FileNotFoundException e) {
             Log.e(Constants.LOG_TAG, "File not found: " + e.getMessage());

@@ -8,6 +8,7 @@ import org.cmucreatelab.mfm_android.activities.LoginActivity;
 import org.cmucreatelab.mfm_android.activities.SelectionActivity;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Kiosk;
+import org.cmucreatelab.mfm_android.classes.Refreshable;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
@@ -36,7 +37,7 @@ public class MfmRequestHandler {
     }
 
 
-    public void requestListStudents(final LoginActivity activity) {
+    public void requestListStudents(final Refreshable activity) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;
@@ -59,7 +60,7 @@ public class MfmRequestHandler {
     }
 
 
-    public void requestListGroups(final LoginActivity activity) {
+    public void requestListGroups(final Refreshable activity) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;

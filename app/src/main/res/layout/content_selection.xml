@@ -13,44 +13,51 @@
     tools:context=".activities.SelectionActivity"
     tools:showIn="@layout/activity_selection">
 
-    <ScrollView
-        android:id="@+id/selection_container"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/selection_swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/selection_scrollable_container"
+        <ScrollView
+            android:id="@+id/selection_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <LinearLayout
-                android:id="@+id/selection_students_scrollable_container"
+                android:id="@+id/selection_scrollable_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/selection_students_scrollable_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/selection_groups_scrollable_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/selection_users_scrollable_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/selection_groups_scrollable_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+        </ScrollView>
 
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/selection_users_scrollable_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

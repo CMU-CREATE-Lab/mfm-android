@@ -1,12 +1,11 @@
 package org.cmucreatelab.mfm_android.activities;
 
+import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.app.FragmentManager;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,8 @@ import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.activities.fragments.CameraFragment;
 import org.cmucreatelab.mfm_android.activities.fragments.SessionInfoFragment;
 import org.cmucreatelab.mfm_android.activities.fragments.UserFragment;
-import org.cmucreatelab.mfm_android.classes.AudioRecorder;
+import org.cmucreatelab.mfm_android.helpers.AppState;
+import org.cmucreatelab.mfm_android.helpers.AudioRecorder;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.OnButtonClickAudio;
 import org.cmucreatelab.mfm_android.classes.Sender;
@@ -26,6 +26,7 @@ import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.AudioPlayer;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
+import org.cmucreatelab.mfm_android.helpers.static_classes.FragmentHandler;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -36,9 +37,13 @@ import java.util.TimerTask;
 public class SessionActivity extends OnButtonClickAudio implements UserFragment.UserListener,
                                                                 SessionInfoFragment.SessionInfoListener{
 
-    private final String STUDENT_KEY = "student";
-    private final String GROUP_KEY = "group";
+    private final String STUDENT_TAG = "student";
+    private final String GROUP_TAG = "group";
+    private final String CAMERA_TAG = "camera";
+    private final String INFO_TAG = "info";
+    private final String USER_TAG = "user";
 
+    private Activity activity;
     private GlobalHandler globalHandler;
     private Timer timer;    // used to delay the display of the camera fragment
     private TimerTask task;
@@ -55,27 +60,6 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
     // class methods
 
 
-    private void replaceFragment(int id, Fragment fragment) {
-        FragmentTransaction ft = this.getFragmentManager().beginTransaction();
-        ft.replace(id, fragment);
-        ft.show(fragment);
-        ft.commit();
-    }
-
-
-    private void hideFragment(Fragment fragment) {
-        FragmentTransaction ft = this.getFragmentManager().beginTransaction();
-        ft.hide(fragment);
-        ft.commit();
-    }
-
-    private void removeFragment(Fragment fragment) {
-        FragmentTransaction ft = this.getFragmentManager().beginTransaction();
-        ft.remove(fragment);
-        ft.commit();
-    }
-
-
     private void startTimer() {
         timer = new Timer();
 
@@ -83,9 +67,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
             @Override
             public void run() {
                 camera = new CameraFragment().newInstance();
-                if (sessionInfo != null)
-                    hideFragment(sessionInfo);
-                replaceFragment(R.id.session_camera, camera);
+                showCamera();
             }
         };
 
@@ -93,23 +75,50 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
     }
 
 
+    private void showUsers() {
+        globalHandler.appState = AppState.SESSION_USER;
+
+        FragmentManager fm = this.getFragmentManager();
+        FragmentHandler.hideFragment(this, fm.findFragmentByTag(INFO_TAG));
+        FragmentHandler.hideFragment(this, fm.findFragmentByTag(CAMERA_TAG));
+        users = UserFragment.newInstance(mStudent.getUsers());
+        FragmentHandler.replaceFragment(this, R.id.session_users, users, USER_TAG);
+    }
+
+
+    private void showInfo() {
+        globalHandler.appState = AppState.SESSION_INFO;
+
+        FragmentManager fm = this.getFragmentManager();
+        FragmentHandler.hideFragment(this, fm.findFragmentByTag(USER_TAG));
+        FragmentHandler.hideFragment(this, fm.findFragmentByTag(CAMERA_TAG));
+        sessionInfo = SessionInfoFragment.newInstance();
+        FragmentHandler.replaceFragment(this, R.id.session_info, sessionInfo, INFO_TAG);
+    }
+
+
+    private void showCamera() {
+        globalHandler.appState = AppState.SESSION_CAMERA;
+
+        FragmentManager fm = this.getFragmentManager();
+        FragmentHandler.hideFragment(this, fm.findFragmentByTag(USER_TAG));
+        FragmentHandler.hideFragment(this, fm.findFragmentByTag(INFO_TAG));
+        camera = CameraFragment.newInstance();
+        FragmentHandler.replaceFragment(this, R.id.session_camera, camera, CAMERA_TAG);
+    }
+
+
     public void pictureTaken() {
         audioPlayer.addAudio(R.raw.what_did_take);
         audioPlayer.playAudio();
-        hideFragment(camera);
-        sessionInfo = SessionInfoFragment.newInstance();
-        replaceFragment(R.id.session_info, sessionInfo);
+        showInfo();
     }
 
 
     public void onRecipients() {
         if (mSender.getSenderType() == Sender.Type.student) {
             audioPlayer.stop();
-            selectedUsers = new ArrayList<>();
-            if (sessionInfo != null)
-                hideFragment(sessionInfo);
-            users = UserFragment.newInstance(mStudent.getUsers());
-            replaceFragment(R.id.session_users, users);
+            showUsers();
 
             // reset the message and audio
             globalHandler.sessionHandler.setMessagePhoto(null);
@@ -123,28 +132,45 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session);
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
+        activity = this;
         audioRecorder = new AudioRecorder(globalHandler.appContext);
         audioPlayer = AudioPlayer.newInstance(globalHandler.appContext);
+        selectedUsers = new ArrayList<>();
 
         if (savedInstanceState == null) {
             mSender = globalHandler.sessionHandler.getMessageSender();
 
+            sessionInfo = SessionInfoFragment.newInstance();
+            camera = CameraFragment.newInstance();
+            FragmentManager fm = this.getFragmentManager();
+            FragmentHandler.addFragment(this, R.id.session_info, sessionInfo, INFO_TAG);
+            FragmentHandler.addFragment(this, R.id.session_camera, camera, CAMERA_TAG);
+            FragmentHandler.hideFragment(this, sessionInfo);
+            FragmentHandler.hideFragment(this, camera);
+
             if (mSender.getSenderType() == Sender.Type.student) {
                 mStudent = (Student) mSender;
+                users = UserFragment.newInstance(mStudent.getUsers());
+                FragmentHandler.addFragment(this, R.id.session_users, users, USER_TAG);
+                FragmentHandler.hideFragment(this, users);
                 onRecipients();
             } else {
                 mGroup = (Group) mSender;
                 startTimer();
             }
         } else {
-            selectedUsers = new ArrayList<>();
-            mStudent = (Student) savedInstanceState.getSerializable(STUDENT_KEY);
-            mGroup = (Group) savedInstanceState.getSerializable(GROUP_KEY);
-            camera = CameraFragment.newInstance();
-            sessionInfo = SessionInfoFragment.newInstance();
-            replaceFragment(R.id.session_info, sessionInfo);
-            if (mStudent != null) {
-                mSender = (Sender) mStudent;
+            mStudent = (Student) savedInstanceState.getSerializable(STUDENT_TAG);
+            mGroup = (Group) savedInstanceState.getSerializable(GROUP_TAG);
+            switch (globalHandler.appState) {
+                case SESSION_USER:
+                    showUsers();
+                    break;
+                case SESSION_INFO:
+                    showInfo();
+                    break;
+                case SESSION_CAMERA:
+                    showCamera();
+                    break;
             }
         }
     }
@@ -152,8 +178,9 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
 
     @Override
     protected void onSaveInstanceState(Bundle out) {
-        out.putSerializable(STUDENT_KEY, mStudent);
-        out.putSerializable(GROUP_KEY, mGroup);
+        super.onSaveInstanceState(out);
+        out.putSerializable(STUDENT_TAG, mStudent);
+        out.putSerializable(GROUP_TAG, mGroup);
         audioPlayer.stop();
     }
 
@@ -189,9 +216,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
             audioPlayer.stop();
             super.onButtonClick(globalHandler.appContext);
             globalHandler.sessionHandler.setMessageRecipients(selectedUsers);
-            sessionInfo = SessionInfoFragment.newInstance();
-            hideFragment(users);
-            replaceFragment(R.id.session_info, sessionInfo);
+            showInfo();
             if (globalHandler.sessionHandler.getMessagePhoto() == null)
                 startTimer();
         }
@@ -201,11 +226,8 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
     @Override
     public void onPhoto() {
         super.onButtonClick(globalHandler.appContext);
-        camera = new CameraFragment().newInstance();
         audioPlayer.stop();
-        if (sessionInfo != null)
-            hideFragment(sessionInfo);
-        replaceFragment(R.id.session_camera, camera);
+        showCamera();
     }
 
     @Override

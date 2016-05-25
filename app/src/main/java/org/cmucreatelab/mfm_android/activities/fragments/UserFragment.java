@@ -48,7 +48,6 @@ public class UserFragment extends Fragment  {
         task = new TimerTask() {
             @Override
             public void run() {
-                Log.i(Constants.LOG_TAG, "adding");
                 audioPlayer.addAudio(id);
                 audioPlayer.playAudio();
             }

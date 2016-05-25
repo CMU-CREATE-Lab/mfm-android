@@ -46,11 +46,11 @@ public class GroupFragment extends Fragment {
     * but I figured this is good practice just in case.
     */
     public static final GroupFragment newInstance(ArrayList<Group> groups) {
-        GroupFragment studentFragment = new GroupFragment();
+        GroupFragment groupFragment = new GroupFragment();
         Bundle bdl = new Bundle(1);
         bdl.putSerializable(SERIALIZABLE_GROUP_KEY, groups);
-        studentFragment.setArguments(bdl);
-        return studentFragment;
+        groupFragment.setArguments(bdl);
+        return groupFragment;
     }
 
 
@@ -67,7 +67,7 @@ public class GroupFragment extends Fragment {
         final GlobalHandler globalHandler = GlobalHandler.getInstance(rootView.getContext());
 
         if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
-            mGroups = globalHandler.mfmLoginHandler.getSchool().getGroups();
+            mGroups = (ArrayList<Group>) this.getArguments().getSerializable(SERIALIZABLE_GROUP_KEY);
         }
         this.gridView = (ExtendedHeightGridView) rootView.findViewById(R.id.gridViewGroup);
         this.gridView.setAdapter(new GroupAdapter(rootView.getContext(), this.mGroups));

@@ -14,6 +14,7 @@ import org.cmucreatelab.mfm_android.classes.FormFile;
 import org.cmucreatelab.mfm_android.classes.FormValue;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Kiosk;
+import org.cmucreatelab.mfm_android.classes.Refreshable;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Sender;
 import org.cmucreatelab.mfm_android.classes.Student;
@@ -41,6 +42,7 @@ public class GlobalHandler {
     public MfmRequestHandler mfmRequestHandler;
     public MfmLoginHandler mfmLoginHandler;
     public SessionHandler sessionHandler;
+    public AppState appState;
 
 
     public void sendPost(byte[] photo, byte[] audio) {
@@ -78,13 +80,13 @@ public class GlobalHandler {
 
 
     // refresh the list of students and groups in a school
-    public void refreshStudentsAndGroups(final LoginActivity activity) {
+    public void refreshStudentsAndGroups(final Refreshable activity) {
         mfmRequestHandler.requestListStudents(activity);
         mfmRequestHandler.requestListGroups(activity);
     }
 
 
-    public void checkAndUpdateStudents(ArrayList<Student> studentsFromMfmRequest, final LoginActivity activity) {
+    public void checkAndUpdateStudents(ArrayList<Student> studentsFromMfmRequest, final Refreshable activity) {
         if (mfmLoginHandler.kioskIsLoggedIn) {
             School school = mfmLoginHandler.getSchool();
             ArrayList<Student> studentsFromDB = school.getStudents();
@@ -111,12 +113,13 @@ public class GlobalHandler {
         }
         // To make sure the list of students and groups are populated before displaying them.
         // I would get empty lists every so often and would have to refresh the activity.
-        activity.isStudentsDone = true;
+        if (activity.getClass().getSimpleName().equals(LoginActivity.class.getSimpleName()))
+            ((LoginActivity)activity).isStudentsDone = true;
         activity.populatedGroupsAndStudentsList();
     }
 
 
-    public void checkAndUpdateGroups(ArrayList<Group> groupsFromMfmRequest, final LoginActivity activity) {
+    public void checkAndUpdateGroups(ArrayList<Group> groupsFromMfmRequest, final Refreshable activity) {
         if (mfmLoginHandler.kioskIsLoggedIn) {
             School school = mfmLoginHandler.getSchool();
             ArrayList<Group> groupsFromDB = school.getGroups();
@@ -143,7 +146,9 @@ public class GlobalHandler {
         }
         // To make sure the list of students and groups are populated before displaying them.
         // I would get empty lists every so often and would have to refresh the activity.
-        activity.isGroupsDone = true;
+        // I hate how I'm doing this...
+        if (activity.getClass().getSimpleName().equals(LoginActivity.class.getSimpleName()))
+            ((LoginActivity)activity).isGroupsDone = true;
         activity.populatedGroupsAndStudentsList();
     }
 
@@ -171,6 +176,7 @@ public class GlobalHandler {
         this.mfmLoginHandler = new MfmLoginHandler(this);
         this.mfmRequestHandler = new MfmRequestHandler(this);
         this.sessionHandler = new SessionHandler(this);
+        this.appState = AppState.SELECTION_SHOW_ALL;
         Kiosk.ioSVersion = Build.VERSION.RELEASE;
     }
 

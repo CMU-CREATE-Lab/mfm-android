@@ -1,4 +1,4 @@
-package org.cmucreatelab.mfm_android.classes;
+package org.cmucreatelab.mfm_android.helpers;
 
 import android.content.Context;
 import android.media.MediaRecorder;

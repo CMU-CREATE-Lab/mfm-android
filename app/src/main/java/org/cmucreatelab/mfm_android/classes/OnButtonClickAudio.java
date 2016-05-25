@@ -1,6 +1,8 @@
 package org.cmucreatelab.mfm_android.classes;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 
 import org.cmucreatelab.mfm_android.R;

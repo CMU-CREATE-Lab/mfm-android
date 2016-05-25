@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.cmucreatelab.mfm_android.R;
+import org.cmucreatelab.mfm_android.classes.Refreshable;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements Refreshable {
 
     public boolean isStudentsDone;
     public boolean isGroupsDone;
@@ -40,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     private String password;
 
 
+    @Override
     public void populatedGroupsAndStudentsList() {
         if (isStudentsDone && isGroupsDone) {
             Intent intent = new Intent(this, SelectionActivity.class);
@@ -51,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     // If the user successfully belonged to a school, then this will be called.
+    @Override
     public void requestListSchoolsSuccess(ArrayList<School> schools) {
         // TODO do we just select the first school in the list?
         globalHandler = GlobalHandler.getInstance(getApplicationContext());
@@ -59,12 +62,14 @@ public class LoginActivity extends AppCompatActivity {
 
 
     // If the entire loging process was successful then this should be called.
+    @Override
     public void loginSuccess() {
         GlobalHandler.getInstance(getApplicationContext()).refreshStudentsAndGroups(this);
     }
 
 
     // If at any point the login process failed, call this method.
+    @Override
     public void loginFailure() {
         // TODO Have more possible failures instead of just username or password being invalid.
         showProgress(false);
@@ -188,6 +193,5 @@ public class LoginActivity extends AppCompatActivity {
             GlobalHandler.getInstance(getApplicationContext()).mfmRequestHandler.requestListSchools(this, username, password);
         }
     }
-
 }
 

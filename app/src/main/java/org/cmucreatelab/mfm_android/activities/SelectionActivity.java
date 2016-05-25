@@ -1,11 +1,15 @@
 package org.cmucreatelab.mfm_android.activities;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,61 +19,67 @@ import org.cmucreatelab.mfm_android.activities.fragments.GroupFragment;
 import org.cmucreatelab.mfm_android.activities.fragments.StudentFragment;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.OnButtonClickAudio;
+import org.cmucreatelab.mfm_android.classes.Refreshable;
+import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.classes.Student;
+import org.cmucreatelab.mfm_android.helpers.AppState;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
+import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
+import org.cmucreatelab.mfm_android.helpers.static_classes.FragmentHandler;
 
 import java.util.ArrayList;
 
 
-public class SelectionActivity extends OnButtonClickAudio implements GroupFragment.GroupListener,
+public class SelectionActivity extends OnButtonClickAudio implements Refreshable,
+                                                                    GroupFragment.GroupListener,
                                                                     StudentFragment.StudentListener{
 
+    private static final String STUDENT_TAG = "student";
+    private static final String GROUP_TAG = "group";
     private boolean isOrderByGroup;
     private Fragment students;
     private Fragment groups;
     private GlobalHandler globalHandler;
     private String schoolName;
+    private SwipeRefreshLayout swipeLayout;
+    private Group selectedGroup;
 
 
-    private void addFragment(int id, Fragment fragment) {
-        FragmentTransaction ft = this.getFragmentManager().beginTransaction();
-        ft.add(id, fragment);
-        ft.show(fragment);
-        ft.commit();
-    }
+    // Shows all the students and groups in a school
+    private void showAll() {
+        this.setTitle(schoolName + " - All Students & Groups");
+        globalHandler.appState = AppState.SELECTION_SHOW_ALL;
+        isOrderByGroup = false;
 
-
-    private void replaceFragment(int id, Fragment fragment) {
-        FragmentTransaction ft = this.getFragmentManager().beginTransaction();
-        ft.replace(id, fragment);
-        ft.show(fragment);
-        ft.commit();
-    }
-
-
-    private void hideFragment(Fragment fragment) {
-        FragmentTransaction ft = this.getFragmentManager().beginTransaction();
-        ft.hide(fragment);
-        ft.commit();
+        students = StudentFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getStudents());
+        groups = GroupFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getGroups());
+        FragmentHandler.replaceFragment(this, R.id.selection_students_scrollable_container, students, STUDENT_TAG);
+        FragmentHandler.replaceFragment(this, R.id.selection_groups_scrollable_container, groups, GROUP_TAG);
     }
 
 
     // Shows the students based off of a selected group
     private void orderByGroup() {
-        this.setTitle(schoolName + " - Groups");
+        this.setTitle(schoolName + " - Order By Group");
+        globalHandler.appState = AppState.SELECTION_ORDER_BY_GROUP;
         isOrderByGroup = true;
-        hideFragment(students);
+
+        FragmentManager fm = this.getFragmentManager();
+        FragmentHandler.hideFragment(this, fm.findFragmentByTag(STUDENT_TAG));
     }
 
 
-    // Shows all the students and groups in a school
-    private void showAll() {
-        this.setTitle(schoolName +  " - All Students & Groups");
-        isOrderByGroup = false;
-        students = StudentFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getStudents());
-        groups = GroupFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getGroups());
-        replaceFragment(R.id.selection_students_scrollable_container, students);
-        replaceFragment(R.id.selection_groups_scrollable_container, groups);
+    private void showGroup() {
+        this.setTitle(schoolName + " - " + selectedGroup.getName());
+        globalHandler.appState = AppState.SELECTION_GROUP;
+        this.isOrderByGroup = false;
+
+        ArrayList<Group> newGroupsList = new ArrayList<>();
+        newGroupsList.add(selectedGroup);
+        groups = GroupFragment.newInstance(newGroupsList);
+        students = StudentFragment.newInstance(selectedGroup.getStudents());
+        FragmentHandler.replaceFragment(this, R.id.selection_students_scrollable_container, students, STUDENT_TAG);
+        FragmentHandler.replaceFragment(this, R.id.selection_groups_scrollable_container, groups, GROUP_TAG);
     }
 
 
@@ -88,9 +98,48 @@ public class SelectionActivity extends OnButtonClickAudio implements GroupFragme
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
         schoolName = globalHandler.mfmLoginHandler.getSchool().getName();
 
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.selection_swipe_layout);
+        final Refreshable thisActivity = this;
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override public void run() {
+                        globalHandler.refreshStudentsAndGroups(thisActivity);
+                        showAll();
+                        swipeLayout.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
+
         if (savedInstanceState == null) {
-            showAll();
+            this.setTitle(schoolName + " - All Students & Groups");
+            students = StudentFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getStudents());
+            groups = GroupFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getGroups());
+            FragmentHandler.addFragment(this, R.id.selection_students_scrollable_container, students, STUDENT_TAG);
+            FragmentHandler.addFragment(this, R.id.selection_groups_scrollable_container, groups, GROUP_TAG);
+        } else {
+            selectedGroup = (Group) savedInstanceState.getSerializable(GROUP_TAG);
+            switch (globalHandler.appState) {
+                case SELECTION_SHOW_ALL:
+                    showAll();
+                    break;
+                case SELECTION_ORDER_BY_GROUP:
+                    orderByGroup();
+                    break;
+                case SELECTION_GROUP:
+                    showGroup();
+                    break;
+            }
         }
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle out) {
+        super.onSaveInstanceState(out);
+        out.putSerializable(GROUP_TAG, selectedGroup);
     }
 
 
@@ -135,15 +184,8 @@ public class SelectionActivity extends OnButtonClickAudio implements GroupFragme
             Intent intent = new Intent(this, SessionActivity.class);
             startActivity(intent);
         } else {
-            this.isOrderByGroup = false;
-            String groupName = group.getName();
-            this.setTitle(schoolName + " - " + groupName);
-            ArrayList<Group> newGroupsList = new ArrayList<>();
-            newGroupsList.add(group);
-            groups = GroupFragment.newInstance(newGroupsList);
-            students = StudentFragment.newInstance(group.getStudents());
-            replaceFragment(R.id.selection_students_scrollable_container, students);
-            replaceFragment(R.id.selection_groups_scrollable_container, groups);
+            selectedGroup = group;
+            showGroup();
         }
     }
 
@@ -154,6 +196,28 @@ public class SelectionActivity extends OnButtonClickAudio implements GroupFragme
         globalHandler.sessionHandler.startSession(student);
         Intent intent = new Intent(this, SessionActivity.class);
         startActivity(intent);
+    }
+
+    // TODO - clean this up so I do not have to have empty overrides...
+    // this was just a quick hack to get the lists to refresh
+    @Override
+    public void populatedGroupsAndStudentsList() {
+        // empty
+    }
+
+    @Override
+    public void requestListSchoolsSuccess(ArrayList<School> schools) {
+        // empty
+    }
+
+    @Override
+    public void loginSuccess() {
+        // empty
+    }
+
+    @Override
+    public void loginFailure() {
+        // empty
     }
 
 }

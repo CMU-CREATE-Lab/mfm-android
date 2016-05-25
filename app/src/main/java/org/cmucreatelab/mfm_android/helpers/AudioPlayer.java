@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class AudioPlayer implements MediaPlayer.OnCompletionListener, Serializable {
 
+    public boolean playedBlueButton;
     private static AudioPlayer classInstance;
     private Context appContext;
     private MediaPlayer mediaPlayer;
@@ -44,6 +45,7 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, Serializab
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnCompletionListener(this);
         appContext = context;
+        playedBlueButton = false;
     }
 
 

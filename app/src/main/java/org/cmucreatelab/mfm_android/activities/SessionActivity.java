@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -118,6 +119,8 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
     public void onRecipients() {
         if (mSender.getSenderType() == Sender.Type.student) {
             audioPlayer.stop();
+            audioPlayer.addAudio(R.raw.send_your_message_to_short);
+            audioPlayer.playAudio();
             showUsers();
 
             // reset the message and audio
@@ -188,6 +191,13 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
     @Override
     public void onUserSelected(User user, boolean isChecked, View v) {
         super.onButtonClick(globalHandler.appContext);
+        System.out.println(audioPlayer.playedBlueButton);
+        if (audioPlayer.playedBlueButton == false) {
+            audioPlayer.stop();
+            audioPlayer.addAudio(R.raw.press_the_blue_button);
+            audioPlayer.playAudio();
+            audioPlayer.playedBlueButton = true;
+        }
         ImageView chooseButton = (ImageView) findViewById(R.id.selection_done_selecting_users);
         if (isChecked) {
             selectedUsers.add(user);

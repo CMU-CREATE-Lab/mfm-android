@@ -31,8 +31,6 @@ import butterknife.OnClick;
  */
 public class UserFragment extends Fragment  {
 
-    private Timer timer;
-    private TimerTask task;
     private static final String USERS_KEY = "users_key";
     private GlobalHandler globalHandler;
     private Activity parentActivity;
@@ -40,21 +38,6 @@ public class UserFragment extends Fragment  {
     private ExtendedHeightGridView gridView;
     private ArrayList<User> mUsers;
     private AudioPlayer audioPlayer;
-
-
-    private void startTimer(final int id, int time) {
-        timer = new Timer();
-
-        task = new TimerTask() {
-            @Override
-            public void run() {
-                audioPlayer.addAudio(id);
-                audioPlayer.playAudio();
-            }
-        };
-
-        timer.schedule(task, time);
-    }
 
 
     public UserFragment() {
@@ -102,9 +85,6 @@ public class UserFragment extends Fragment  {
             }
         });
         chooseButton.setImageResource(R.drawable.choose_disabled);
-
-        startTimer(R.raw.send_your_message_to_short, 0);
-        startTimer(R.raw.press_the_blue_button, 2000);
 
         return rootView;
     }

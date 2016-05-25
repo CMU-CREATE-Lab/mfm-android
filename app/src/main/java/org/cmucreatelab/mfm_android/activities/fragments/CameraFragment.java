@@ -45,7 +45,7 @@ public class CameraFragment extends Fragment {
     private AudioPlayer audioPlayer;
 
 
-    public static int getCameraOrientation(Activity activity) {
+    private static int getCameraOrientation(Activity activity) {
         int result = 0;
 
         Camera.CameraInfo info = new Camera.CameraInfo();

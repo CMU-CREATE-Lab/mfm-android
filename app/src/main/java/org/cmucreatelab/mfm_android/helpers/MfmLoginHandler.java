@@ -92,6 +92,8 @@ public class MfmLoginHandler {
         editor.putString(Constants.PreferencesKeys.kioskUid, (String) Constants.DEFAULT_SETTINGS.get(Constants.PreferencesKeys.kioskUid));
         editor.putString(Constants.PreferencesKeys.kioskSchoolName, (String) Constants.DEFAULT_SETTINGS.get(Constants.PreferencesKeys.kioskSchoolName));
         editor.apply();
+
+        DbHelper.clearAll(globalHandler.appContext);
     }
 
 }

@@ -6,7 +6,9 @@ import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +23,10 @@ import org.cmucreatelab.mfm_android.classes.Sender;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.AudioPlayer;
+import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
@@ -95,7 +99,19 @@ public class SessionInfoFragment extends Fragment {
 
         // Media content and send
         if (globalHandler.sessionHandler.getMessagePhoto() != null) {
-            int rotation = CameraFragment.getCameraOrientation(this.getActivity());
+            int orientation = 0;
+            int rotation = 0;
+            try {
+                ExifInterface exif = new ExifInterface(globalHandler.sessionHandler.getMessagePhoto().getAbsolutePath());
+                orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+                System.out.println(orientation);
+                if (orientation == 8) {
+                    rotation = 270;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             Matrix matrix = new Matrix();
             matrix.postRotate(rotation);
             Bitmap bitmap = BitmapFactory.decodeFile(globalHandler.sessionHandler.getMessagePhoto().getAbsolutePath());

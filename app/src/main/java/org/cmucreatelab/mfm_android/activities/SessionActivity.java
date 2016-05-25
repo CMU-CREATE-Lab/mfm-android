@@ -61,21 +61,6 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
     // class methods
 
 
-    private void startTimer() {
-        timer = new Timer();
-
-        task = new TimerTask() {
-            @Override
-            public void run() {
-                camera = new CameraFragment().newInstance();
-                showCamera();
-            }
-        };
-
-        timer.schedule(task, 500);
-    }
-
-
     private void showUsers() {
         globalHandler.appState = AppState.SESSION_USER;
 
@@ -159,7 +144,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
                 onRecipients();
             } else {
                 mGroup = (Group) mSender;
-                startTimer();
+                showCamera();
             }
         } else {
             mStudent = (Student) savedInstanceState.getSerializable(STUDENT_TAG);
@@ -191,7 +176,6 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
     @Override
     public void onUserSelected(User user, boolean isChecked, View v) {
         super.onButtonClick(globalHandler.appContext);
-        System.out.println(audioPlayer.playedBlueButton);
         if (audioPlayer.playedBlueButton == false) {
             audioPlayer.stop();
             audioPlayer.addAudio(R.raw.press_the_blue_button);
@@ -228,7 +212,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
             globalHandler.sessionHandler.setMessageRecipients(selectedUsers);
             showInfo();
             if (globalHandler.sessionHandler.getMessagePhoto() == null)
-                startTimer();
+                showCamera();
         }
     }
 

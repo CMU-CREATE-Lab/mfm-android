@@ -186,7 +186,6 @@ public class CameraFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-
         if (this.mCamera != null && this.mPreview != null) {
             this.mCamera.setPreviewCallback(null);
             this.mPreview.getHolder().removeCallback(this.mPreview);

@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.adapters.SchoolAdapter;
 import org.cmucreatelab.mfm_android.classes.School;
-import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 

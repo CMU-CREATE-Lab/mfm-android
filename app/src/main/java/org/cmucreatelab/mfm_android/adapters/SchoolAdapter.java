@@ -1,18 +1,14 @@
 package org.cmucreatelab.mfm_android.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.classes.School;
-import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 
 import java.util.ArrayList;
 

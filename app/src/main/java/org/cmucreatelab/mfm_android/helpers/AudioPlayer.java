@@ -1,13 +1,11 @@
 package org.cmucreatelab.mfm_android.helpers;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 
-import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 
 import java.io.IOException;

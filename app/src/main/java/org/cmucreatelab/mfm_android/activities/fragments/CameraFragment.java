@@ -10,10 +10,8 @@ import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.activities.SessionActivity;
@@ -147,10 +145,6 @@ public class CameraFragment extends Fragment {
             FileOutputStream fos = new FileOutputStream(picture);
             fos.write(possiblePhoto);
             fos.close();
-
-            String message = "Picture has been taken and saved.";
-            Toast toast = Toast.makeText(globalHandler.appContext, message, Toast.LENGTH_SHORT);
-            toast.show();
 
             // We may not need to save the image to any directory if we do this.
             globalHandler.sessionHandler.setMessagePhoto(picture);

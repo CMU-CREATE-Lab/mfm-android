@@ -3,6 +3,8 @@ package org.cmucreatelab.mfm_android.helpers.static_classes;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
+
+import org.cmucreatelab.mfm_android.classes.Sender;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import java.io.File;
@@ -24,14 +26,12 @@ public class SaveFileHandler {
         File mediaStorageDir = new File("","");
         File mediaFile;
 
-        // TODO - change the structure of the folder hierarchy
-        // TODO - possibly pass in a user/student/whatever instead of the global handler
-        // TODO handle when school is null
-        Student student = globalHandler.mfmLoginHandler.getSchool().getStudents().get(0);
+
+        String name = globalHandler.sessionHandler.getMessageSender().getName();
         if (type == MEDIA_TYPE_IMAGE) {
-            mediaStorageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), student.getFirstName() + "_" + student.getLastName());
+            mediaStorageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), name);
         } else if (type == MEDIA_TYPE_AUDIO) {
-            mediaStorageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC), student.getFirstName() + "_" + student.getLastName());
+            mediaStorageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_MUSIC), name);
         }
 
         if (! mediaStorageDir.exists()) {
@@ -43,10 +43,10 @@ public class SaveFileHandler {
 
         if (type == MEDIA_TYPE_IMAGE) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + student.getFirstName() + ".jpg");
+                    "IMG_" + name + ".jpg");
         } else if (type == MEDIA_TYPE_AUDIO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "AUDIO_" + student.getFirstName() + ".amr-nb");
+                    "AUDIO_" + name + ".amr-nb");
         } else {
             return null;
         }

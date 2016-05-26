@@ -3,10 +3,7 @@ package org.cmucreatelab.mfm_android.helpers;
 import android.content.Context;
 import android.media.MediaRecorder;
 import android.util.Log;
-import android.widget.Toast;
 
-import org.cmucreatelab.mfm_android.activities.SessionActivity;
-import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.SaveFileHandler;
 
@@ -45,10 +42,6 @@ public class AudioRecorder {
 
         this.mediaRecorder.start();
         this.isRecording = true;
-
-        String message = "Recording audio";
-        Toast toast = Toast.makeText(appContext, message, Toast.LENGTH_SHORT);
-        toast.show();
     }
 
 
@@ -57,10 +50,6 @@ public class AudioRecorder {
         this.mediaRecorder.release();
         this.mediaRecorder = null;
         this.isRecording = false;
-
-        String message = "Audio file has been saved.";
-        Toast toast = Toast.makeText(appContext, message, Toast.LENGTH_SHORT);
-        toast.show();
     }
 
 

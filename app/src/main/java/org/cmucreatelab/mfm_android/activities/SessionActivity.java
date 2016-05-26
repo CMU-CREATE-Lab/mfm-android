@@ -5,14 +5,19 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 
+import org.apache.commons.io.FileUtils;
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.activities.fragments.CameraFragment;
 import org.cmucreatelab.mfm_android.activities.fragments.SessionInfoFragment;
@@ -29,6 +34,8 @@ import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.FragmentHandler;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -235,8 +242,36 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
             ((ImageView) findViewById(R.id.f_session_info_media_audio)).setImageResource(R.drawable.soundwave_final);
             ((ImageView) findViewById(R.id.f_session_info_send)).setImageResource(R.drawable.send_up);
             audioRecorder.stopRecording();
-            audioPlayer.addAudio(R.raw.press_the_green_button);
-            audioPlayer.playAudio();
+
+            // playback the audio clip you recorded
+            File audioFile = globalHandler.sessionHandler.getMessageAudio();
+            if (audioFile != null) {
+                Uri.Builder uriBuilder = new Uri.Builder();
+                uriBuilder.appendPath(audioFile.getAbsolutePath());
+                Uri uri = uriBuilder.build();
+                Log.i(Constants.LOG_TAG, audioFile.getAbsolutePath());
+                MediaPlayer mediaPlayer = new MediaPlayer();
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mediaPlayer) {
+                        mediaPlayer.release();
+                        audioPlayer.addAudio(R.raw.press_the_green_button);
+                        audioPlayer.playAudio();
+                    }
+                });
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                try {
+                    mediaPlayer.setDataSource(this.getApplicationContext(), uri);
+                    mediaPlayer.prepare();
+                    mediaPlayer.start();
+                    Toast toast = Toast.makeText(this.getApplicationContext(), "Replaying audio recorded.", Toast.LENGTH_SHORT);
+                    toast.show();
+                } catch (IOException e) {
+                    Log.e(Constants.LOG_TAG, e.toString());
+                    Log.e(Constants.LOG_TAG, audioFile.getAbsolutePath());
+                }
+
+            }
         }
     }
 

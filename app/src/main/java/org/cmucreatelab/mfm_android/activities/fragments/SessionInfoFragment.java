@@ -104,8 +104,12 @@ public class SessionInfoFragment extends Fragment {
             try {
                 ExifInterface exif = new ExifInterface(globalHandler.sessionHandler.getMessagePhoto().getAbsolutePath());
                 orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
-                if (orientation == 8) {
+                if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
                     rotation = 270;
+                } else if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
+                    rotation = 90;
+                } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
+                    rotation = 180;
                 }
             } catch (IOException e) {
                 e.printStackTrace();

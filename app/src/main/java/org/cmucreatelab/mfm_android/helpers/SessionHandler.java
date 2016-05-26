@@ -1,7 +1,6 @@
 package org.cmucreatelab.mfm_android.helpers;
 
 
-import android.util.Base64;
 import android.util.Log;
 
 import org.apache.commons.io.FileUtils;

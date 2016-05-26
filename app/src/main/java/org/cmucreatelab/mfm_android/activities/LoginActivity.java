@@ -22,6 +22,7 @@ import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.activities.fragments.SchoolFragment;
 import org.cmucreatelab.mfm_android.classes.Refreshable;
 import org.cmucreatelab.mfm_android.classes.School;
+import org.cmucreatelab.mfm_android.helpers.AudioPlayer;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.FragmentHandler;
@@ -65,15 +66,19 @@ public class LoginActivity extends AppCompatActivity implements Refreshable, Sch
     @Override
     public void requestListSchoolsSuccess(ArrayList<School> schools) {
         globalHandler = GlobalHandler.getInstance(getApplicationContext());
-        showProgress(false);
-        this.schools  = SchoolFragment.newInstance(schools);
-        FragmentHandler.addFragment(this, R.id.login_schools_scrollable_container, this.schools, SCHOOL_TAG);
 
-        ScrollView scrollView = (ScrollView) findViewById(R.id.login_form);
-        scrollView.clearAnimation();
-        scrollView.setAnimation(null);
-        scrollView.setVisibility(View.INVISIBLE);
-        scrollView.removeAllViews();
+        if (schools.size() == 1) {
+            showProgress(true);
+            globalHandler.mfmRequestHandler.login(this, username, password, schools.get(0).getId().toString());
+        } else {
+            showProgress(false);
+            this.schools  = SchoolFragment.newInstance(schools);
+            FragmentHandler.addFragment(this, R.id.login_schools_scrollable_container, this.schools, SCHOOL_TAG);
+            ScrollView scrollView = (ScrollView) findViewById(R.id.login_form);
+            scrollView.removeAllViews();
+        }
+
+
     }
 
 
@@ -141,6 +146,13 @@ public class LoginActivity extends AppCompatActivity implements Refreshable, Sch
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
+        if (show) {
+            AudioPlayer audioPlayer = AudioPlayer.newInstance(this.getApplicationContext());
+            audioPlayer.addAudio(R.raw.please_wait);
+            audioPlayer.playAudio();
+        }
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -205,7 +217,6 @@ public class LoginActivity extends AppCompatActivity implements Refreshable, Sch
             focusView.requestFocus();
         } else {
             // Shows a progress bar and starts the background task of logging in.
-            showProgress(true);
             GlobalHandler.getInstance(getApplicationContext()).mfmRequestHandler.requestListSchools(this, username, password);
         }
     }
@@ -213,6 +224,7 @@ public class LoginActivity extends AppCompatActivity implements Refreshable, Sch
 
     @Override
     public void onSchoolSelected(School school) {
+        showProgress(true);
         globalHandler.mfmRequestHandler.login(this, username, password, school.getId().toString());
     }
 }

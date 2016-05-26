@@ -2,12 +2,14 @@ package org.cmucreatelab.mfm_android.classes;
 
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.DbHelper;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Steve on 3/14/2016.
  */
-public class School {
+public class School implements Serializable{
 
     // class attributes
     private int id;

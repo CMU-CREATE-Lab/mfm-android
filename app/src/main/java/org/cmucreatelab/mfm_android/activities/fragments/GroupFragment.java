@@ -71,7 +71,6 @@ public class GroupFragment extends Fragment {
         }
         this.gridView = (ExtendedHeightGridView) rootView.findViewById(R.id.gridViewGroup);
         this.gridView.setAdapter(new GroupAdapter(rootView.getContext(), this.mGroups));
-
         this.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 try {

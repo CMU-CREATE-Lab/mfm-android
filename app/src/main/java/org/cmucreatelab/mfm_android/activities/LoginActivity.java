@@ -2,33 +2,41 @@ package org.cmucreatelab.mfm_android.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
+import android.app.Fragment;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import org.cmucreatelab.mfm_android.R;
+import org.cmucreatelab.mfm_android.activities.fragments.SchoolFragment;
 import org.cmucreatelab.mfm_android.classes.Refreshable;
 import org.cmucreatelab.mfm_android.classes.School;
-import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
+import org.cmucreatelab.mfm_android.helpers.static_classes.FragmentHandler;
+
+import java.util.ArrayList;
+
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import android.annotation.TargetApi;
-import java.util.ArrayList;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements Refreshable {
+public class LoginActivity extends AppCompatActivity implements Refreshable, SchoolFragment.SchoolListener {
+
+    private static final String SCHOOL_TAG = "school";
 
     public boolean isStudentsDone;
     public boolean isGroupsDone;
@@ -39,6 +47,7 @@ public class LoginActivity extends AppCompatActivity implements Refreshable {
     private View mLoginFormView;
     private String username;
     private String password;
+    private Fragment schools;
 
 
     @Override
@@ -55,9 +64,16 @@ public class LoginActivity extends AppCompatActivity implements Refreshable {
     // If the user successfully belonged to a school, then this will be called.
     @Override
     public void requestListSchoolsSuccess(ArrayList<School> schools) {
-        // TODO do we just select the first school in the list?
         globalHandler = GlobalHandler.getInstance(getApplicationContext());
-        globalHandler.mfmRequestHandler.login(this, username, password, schools.get(0).getId().toString());
+        showProgress(false);
+        this.schools  = SchoolFragment.newInstance(schools);
+        FragmentHandler.addFragment(this, R.id.login_schools_scrollable_container, this.schools, SCHOOL_TAG);
+
+        ScrollView scrollView = (ScrollView) findViewById(R.id.login_form);
+        scrollView.clearAnimation();
+        scrollView.setAnimation(null);
+        scrollView.setVisibility(View.INVISIBLE);
+        scrollView.removeAllViews();
     }
 
 
@@ -192,6 +208,12 @@ public class LoginActivity extends AppCompatActivity implements Refreshable {
             showProgress(true);
             GlobalHandler.getInstance(getApplicationContext()).mfmRequestHandler.requestListSchools(this, username, password);
         }
+    }
+
+
+    @Override
+    public void onSchoolSelected(School school) {
+        globalHandler.mfmRequestHandler.login(this, username, password, school.getId().toString());
     }
 }
 

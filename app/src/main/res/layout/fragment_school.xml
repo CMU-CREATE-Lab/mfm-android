@@ -2,19 +2,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.cmucreatelab.mfm_android.activities.fragments.GroupFragment"
+    tools:context="org.cmucreatelab.mfm_android.activities.fragments.SchoolFragment"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Groups"
-        android:id="@+id/groupTitleLabel"
+        android:text="Schools"
+        android:id="@+id/schoolTitleLabel"
         android:textColor="#ffffffff"
         android:textSize="30sp"/>
 
     <org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView
-        android:id="@+id/gridViewGroup"
+        android:id="@+id/gridViewSchool"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:stretchMode="columnWidth"

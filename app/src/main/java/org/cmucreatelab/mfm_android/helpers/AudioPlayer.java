@@ -24,7 +24,7 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, Serializab
     public boolean playedBlueButton;
     private static AudioPlayer classInstance;
     private Context appContext;
-    private MediaPlayer mediaPlayer;
+    public MediaPlayer mediaPlayer;
     private ConcurrentLinkedQueue<Integer> fileIds;
 
 

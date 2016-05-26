@@ -16,8 +16,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-
-import org.apache.commons.io.FileUtils;
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.activities.fragments.CameraFragment;
 import org.cmucreatelab.mfm_android.activities.fragments.SessionInfoFragment;
@@ -246,11 +244,10 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
             // playback the audio clip you recorded
             File audioFile = globalHandler.sessionHandler.getMessageAudio();
             if (audioFile != null) {
-                Uri.Builder uriBuilder = new Uri.Builder();
-                uriBuilder.appendPath(audioFile.getAbsolutePath());
-                Uri uri = uriBuilder.build();
-                Log.i(Constants.LOG_TAG, audioFile.getAbsolutePath());
+                Uri uri = Uri.parse(audioFile.getAbsolutePath());
+                Log.i(Constants.LOG_TAG, uri.toString());
                 MediaPlayer mediaPlayer = new MediaPlayer();
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mediaPlayer) {
@@ -259,12 +256,11 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
                         audioPlayer.playAudio();
                     }
                 });
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 try {
                     mediaPlayer.setDataSource(this.getApplicationContext(), uri);
                     mediaPlayer.prepare();
                     mediaPlayer.start();
-                    Toast toast = Toast.makeText(this.getApplicationContext(), "Replaying audio recorded.", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(globalHandler.appContext, "Replaying audio recorded.", Toast.LENGTH_SHORT);
                     toast.show();
                 } catch (IOException e) {
                     Log.e(Constants.LOG_TAG, e.toString());

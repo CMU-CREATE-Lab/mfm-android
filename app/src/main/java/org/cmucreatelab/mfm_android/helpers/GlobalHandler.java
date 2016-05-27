@@ -10,6 +10,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
 import org.cmucreatelab.mfm_android.activities.LoginActivity;
+import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import org.cmucreatelab.mfm_android.classes.FormFile;
 import org.cmucreatelab.mfm_android.classes.FormValue;
 import org.cmucreatelab.mfm_android.classes.Group;
@@ -45,7 +46,7 @@ public class GlobalHandler {
     public AppState appState;
 
 
-    public void sendPost(byte[] photo, byte[] audio) {
+    public void sendPost(byte[] photo, byte[] audio, final SessionActivity activity) {
         int requestMethod = Request.Method.POST;
         String requestUrl = Constants.MFM_API_URL + "/api/v2/message";
 
@@ -53,12 +54,14 @@ public class GlobalHandler {
             @Override
             public void onResponse(JSONObject response) {
                 Log.i("GlobalHandler", "Got response: "+response.toString());
+                activity.success();
             }
         };
         Response.ErrorListener error = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("GlobalHandler", "Got ERROR: "+error.toString());
+                activity.fail();
             }
         };
 

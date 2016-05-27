@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import org.cmucreatelab.mfm_android.R;
+import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import org.cmucreatelab.mfm_android.adapters.GroupAdapter;
 import org.cmucreatelab.mfm_android.adapters.StudentAdapter;
 import org.cmucreatelab.mfm_android.adapters.UserAdapter;
@@ -149,7 +150,8 @@ public class SessionInfoFragment extends Fragment {
 
     @OnClick(R.id.f_session_info_send)
     public void onClickSend() {
-        if (globalHandler.sessionHandler.getMessageAudio() != null) {
+        if (globalHandler.sessionHandler.getMessageAudio() != null && !((SessionActivity) parentActivity).isSent) {
+            ((ImageView) rootView.findViewById(R.id.f_session_info_send)).setImageResource(R.drawable.send_down);
             ((SessionInfoListener) parentActivity).onSend();
         }
     }

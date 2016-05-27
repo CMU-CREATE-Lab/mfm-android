@@ -3,6 +3,7 @@ package org.cmucreatelab.mfm_android.activities;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
@@ -62,6 +63,8 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
     private Group mGroup;
     private AudioRecorder audioRecorder;
     private AudioPlayer audioPlayer;
+
+    public boolean isSent;
 
     // class methods
 
@@ -129,6 +132,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
         audioRecorder = new AudioRecorder(globalHandler.appContext);
         audioPlayer = AudioPlayer.newInstance(globalHandler.appContext);
         selectedUsers = new ArrayList<>();
+        isSent = false;
 
         if (savedInstanceState == null) {
             mSender = globalHandler.sessionHandler.getMessageSender();
@@ -238,7 +242,6 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
             audioRecorder.startRecording();
         } else {
             ((ImageView) findViewById(R.id.f_session_info_media_audio)).setImageResource(R.drawable.soundwave_final);
-            ((ImageView) findViewById(R.id.f_session_info_send)).setImageResource(R.drawable.send_up);
             audioRecorder.stopRecording();
 
             // playback the audio clip you recorded
@@ -252,6 +255,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
                     @Override
                     public void onCompletion(MediaPlayer mediaPlayer) {
                         mediaPlayer.release();
+                        ((ImageView) findViewById(R.id.f_session_info_send)).setImageResource(R.drawable.send_up);
                         audioPlayer.addAudio(R.raw.press_the_green_button);
                         audioPlayer.playAudio();
                     }
@@ -276,6 +280,35 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
         super.onButtonClick(globalHandler.appContext);
         audioPlayer.stop();
         if (!audioRecorder.isRecording)
-            globalHandler.sessionHandler.sendMessage();
+            globalHandler.sessionHandler.sendMessage(this);
+    }
+
+
+    public void success() {
+        Uri uri = Uri.parse("android.resource://" + globalHandler.appContext.getPackageName() + "/" + R.raw.your_message_has_been_sent);
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                Intent intent = new Intent(globalHandler.appContext, SelectionActivity.class);
+                startActivity(intent);
+            }
+        });
+        try {
+            mediaPlayer.setDataSource(globalHandler.appContext, uri);
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mediaPlayer.start();
+        isSent = true;
+    }
+
+
+    public void fail() {
+        isSent = false;
+        Toast toast = Toast.makeText(this, "Your message failed to send.", Toast.LENGTH_LONG);
+        toast.show();
     }
 }

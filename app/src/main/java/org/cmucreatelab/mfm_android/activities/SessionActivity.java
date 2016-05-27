@@ -291,6 +291,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
+                mediaPlayer.release();
                 Intent intent = new Intent(globalHandler.appContext, SelectionActivity.class);
                 startActivity(intent);
             }

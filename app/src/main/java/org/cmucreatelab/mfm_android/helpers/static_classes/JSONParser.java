@@ -36,7 +36,7 @@ public class JSONParser {
         Group group = new Group();
         group.setId(id);
         group.setUpdatedAt(updatedAt);
-        group.setPhotoUrl(thumbPhotoUrl);
+        group.setPhotoUrl(thumbPolaroidUrl);
 
         // students, studentids and name do not get taken care of here
 
@@ -58,7 +58,7 @@ public class JSONParser {
         Student student = new Student();
         student.setId(id);
         student.setUpdatedAt(updatedAt);
-        student.setPhotoUrl(thumbPhotoUrl);
+        student.setPhotoUrl(thumbPolaroidUrl);
 
         // firstname, lastname and users do not get taken care of here
 
@@ -68,6 +68,7 @@ public class JSONParser {
 
     private static User parseUserFromJson(JSONObject row) throws JSONException {
         Log.i(Constants.LOG_TAG, "parseUserFromJson");
+        Log.d(Constants.LOG_TAG, row.toString());
         // parse values
         Integer id = row.getInt("id");
         String firstName = row.getString("first_name");
@@ -76,6 +77,8 @@ public class JSONParser {
         String studentUserRole = row.getString("student_user_role");
         String mediumPhotoUrl = row.getString("medium_photo_url");
         String thumbPhotoUrl = row.getString("thumb_photo_url");
+        String mediumPolaroidUrl = row.getString("medium_polaroid_url");
+        String thumbPolaroidUrl = row.getString("thumb_polaroid_url");
 
 
         // create object
@@ -85,7 +88,7 @@ public class JSONParser {
         user.setLastName(lastName);
         user.setUpdatedAt(updatedAt);
         user.setStudentUserRole(studentUserRole);
-        user.setPhotoUrl(thumbPhotoUrl);
+        user.setPhotoUrl(mediumPolaroidUrl);
 
         return user;
     }
@@ -164,7 +167,10 @@ public class JSONParser {
         Integer id = groupJson.getInt("id");
         String name = groupJson.getString("name");
         String updatedAt = groupJson.getString("updated_at");
+        String mediumPhotoUrl = groupJson.getString("medium_photo_url");
         String thumbPhotoUrl = groupJson.getString("thumb_photo_url");
+        String mediumPolaroidUrl = groupJson.getString("medium_polaroid_url");
+        String thumbPolaroidUrl = groupJson.getString("thumb_polaroid_url");
         ArrayList<Integer> studentIds = JSONParser.parseStudentIdsInGroup(groupJson);
 
         // create group
@@ -172,7 +178,7 @@ public class JSONParser {
         result.setId(id);
         result.setName(name);
         result.setUpdatedAt(updatedAt);
-        result.setPhotoUrl(thumbPhotoUrl);
+        result.setPhotoUrl(mediumPolaroidUrl);
 
         ArrayList<Student> groupStudents = new ArrayList<>();
         for (int i = 0; i < studentIds.size(); i++) {
@@ -187,6 +193,7 @@ public class JSONParser {
     public static Student parseStudentBasedOffId(JSONObject row) throws JSONException {
         // parse values
         Log.i(Constants.LOG_TAG, "parseStudentBasedOffId");
+        Log.i(Constants.LOG_TAG, row.toString());
         JSONObject studentJson = row.getJSONObject("student");
         Integer id = studentJson.getInt("id");
         String firstName = studentJson.getString("first_name");
@@ -204,7 +211,7 @@ public class JSONParser {
         result.setFirstName(firstName);
         result.setLastName(lastName);
         result.setUpdatedAt(updatedAt);
-        result.setPhotoUrl(thumbPhotoUrl);
+        result.setPhotoUrl(mediumPolaroidUrl);
         // set the student that belongs to each of the users
         for (User user : users) {
             user.setStudent(result);

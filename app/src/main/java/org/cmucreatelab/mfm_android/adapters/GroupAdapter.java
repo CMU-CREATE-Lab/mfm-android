@@ -27,7 +27,6 @@ public class GroupAdapter extends BaseAdapter {
 
     private static class ViewHolder {
         ImageView groupPhotoView;
-        TextView groupName;
     }
 
 
@@ -63,7 +62,6 @@ public class GroupAdapter extends BaseAdapter {
             view = LayoutInflater.from(mContext).inflate(R.layout.group_list_item, null);
             holder = new ViewHolder();
             holder.groupPhotoView = (ImageView) view.findViewById(R.id.groupPhotoImageView);
-            holder.groupName = (TextView) view.findViewById(R.id.groupNameTextView);
 
             view.setTag(holder);
         } else {
@@ -74,7 +72,6 @@ public class GroupAdapter extends BaseAdapter {
         String photoUrl = group.getPhotoUrl();
         String url = Constants.MFM_API_URL + photoUrl;
 
-        holder.groupName.setText(group.getName());
         Picasso.with(mContext).load(url).into(holder.groupPhotoView);
 
         return view;

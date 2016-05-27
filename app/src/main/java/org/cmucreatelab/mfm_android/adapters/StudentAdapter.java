@@ -22,7 +22,6 @@ public class StudentAdapter extends BaseAdapter {
     //allows to reuse views when the list is long
     private static class ViewHolder {
         ImageView studentPhotoView;
-        TextView studentName;
     }
 
 
@@ -58,7 +57,6 @@ public class StudentAdapter extends BaseAdapter {
             view = LayoutInflater.from(mContext).inflate(R.layout.student_list_item, null);
             holder = new ViewHolder();
             holder.studentPhotoView = (ImageView) view.findViewById(R.id.studentPhotoImageView);
-            holder.studentName = (TextView) view.findViewById(R.id.studentNameTextView);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
@@ -68,7 +66,6 @@ public class StudentAdapter extends BaseAdapter {
         String photoUrl = student.getPhotoUrl();
         String url = Constants.MFM_API_URL + photoUrl;
 
-        holder.studentName.setText(student.getFirstName() + " " + student.getLastName());
         Picasso.with(mContext).load(url).into(holder.studentPhotoView);
 
         return view;

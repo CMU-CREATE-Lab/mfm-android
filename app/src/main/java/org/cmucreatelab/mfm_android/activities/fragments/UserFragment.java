@@ -88,7 +88,6 @@ public class UserFragment extends Fragment  {
 
     @OnClick(R.id.selection_done_selecting_users)
     public void doneSelectingUsers() {
-        ((ImageView) rootView.findViewById(R.id.selection_done_selecting_users)).setImageResource(R.drawable.choose_down);
         ((UserListener) parentActivity).onDoneSelectingUsers();
     }
 

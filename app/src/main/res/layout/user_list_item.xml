@@ -11,21 +11,10 @@
 
         <ImageView
             android:id="@+id/userPhotoImageView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"/>
-
-        <TextView
-            android:id="@+id/userNameTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_below="@id/userPhotoImageView"
-            android:textColor="@color/Black"
-            android:background="@color/White"
-            android:layout_alignRight="@+id/userPhotoImageView"
-            android:layout_alignEnd="@+id/userPhotoImageView"/>
 
     </RelativeLayout>
 

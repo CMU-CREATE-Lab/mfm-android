@@ -6,20 +6,9 @@
 
     <ImageView
         android:id="@+id/groupPhotoImageView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         android:adjustViewBounds="true" />
-
-    <TextView
-        android:id="@+id/groupNameTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_below="@id/groupPhotoImageView"
-        android:textColor="@color/Black"
-        android:background="@color/White"
-        android:layout_alignRight="@+id/groupPhotoImageView"
-        android:layout_alignEnd="@+id/groupPhotoImageView"/>
 
 </RelativeLayout>

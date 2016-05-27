@@ -13,7 +13,7 @@ public class Constants {
 
     public static final String APP_VERSION = "1.0";
 
-    public static final String MFM_API_URL = "http://dev.messagefromme.org";
+    public static final String MFM_API_URL = "http://messagefromme.org";
 
     public static final int CAMERA_ID = 0;
 

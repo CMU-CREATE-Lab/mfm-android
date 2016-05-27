@@ -216,6 +216,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
     @Override
     public void onDoneSelectingUsers() {
         if (!selectedUsers.isEmpty()) {
+            ((ImageView) findViewById(R.id.selection_done_selecting_users)).setImageResource(R.drawable.choose_down);
             audioPlayer.stop();
             super.onButtonClick(globalHandler.appContext);
             globalHandler.sessionHandler.setMessageRecipients(selectedUsers);

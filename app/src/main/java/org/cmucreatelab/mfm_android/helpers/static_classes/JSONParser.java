@@ -99,7 +99,7 @@ public class JSONParser {
         ArrayList<Integer> ids = new ArrayList<>();
 
         // parse values
-        JSONArray values = row.getJSONArray("student_ids_in_group");
+        JSONArray values = row.getJSONArray("active_student_ids_in_group");
         int size = values.length();
         for (int i = 0; i < size; i++) {
             ids.add(values.getInt(i));
@@ -163,7 +163,7 @@ public class JSONParser {
     public static Group parseGroupBasedOffId(JSONObject row, GlobalHandler globalHandler) throws JSONException {
         // parse values
         Log.i(Constants.LOG_TAG, "parseGroupBasedOffId");
-        JSONObject groupJson = row.getJSONObject("student");
+        JSONObject groupJson = row.getJSONObject("group");
         Integer id = groupJson.getInt("id");
         String name = groupJson.getString("name");
         String updatedAt = groupJson.getString("updated_at");

@@ -20,23 +20,20 @@
             android:padding="5dp">
 
             <TextView
+                android:id="@+id/fromText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="From:"
+                android:textStyle="italic"
+                android:textSize="30dp"
                 android:textColor="@color/White"/>
 
-            <ScrollView
+            <org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView
+                android:id="@+id/f_session_info_from"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView
-                    android:id="@+id/f_session_info_from"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:numColumns="1">
-                </org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView>
-
-            </ScrollView>
+                android:layout_height="wrap_content"
+                android:numColumns="auto_fit">
+            </org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView>
 
         </LinearLayout>
 
@@ -52,6 +49,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="To:"
+                android:textStyle="italic"
+                android:textSize="30dp"
                 android:textColor="@color/White"/>
 
             <ScrollView
@@ -62,7 +61,7 @@
                     android:id="@+id/f_session_info_recipients"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:numColumns="1">
+                    android:numColumns="auto_fit">
                 </org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView>
 
             </ScrollView>

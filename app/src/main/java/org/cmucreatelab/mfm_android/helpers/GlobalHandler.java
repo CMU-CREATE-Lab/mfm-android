@@ -66,7 +66,6 @@ public class GlobalHandler {
         };
 
         String senderType = sessionHandler.getMessageSender().getSenderType().toString();
-        Log.i(Constants.LOG_TAG, senderType);
         HashMap<String,FormValue> formElements = new HashMap<>();
         formElements.put("photo", new FormFile("photo.jpg","image/jpeg",photo));
         formElements.put("audio", new FormFile("audio.amr-nb","audio/amr-nb",audio));
@@ -89,6 +88,7 @@ public class GlobalHandler {
     }
 
 
+    int count;
     public void checkAndUpdateStudents(ArrayList<Student> studentsFromMfmRequest, final Refreshable activity) {
         if (mfmLoginHandler.kioskIsLoggedIn) {
             School school = mfmLoginHandler.getSchool();
@@ -148,6 +148,7 @@ public class GlobalHandler {
             Log.e(Constants.LOG_TAG, "Tried to checkAndUpdateGroups with Kiosk not logged in");
         }
         // To make sure the list of students and groups are populated before displaying them.
+
         // I would get empty lists every so often and would have to refresh the activity.
         // I hate how I'm doing this...
         if (activity.getClass().getSimpleName().equals(LoginActivity.class.getSimpleName()))

@@ -63,8 +63,10 @@ public class SelectionActivity extends OnButtonClickAudio implements Refreshable
         globalHandler.appState = AppState.SELECTION_ORDER_BY_GROUP;
         isOrderByGroup = true;
 
+        groups = GroupFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getGroups());
         FragmentManager fm = this.getFragmentManager();
         FragmentHandler.hideFragment(this, fm.findFragmentByTag(STUDENT_TAG));
+        FragmentHandler.replaceFragment(this, R.id.selection_groups_scrollable_container, groups, GROUP_TAG);
     }
 
 

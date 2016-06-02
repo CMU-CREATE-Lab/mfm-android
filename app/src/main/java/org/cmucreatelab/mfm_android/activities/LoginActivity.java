@@ -138,6 +138,12 @@ public class LoginActivity extends AppCompatActivity implements Refreshable, Sch
     }
 
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
+
     /**
      * Shows the progress UI and hides the login form.
      */

@@ -88,11 +88,13 @@ public class GlobalHandler {
     }
 
 
-    int count;
     public void checkAndUpdateStudents(ArrayList<Student> studentsFromMfmRequest, final Refreshable activity) {
         if (mfmLoginHandler.kioskIsLoggedIn) {
             School school = mfmLoginHandler.getSchool();
             ArrayList<Student> studentsFromDB = school.getStudents();
+
+            Log.i(Constants.LOG_TAG, "GlobalHandler " + String.format("%d", studentsFromDB.size()));
+            Log.i(Constants.LOG_TAG, "GlobalHandler " + String.format("%d", studentsFromMfmRequest.size()));
 
             // for ever student in the list of students from - mfmRequestHandler.requestListStudents();
             for (Student mfmStudent : studentsFromMfmRequest) {

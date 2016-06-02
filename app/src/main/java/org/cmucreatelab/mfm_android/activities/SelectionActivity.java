@@ -99,8 +99,8 @@ public class SelectionActivity extends OnButtonClickAudio implements Refreshable
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
         schoolName = globalHandler.mfmLoginHandler.getSchool().getName();
 
-        Log.d(Constants.LOG_TAG, String.format("%d", globalHandler.mfmLoginHandler.getSchool().getStudents().size()));
-        Log.d(Constants.LOG_TAG, String.format("%d", globalHandler.mfmLoginHandler.getSchool().getGroups().size()));
+        Log.d(Constants.LOG_TAG, "Selection activity " + String.format("%d", globalHandler.mfmLoginHandler.getSchool().getStudents().size()));
+        Log.d(Constants.LOG_TAG, "Selection activity " + String.format("%d", globalHandler.mfmLoginHandler.getSchool().getGroups().size()));
 
         swipeLayout = (SwipeRefreshLayout) findViewById(R.id.selection_swipe_layout);
         final Refreshable thisActivity = this;
@@ -139,6 +139,13 @@ public class SelectionActivity extends OnButtonClickAudio implements Refreshable
         }
     }
 
+
+    @Override
+    protected void onStop() {
+        Log.i(Constants.LOG_TAG, "stopping app");
+        this.finish();
+        super.onStop();
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle out) {
@@ -187,6 +194,7 @@ public class SelectionActivity extends OnButtonClickAudio implements Refreshable
             globalHandler.sessionHandler.startSession(group);
             Intent intent = new Intent(this, SessionActivity.class);
             startActivity(intent);
+            finish();
         } else {
             selectedGroup = group;
             showGroup();
@@ -200,6 +208,7 @@ public class SelectionActivity extends OnButtonClickAudio implements Refreshable
         globalHandler.sessionHandler.startSession(student);
         Intent intent = new Intent(this, SessionActivity.class);
         startActivity(intent);
+        finish();
     }
 
     // TODO - clean this up so I do not have to have empty overrides...

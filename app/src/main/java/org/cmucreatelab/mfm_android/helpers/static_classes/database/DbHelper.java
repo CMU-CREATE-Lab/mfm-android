@@ -19,13 +19,20 @@ import java.util.ArrayList;
 public class DbHelper {
 
 
-    public static void clearAll(Context context) {
-        MessageFromMeSQLLiteOpenHelper md = new MessageFromMeSQLLiteOpenHelper(context);
-        SQLiteDatabase db = md.getWritableDatabase();
-        db.delete(GroupContract.TABLE_NAME, null, null);
-        db.delete(StudentContract.TABLE_NAME, null, null);
-        db.delete(StudentGroupContract.TABLE_NAME, null, null);
-        db.delete(UserContract.TABLE_NAME, null, null);
+    public static void clearAll(GlobalHandler globalHandler) {
+        ArrayList<Student> students = globalHandler.mfmLoginHandler.getSchool().getStudents();
+        ArrayList<Group> groups = globalHandler.mfmLoginHandler.getSchool().getGroups();
+
+        for (Student student : students) {
+            UserDbHelper.destroyAllFromStudent(globalHandler.appContext, student.getId());
+            StudentGroupDbHelper.destroyAllFromStudent(globalHandler.appContext, student.getId());
+            StudentDbHelper.destroy(globalHandler.appContext, student);
+        }
+
+        for (Group group : groups) {
+            StudentGroupDbHelper.destroyAllFromStudent(globalHandler.appContext, group.getId());
+            GroupDbHelper.destroy(globalHandler.appContext, group);
+        }
     }
 
 
@@ -73,9 +80,19 @@ public class DbHelper {
             for (Group group : dbGroups) {
                 school.addGroup(group);
             }
+            Log.d(Constants.LOG_TAG, "load from db " + String.format("%d", school.getStudents().size()));
+            Log.d(Constants.LOG_TAG, "load from db " + String.format("%d", school.getGroups().size()));
         } else {
             Log.e(Constants.LOG_TAG, "trying to load from database but Kiosk is not logged in.");
         }
+    }
+
+
+    public static void closeDB(Context context) {
+        MessageFromMeSQLLiteOpenHelper mdb = MessageFromMeSQLLiteOpenHelper.getInstance(context);
+        SQLiteDatabase db = mdb.getWritableDatabase();
+        mdb.close();
+        db.close();
     }
 
 }

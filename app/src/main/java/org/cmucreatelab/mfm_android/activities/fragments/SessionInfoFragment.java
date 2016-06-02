@@ -205,12 +205,13 @@ public class SessionInfoFragment extends Fragment {
                 int height = fromLL.getHeight();
                 int orientation = getScreenOrientation();
 
+                //  TODO - more orientations
                 if (orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
                     // 1 is 100%
                     // .15 is 15%
                     // 15% of the Linear Layout height is taken up by the toLL
                     fromView.setColumnWidth((int) ((height * (1-.15))/(1+.15)));
-                } else {
+                } else if(orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
                     TextView fromText = (TextView) rootView.findViewById(R.id.fromText);
                     int heightText = fromText.getHeight();
                     height -= heightText;

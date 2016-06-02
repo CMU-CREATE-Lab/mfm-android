@@ -64,7 +64,7 @@ public class StudentDbHelper {
         String[] selectionArgs = { String.valueOf(student.getDatabaseId()) };
         int resultInt;
 
-        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
+        mDbHelper = MessageFromMeSQLLiteOpenHelper.getInstance(context);
         db = mDbHelper.getWritableDatabase();
         resultInt = db.delete(StudentContract.TABLE_NAME, selection, selectionArgs);
         if (resultInt == 1) {
@@ -90,7 +90,7 @@ public class StudentDbHelper {
         ContentValues values;
         long newId;
 
-        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
+        mDbHelper = MessageFromMeSQLLiteOpenHelper.getInstance(context);
         db = mDbHelper.getWritableDatabase();
         values = new ContentValues();
         values.put(StudentContract.COLUMN_FIRST_NAME, student.getFirstName());
@@ -121,7 +121,7 @@ public class StudentDbHelper {
             int result;
             ContentValues contentValues;
 
-            mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
+            mDbHelper = MessageFromMeSQLLiteOpenHelper.getInstance(context);
             db = mDbHelper.getWritableDatabase();
 
             // find values to be updated
@@ -165,7 +165,7 @@ public class StudentDbHelper {
         MessageFromMeSQLLiteOpenHelper mDbHelper;
         SQLiteDatabase db;
         Cursor cursor;
-        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
+        mDbHelper = MessageFromMeSQLLiteOpenHelper.getInstance(context);
         db = mDbHelper.getWritableDatabase();
         cursor = db.query(StudentContract.TABLE_NAME, projection,
                 null, null, // columns and values for WHERE clause

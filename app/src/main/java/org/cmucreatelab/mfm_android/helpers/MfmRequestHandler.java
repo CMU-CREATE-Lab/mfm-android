@@ -86,7 +86,7 @@ public class MfmRequestHandler {
 
     public void updateStudent(final Student student) {
         int requestMethod;
-        String requestUrl;
+        final String requestUrl;
         Response.Listener<JSONObject> response;
 
         requestMethod = Request.Method.GET;
@@ -110,6 +110,7 @@ public class MfmRequestHandler {
 
                     // update user objects
                     ArrayList<User> users = student.getUsers();
+                    Log.i(Constants.LOG_TAG, "request " + String.format("%d", student.getUsers().size()));
                     for (User user: users) {
                         user.setStudent(student);
                     }

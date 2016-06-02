@@ -62,7 +62,7 @@ public class GroupDbHelper {
         String[] selectionArgs = { String.valueOf(group.getDatabaseId()) };
         int resultInt;
 
-        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
+        mDbHelper = MessageFromMeSQLLiteOpenHelper.getInstance(context);
         db = mDbHelper.getWritableDatabase();
         resultInt = db.delete(GroupContract.TABLE_NAME, selection, selectionArgs);
         if (resultInt == 1) {
@@ -86,7 +86,7 @@ public class GroupDbHelper {
         ContentValues values;
         long newId;
 
-        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
+        mDbHelper = MessageFromMeSQLLiteOpenHelper.getInstance(context);
         db = mDbHelper.getWritableDatabase();
         values = new ContentValues();
         values.put(GroupContract.COLUMN_NAME, group.getName());
@@ -116,7 +116,7 @@ public class GroupDbHelper {
             int result;
             ContentValues contentValues;
 
-            mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
+            mDbHelper = MessageFromMeSQLLiteOpenHelper.getInstance(context);
             db = mDbHelper.getWritableDatabase();
 
             // find values to be updated
@@ -157,7 +157,7 @@ public class GroupDbHelper {
         SQLiteDatabase db;
         Cursor cursor;
 
-        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
+        mDbHelper = MessageFromMeSQLLiteOpenHelper.getInstance(context);
         db = mDbHelper.getWritableDatabase();
         cursor = db.query(GroupContract.TABLE_NAME, projection,
                 null, null, // columns and values for WHERE clause

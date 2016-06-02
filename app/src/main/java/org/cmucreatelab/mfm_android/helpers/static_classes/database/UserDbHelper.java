@@ -63,7 +63,7 @@ public class UserDbHelper {
         String[] selectionArgs = {String.valueOf(studentId)};
         int resultInt;
 
-        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
+        mDbHelper = MessageFromMeSQLLiteOpenHelper.getInstance(context);
         db = mDbHelper.getWritableDatabase();
         resultInt = db.delete(UserContract.TABLE_NAME, selection, selectionArgs);
         if (resultInt > 0) {
@@ -80,7 +80,7 @@ public class UserDbHelper {
         ContentValues values;
         long newId;
 
-        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
+        mDbHelper = MessageFromMeSQLLiteOpenHelper.getInstance(context);
         db = mDbHelper.getWritableDatabase();
         values = new ContentValues();
         values.put(UserContract.COLUMN_FIRST_NAME, user.getFirstName());
@@ -91,6 +91,8 @@ public class UserDbHelper {
         values.put(UserContract.COLUMN_PHOTO_URL, user.getPhotoUrl());
         values.put(UserContract.COLUMN_UPDATED_AT, user.getUpdatedAt());
         newId = db.insert(UserContract.TABLE_NAME, "null", values);
+
+        Log.i(Constants.LOG_TAG, String.format("%d", user.getStudent().getId()));
 
         user.setDatabaseId(newId);
         Log.i(Constants.LOG_TAG, "inserted new user _id=" + newId);
@@ -116,7 +118,7 @@ public class UserDbHelper {
         SQLiteDatabase db;
         Cursor cursor;
 
-        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
+        mDbHelper = MessageFromMeSQLLiteOpenHelper.getInstance(context);
         db = mDbHelper.getWritableDatabase();
         cursor = db.query(UserContract.TABLE_NAME, projection,
                 selection, selectionArgs, // columns and values for WHERE clause

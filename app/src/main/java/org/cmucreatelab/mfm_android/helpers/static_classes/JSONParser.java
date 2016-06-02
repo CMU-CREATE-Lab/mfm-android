@@ -36,7 +36,7 @@ public class JSONParser {
         Group group = new Group();
         group.setId(id);
         group.setUpdatedAt(updatedAt);
-        group.setPhotoUrl(thumbPolaroidUrl);
+        group.setPhotoUrl(mediumPolaroidUrl);
 
         // students, studentids and name do not get taken care of here
 
@@ -58,7 +58,7 @@ public class JSONParser {
         Student student = new Student();
         student.setId(id);
         student.setUpdatedAt(updatedAt);
-        student.setPhotoUrl(thumbPolaroidUrl);
+        student.setPhotoUrl(mediumPolaroidUrl);
 
         // firstname, lastname and users do not get taken care of here
 
@@ -68,7 +68,6 @@ public class JSONParser {
 
     private static User parseUserFromJson(JSONObject row) throws JSONException {
         Log.i(Constants.LOG_TAG, "parseUserFromJson");
-        Log.d(Constants.LOG_TAG, row.toString());
         // parse values
         Integer id = row.getInt("id");
         String firstName = row.getString("first_name");
@@ -193,7 +192,6 @@ public class JSONParser {
     public static Student parseStudentBasedOffId(JSONObject row) throws JSONException {
         // parse values
         Log.i(Constants.LOG_TAG, "parseStudentBasedOffId");
-        Log.i(Constants.LOG_TAG, row.toString());
         JSONObject studentJson = row.getJSONObject("student");
         Integer id = studentJson.getInt("id");
         String firstName = studentJson.getString("first_name");

@@ -24,7 +24,7 @@ public class StudentGroupDbHelper {
         String[] selectionArgs = {String.valueOf(studentId)};
         int resultInt;
 
-        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
+        mDbHelper = MessageFromMeSQLLiteOpenHelper.getInstance(context);
         db = mDbHelper.getWritableDatabase();
         resultInt = db.delete(StudentGroupContract.TABLE_NAME, selection, selectionArgs);
         if (resultInt > 0) {
@@ -42,7 +42,7 @@ public class StudentGroupDbHelper {
         String[] selectionArgs = {String.valueOf(groupId)};
         int resultInt;
 
-        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
+        mDbHelper = MessageFromMeSQLLiteOpenHelper.getInstance(context);
         db = mDbHelper.getWritableDatabase();
         resultInt = db.delete(StudentGroupContract.TABLE_NAME, selection, selectionArgs);
         if (resultInt > 0) {
@@ -59,7 +59,7 @@ public class StudentGroupDbHelper {
         ContentValues values;
         long newGroupId, newStudentId;
 
-        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
+        mDbHelper = MessageFromMeSQLLiteOpenHelper.getInstance(context);
         db = mDbHelper.getWritableDatabase();
         values = new ContentValues();
         values.put(StudentGroupContract.COLUMN_GROUP_ID, String.valueOf(group.getId()));
@@ -84,7 +84,7 @@ public class StudentGroupDbHelper {
         SQLiteDatabase db;
         Cursor cursor;
 
-        mDbHelper = new MessageFromMeSQLLiteOpenHelper(context);
+        mDbHelper = MessageFromMeSQLLiteOpenHelper.getInstance(context);
         db = mDbHelper.getWritableDatabase();
         cursor = db.query(StudentGroupContract.TABLE_NAME, projection,
                 selection, selectionArgs, // columns and values for WHERE clause

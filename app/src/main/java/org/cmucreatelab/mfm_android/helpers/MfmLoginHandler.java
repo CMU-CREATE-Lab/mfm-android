@@ -75,10 +75,12 @@ public class MfmLoginHandler {
 
         // load from database
         DbHelper.loadFromDb(globalHandler.appContext);
+        DbHelper.closeDB(globalHandler.appContext);
     }
 
 
     public void logout() {
+        DbHelper.clearAll(globalHandler);
 
         this.kioskIsLoggedIn = false;
         if (this.kiosk != null) {
@@ -92,8 +94,6 @@ public class MfmLoginHandler {
         editor.putString(Constants.PreferencesKeys.kioskUid, (String) Constants.DEFAULT_SETTINGS.get(Constants.PreferencesKeys.kioskUid));
         editor.putString(Constants.PreferencesKeys.kioskSchoolName, (String) Constants.DEFAULT_SETTINGS.get(Constants.PreferencesKeys.kioskSchoolName));
         editor.apply();
-
-        DbHelper.clearAll(globalHandler.appContext);
     }
 
 }

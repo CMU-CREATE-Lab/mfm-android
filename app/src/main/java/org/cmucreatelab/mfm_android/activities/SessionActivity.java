@@ -197,7 +197,7 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
             Log.i(Constants.LOG_TAG, "Selected " + user.getId() + " to be added to the recipients list.");
             GradientDrawable drawable = new GradientDrawable();
             drawable.setShape(GradientDrawable.RECTANGLE);
-            drawable.setStroke(5, Color.GREEN);
+            drawable.setStroke(50, Color.GREEN);
             Log.i(Constants.LOG_TAG, ((ViewGroup) v).getChildAt(0).toString());
             ((ViewGroup) v).getChildAt(0).setBackgroundDrawable(drawable);
         } else {

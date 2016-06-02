@@ -162,6 +162,7 @@ public class SelectionActivity extends OnButtonClickAudio implements Refreshable
         //noinspection SimplifiableIfStatement
         if (id == R.id.logout) {
             GlobalHandler.getInstance(this.getApplicationContext()).mfmRequestHandler.logout(this);
+            finish();
             return true;
         } else if (id == R.id.orderByGroup) {
             orderByGroup();
@@ -183,7 +184,6 @@ public class SelectionActivity extends OnButtonClickAudio implements Refreshable
             globalHandler.sessionHandler.startSession(group);
             Intent intent = new Intent(this, SessionActivity.class);
             startActivity(intent);
-            finish();
         } else {
             selectedGroup = group;
             showGroup();
@@ -197,7 +197,6 @@ public class SelectionActivity extends OnButtonClickAudio implements Refreshable
         globalHandler.sessionHandler.startSession(student);
         Intent intent = new Intent(this, SessionActivity.class);
         startActivity(intent);
-        finish();
     }
 
     // TODO - clean this up so I do not have to have empty overrides...

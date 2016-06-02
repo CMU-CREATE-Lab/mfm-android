@@ -172,7 +172,7 @@ public class CameraFragment extends Fragment {
 
             // We may not need to save the image to any directory if we do this.
             globalHandler.sessionHandler.setMessagePhoto(picture);
-            ((SessionActivity) this.getActivity()).pictureTaken();
+            ((CameraListener) this.getActivity()).onPictureTaken();
 
         } catch (FileNotFoundException e) {
             Log.e(Constants.LOG_TAG, "File not found: " + e.getMessage());
@@ -211,6 +211,10 @@ public class CameraFragment extends Fragment {
             this.mCamera = null;
             this.mPreview = null;
         }
+    }
+
+    public interface CameraListener {
+        public void onPictureTaken();
     }
 
 }

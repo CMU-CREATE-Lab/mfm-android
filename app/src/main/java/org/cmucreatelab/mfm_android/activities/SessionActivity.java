@@ -43,7 +43,8 @@ import java.util.TimerTask;
 
 
 // TODO - may add interfaces to the fragments that use this activity....similar to SelectionActivity
-public class SessionActivity extends OnButtonClickAudio implements UserFragment.UserListener,
+public class SessionActivity extends OnButtonClickAudio implements CameraFragment.CameraListener,
+                                                                UserFragment.UserListener,
                                                                 SessionInfoFragment.SessionInfoListener{
 
     private final String STUDENT_TAG = "student";
@@ -104,27 +105,6 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
     }
 
 
-    public void pictureTaken() {
-        audioPlayer.addAudio(R.raw.what_did_take);
-        audioPlayer.playAudio();
-        showInfo();
-    }
-
-
-    public void onRecipients() {
-        if (mSender.getSenderType() == Sender.Type.student) {
-            audioPlayer.stop();
-            audioPlayer.addAudio(R.raw.send_your_message_to_short);
-            audioPlayer.playAudio();
-            showUsers();
-
-            // reset the message and audio
-            globalHandler.sessionHandler.setMessagePhoto(null);
-            globalHandler.sessionHandler.setMessageAudio(null);
-        }
-    }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,7 +132,10 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
                 users = UserFragment.newInstance(mStudent.getUsers());
                 FragmentHandler.addFragment(this, R.id.session_users, users, USER_TAG);
                 FragmentHandler.hideFragment(this, users);
-                onRecipients();
+                audioPlayer.stop();
+                audioPlayer.addAudio(R.raw.send_your_message_to_short);
+                audioPlayer.playAudio();
+                showUsers();
             } else {
                 mGroup = (Group) mSender;
                 showCamera(Constants.DEFAULT_CAMERA_ID);
@@ -287,6 +270,14 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
     }
 
 
+    @Override
+    public void onPictureTaken() {
+        audioPlayer.addAudio(R.raw.what_did_take);
+        audioPlayer.playAudio();
+        showInfo();
+    }
+
+
     public void success() {
         Uri uri = Uri.parse("android.resource://" + globalHandler.appContext.getPackageName() + "/" + R.raw.your_message_has_been_sent);
         MediaPlayer mediaPlayer = new MediaPlayer();
@@ -315,4 +306,5 @@ public class SessionActivity extends OnButtonClickAudio implements UserFragment.
         Toast toast = Toast.makeText(this, "Your message failed to send.", Toast.LENGTH_LONG);
         toast.show();
     }
+
 }

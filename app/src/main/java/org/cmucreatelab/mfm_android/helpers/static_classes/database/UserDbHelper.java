@@ -92,8 +92,6 @@ public class UserDbHelper {
         values.put(UserContract.COLUMN_UPDATED_AT, user.getUpdatedAt());
         newId = db.insert(UserContract.TABLE_NAME, "null", values);
 
-        Log.i(Constants.LOG_TAG, String.format("%d", user.getStudent().getId()));
-
         user.setDatabaseId(newId);
         Log.i(Constants.LOG_TAG, "inserted new user _id=" + newId);
     }

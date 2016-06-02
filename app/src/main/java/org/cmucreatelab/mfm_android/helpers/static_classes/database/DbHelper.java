@@ -36,12 +36,18 @@ public class DbHelper {
     }
 
 
+    public static int studentCount = 0;
+    public static int groupCount = 0;
     public static void addToDatabase(Context context, Sender sender) {
         switch(sender.getSenderType()) {
             case group:
+                groupCount++;
+                Log.i(Constants.LOG_TAG, "The group count" +  String.format("%d", groupCount));
                 GroupDbHelper.addToDatabase(context, (Group) sender);
                 break;
             case student:
+                studentCount++;
+                Log.i(Constants.LOG_TAG, "The student count" +  String.format("%d", studentCount));
                 StudentDbHelper.addToDatabase(context, (Student) sender);
                 break;
             default:
@@ -85,14 +91,6 @@ public class DbHelper {
         } else {
             Log.e(Constants.LOG_TAG, "trying to load from database but Kiosk is not logged in.");
         }
-    }
-
-
-    public static void closeDB(Context context) {
-        MessageFromMeSQLLiteOpenHelper mdb = MessageFromMeSQLLiteOpenHelper.getInstance(context);
-        SQLiteDatabase db = mdb.getWritableDatabase();
-        mdb.close();
-        db.close();
     }
 
 }

@@ -99,9 +99,6 @@ public class SelectionActivity extends OnButtonClickAudio implements Refreshable
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
         schoolName = globalHandler.mfmLoginHandler.getSchool().getName();
 
-        Log.d(Constants.LOG_TAG, "Selection activity " + String.format("%d", globalHandler.mfmLoginHandler.getSchool().getStudents().size()));
-        Log.d(Constants.LOG_TAG, "Selection activity " + String.format("%d", globalHandler.mfmLoginHandler.getSchool().getGroups().size()));
-
         swipeLayout = (SwipeRefreshLayout) findViewById(R.id.selection_swipe_layout);
         final Refreshable thisActivity = this;
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -139,18 +136,10 @@ public class SelectionActivity extends OnButtonClickAudio implements Refreshable
         }
     }
 
-
-    @Override
-    protected void onStop() {
-        Log.i(Constants.LOG_TAG, "stopping app");
-        this.finish();
-        super.onStop();
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle out) {
-        super.onSaveInstanceState(out);
         out.putSerializable(GROUP_TAG, selectedGroup);
+        super.onSaveInstanceState(out);
     }
 
 

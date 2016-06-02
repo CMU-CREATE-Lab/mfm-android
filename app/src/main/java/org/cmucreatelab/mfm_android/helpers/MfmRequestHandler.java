@@ -47,6 +47,7 @@ public class MfmRequestHandler {
         response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                Log.i(Constants.LOG_TAG, "requestListStudents onResponse");
                 try {
                     ArrayList<Student> students = JSONParser.parseStudentsFromJson(response);
                     globalHandler.checkAndUpdateStudents(students, activity);
@@ -94,7 +95,6 @@ public class MfmRequestHandler {
         response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
                 Log.i(Constants.LOG_TAG, "updateStudent onResponse");
                 try {
                     // create a temp student
@@ -110,7 +110,6 @@ public class MfmRequestHandler {
 
                     // update user objects
                     ArrayList<User> users = student.getUsers();
-                    Log.i(Constants.LOG_TAG, "request " + String.format("%d", student.getUsers().size()));
                     for (User user: users) {
                         user.setStudent(student);
                     }
@@ -135,7 +134,6 @@ public class MfmRequestHandler {
         response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
                 Log.i(Constants.LOG_TAG, "updateGroup onResponse");
                 try {
                     // create temporary object

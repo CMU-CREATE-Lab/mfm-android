@@ -175,13 +175,26 @@ public class SessionInfoFragment extends Fragment {
             try {
                 ExifInterface exif = new ExifInterface(globalHandler.sessionHandler.getMessagePhoto().getAbsolutePath());
                 orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
-                if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
-                    rotation = 270;
-                } else if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
-                    rotation = 90;
-                } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
-                    rotation = 180;
+                Log.i(Constants.LOG_TAG, String.format("%d", orientation));
+
+                if (CameraFragment.cameraId == Constants.DEFAULT_CAMERA_ID) {
+                    if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
+                        rotation = 270;
+                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
+                        rotation = 90;
+                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
+                        rotation = 180;
+                    }
+                } else {
+                    if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
+                        rotation = 90;
+                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
+                        rotation = 270;
+                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
+                        rotation = 180;
+                    }
                 }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -251,7 +264,7 @@ public class SessionInfoFragment extends Fragment {
     @OnClick(R.id.f_session_info_media_photo)
     public void onClickPhoto() {
         ((ImageView) rootView.findViewById(R.id.f_session_info_media_photo)).setImageResource(R.drawable.button_down_photo);
-        ((SessionInfoListener) parentActivity).onPhoto();
+        ((SessionInfoListener) parentActivity).onPhoto(Constants.DEFAULT_CAMERA_ID);
     }
 
 
@@ -273,7 +286,7 @@ public class SessionInfoFragment extends Fragment {
     }
 
     public interface SessionInfoListener {
-        public void onPhoto();
+        public void onPhoto(int id);
         public void onAudio();
         public void onSend();
     }

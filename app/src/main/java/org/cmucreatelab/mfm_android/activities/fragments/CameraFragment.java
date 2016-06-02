@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Surface;
@@ -15,6 +17,7 @@ import android.widget.ImageView;
 
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.activities.SessionActivity;
+import org.cmucreatelab.mfm_android.classes.Refreshable;
 import org.cmucreatelab.mfm_android.helpers.CameraPreview;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
@@ -33,6 +36,8 @@ import butterknife.OnClick;
  * A simple {@link Fragment} subclass.
  */
 public class CameraFragment extends Fragment {
+
+    public static int cameraId;
 
     private Activity parentActivity;
     private GlobalHandler globalHandler;
@@ -70,7 +75,8 @@ public class CameraFragment extends Fragment {
     }
 
 
-    public static Fragment newInstance() {
+    public static Fragment newInstance(int id) {
+        cameraId = id;
         return new CameraFragment();
     }
 
@@ -93,6 +99,24 @@ public class CameraFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_camera, container, false);
         ButterKnife.bind(this, rootView);
         this.audioPlayer = AudioPlayer.newInstance(globalHandler.appContext);
+
+        final SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.camera_swipe_layout);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override public void run() {
+                        if (cameraId == Constants.DEFAULT_CAMERA_ID){
+                            ((SessionActivity) parentActivity).onPhoto(Constants.FRONT_FACING_CAMERA_ID);
+                        } else {
+                            ((SessionActivity) parentActivity).onPhoto(Constants.DEFAULT_CAMERA_ID);
+                        }
+                        swipeLayout.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
+
         return rootView;
     }
 
@@ -127,7 +151,7 @@ public class CameraFragment extends Fragment {
     @OnClick(R.id.photoNo)
     public void retakePhoto() {
         audioPlayer.stop();
-        ((SessionInfoFragment.SessionInfoListener) this.getActivity()).onPhoto();
+        ((SessionInfoFragment.SessionInfoListener) this.getActivity()).onPhoto(cameraId);
     }
 
 
@@ -161,7 +185,7 @@ public class CameraFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        this.mCamera = Camera.open(Constants.FRONT_FACING_CAMERA_ID);
+        this.mCamera = Camera.open(cameraId);
         this.mCamera.setPreviewCallback(null);
         this.mPreview = new CameraPreview(globalHandler.appContext, this.mCamera);
 

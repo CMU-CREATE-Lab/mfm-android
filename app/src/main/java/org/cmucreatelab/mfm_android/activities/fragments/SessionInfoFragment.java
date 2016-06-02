@@ -205,13 +205,13 @@ public class SessionInfoFragment extends Fragment {
                 int height = fromLL.getHeight();
                 int orientation = getScreenOrientation();
 
-                //  TODO - more orientations
-                if (orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                Log.d(Constants.LOG_TAG, String.format("%d", orientation));
+                if (orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT || orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT) {
                     // 1 is 100%
                     // .15 is 15%
                     // 15% of the Linear Layout height is taken up by the toLL
                     fromView.setColumnWidth((int) ((height * (1-.15))/(1+.15)));
-                } else if(orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
+                } else if(orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE || orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE){
                     TextView fromText = (TextView) rootView.findViewById(R.id.fromText);
                     int heightText = fromText.getHeight();
                     height -= heightText;
@@ -229,12 +229,12 @@ public class SessionInfoFragment extends Fragment {
                 int height = toLL.getHeight();
                 int orientation = getScreenOrientation();
 
-                if (orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                if (orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT || orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT) {
                     // 1 is 100%
                     // .2 is 20%
                     // 20% of the Linear Layout height is taken up by the toLL
                     recipientsView.setColumnWidth((int) ((height * (1-.2))/(1+.2)));
-                } else {
+                } else if(orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE || orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE){
                     // 1 is 100%
                     // .7 is 70%
                     // 70% of the Linear Layout height is taken up by the toLL

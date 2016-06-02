@@ -47,7 +47,7 @@ public class CameraFragment extends Fragment {
         int result = 0;
 
         Camera.CameraInfo info = new Camera.CameraInfo();
-        Camera.getCameraInfo(Constants.CAMERA_ID, info);
+        Camera.getCameraInfo(Constants.FRONT_FACING_CAMERA_ID, info);
 
         int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
         int degrees = 0;
@@ -161,7 +161,7 @@ public class CameraFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        this.mCamera = Camera.open(Constants.CAMERA_ID);
+        this.mCamera = Camera.open(Constants.FRONT_FACING_CAMERA_ID);
         this.mCamera.setPreviewCallback(null);
         this.mPreview = new CameraPreview(globalHandler.appContext, this.mCamera);
 

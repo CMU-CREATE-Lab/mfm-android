@@ -60,23 +60,22 @@ public class MfmLoginHandler {
 
 
     public void login(School school, String kioskUid) {
-        if (this.kiosk.getSchool() == null) {
-            this.kioskIsLoggedIn = true;
-            this.kiosk = new Kiosk(school, kioskUid);
-            this.kiosk.setSchool(school);
-            this.kiosk.setKioskUid(kioskUid);
+        this.kioskIsLoggedIn = true;
+        this.kiosk = new Kiosk(school, kioskUid);
+        this.kiosk.setSchool(school);
+        this.kiosk.setKioskUid(kioskUid);
 
-            // set SharedPreferences values
-            SharedPreferences.Editor editor = this.sharedPreferences.edit();
-            editor.putBoolean(Constants.PreferencesKeys.kioskIsLoggedIn, true);
-            editor.putInt(Constants.PreferencesKeys.kioskSchoolId, school.getId());
-            editor.putString(Constants.PreferencesKeys.kioskUid, kioskUid);
-            editor.putString(Constants.PreferencesKeys.kioskSchoolName, school.getName());
-            editor.apply();
+        // set SharedPreferences values
+        SharedPreferences.Editor editor = this.sharedPreferences.edit();
+        editor.putBoolean(Constants.PreferencesKeys.kioskIsLoggedIn, true);
+        editor.putInt(Constants.PreferencesKeys.kioskSchoolId, school.getId());
+        editor.putString(Constants.PreferencesKeys.kioskUid, kioskUid);
+        editor.putString(Constants.PreferencesKeys.kioskSchoolName, school.getName());
+        editor.apply();
 
-            // load from database
+        // load from database
+        if (globalHandler.mfmLoginHandler.getSchool().getStudents().size() == 0)
             DbHelper.loadFromDb(globalHandler.appContext);
-        }
     }
 
 

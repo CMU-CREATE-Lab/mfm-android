@@ -15,7 +15,9 @@ public class Constants {
 
     public static final String MFM_API_URL = "http://messagefromme.org";
 
-    public static final int CAMERA_ID = 0;
+    public static final int DEFAULT_CAMERA_ID = 0;
+
+    public static final int FRONT_FACING_CAMERA_ID = 1;
 
     public static final class PreferencesKeys {
         public static final String kioskIsLoggedIn = "kiosk_logged_in";

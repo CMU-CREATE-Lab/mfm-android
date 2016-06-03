@@ -3,14 +3,12 @@ package org.cmucreatelab.mfm_android.classes;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import org.cmucreatelab.mfm_android.R;
-//import org.cmucreatelab.mfm_android.activities.SelectionActivity;
+import org.cmucreatelab.mfm_android.activities.NewLoginActivity;
 import org.cmucreatelab.mfm_android.activities.StudentsGroupsActivity;
 import org.cmucreatelab.mfm_android.helpers.AudioPlayer;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
-import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 
 /**
  * Created by Steve on 6/3/2016.
@@ -44,6 +42,13 @@ public abstract class BaseRefreshableActivity extends AppCompatActivity {
 
     public void loginFailure() {
         // TODO - handle failures
+    }
+
+
+    public void logoutSuccess() {
+        Intent intent = new Intent(this, NewLoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }

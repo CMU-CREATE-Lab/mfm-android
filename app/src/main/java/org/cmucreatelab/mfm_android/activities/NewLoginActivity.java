@@ -180,10 +180,13 @@ public class NewLoginActivity extends BaseRefreshableActivity {
             showProgress(true);
             globalHandler.mfmRequestHandler.login(this, username, password, schools.get(0).getId().toString());
         } else {
-            showProgress(false);
+            /*showProgress(false);
             Intent intent = new Intent(this, SchoolActivity.class);
             intent.putExtra(Constants.SCHOOL_KEY, schools);
-            startActivity(intent);
+            startActivity(intent);*/
+
+            showProgress(true);
+            globalHandler.mfmRequestHandler.login(this, username, password, schools.get(0).getId().toString());
         }
     }
 

@@ -29,14 +29,15 @@ public class JSONParser {
         String updatedAt = row.getString("updated_at");
         String mediumPhotoUrl = row.getString("medium_photo_url");
         String thumbPhotoUrl = row.getString("thumb_photo_url");
-        String mediumPolaroidUrl = row.getString("medium_polaroid_url");
-        String thumbPolaroidUrl = row.getString("thumb_polaroid_url");
+        //String mediumPolaroidUrl = row.getString("medium_polaroid_url");
+        //String thumbPolaroidUrl = row.getString("thumb_polaroid_url");
 
         // create object
         Group group = new Group();
         group.setId(id);
         group.setUpdatedAt(updatedAt);
-        group.setPhotoUrl(mediumPolaroidUrl);
+        //group.setPhotoUrl(mediumPolaroidUrl);
+        group.setPhotoUrl(thumbPhotoUrl);
 
         // students, studentids and name do not get taken care of here
 
@@ -51,14 +52,15 @@ public class JSONParser {
         String updatedAt = row.getString("updated_at");
         String mediumPhotoUrl = row.getString("medium_photo_url");
         String thumbPhotoUrl = row.getString("thumb_photo_url");
-        String mediumPolaroidUrl = row.getString("medium_polaroid_url");
-        String thumbPolaroidUrl = row.getString("thumb_polaroid_url");
+        //String mediumPolaroidUrl = row.getString("medium_polaroid_url");
+        //String thumbPolaroidUrl = row.getString("thumb_polaroid_url");
 
         // create object
         Student student = new Student();
         student.setId(id);
         student.setUpdatedAt(updatedAt);
-        student.setPhotoUrl(mediumPolaroidUrl);
+        //student.setPhotoUrl(mediumPolaroidUrl);
+        student.setPhotoUrl(thumbPhotoUrl);
 
         // firstname, lastname and users do not get taken care of here
 
@@ -76,8 +78,8 @@ public class JSONParser {
         String studentUserRole = row.getString("student_user_role");
         String mediumPhotoUrl = row.getString("medium_photo_url");
         String thumbPhotoUrl = row.getString("thumb_photo_url");
-        String mediumPolaroidUrl = row.getString("medium_polaroid_url");
-        String thumbPolaroidUrl = row.getString("thumb_polaroid_url");
+        //String mediumPolaroidUrl = row.getString("medium_polaroid_url");
+        //String thumbPolaroidUrl = row.getString("thumb_polaroid_url");
 
 
         // create object
@@ -87,7 +89,8 @@ public class JSONParser {
         user.setLastName(lastName);
         user.setUpdatedAt(updatedAt);
         user.setStudentUserRole(studentUserRole);
-        user.setPhotoUrl(mediumPolaroidUrl);
+        //user.setPhotoUrl(mediumPolaroidUrl);
+        user.setPhotoUrl(thumbPhotoUrl);
 
         return user;
     }
@@ -98,7 +101,8 @@ public class JSONParser {
         ArrayList<Integer> ids = new ArrayList<>();
 
         // parse values
-        JSONArray values = row.getJSONArray("active_student_ids_in_group");
+        //JSONArray values = row.getJSONArray("active_student_ids_in_group");
+        JSONArray values = row.getJSONArray("student_ids_in_group");
         int size = values.length();
         for (int i = 0; i < size; i++) {
             ids.add(values.getInt(i));
@@ -162,7 +166,8 @@ public class JSONParser {
     public static Group parseGroupBasedOffId(JSONObject row, GlobalHandler globalHandler) throws JSONException {
         // parse values
         Log.i(Constants.LOG_TAG, "parseGroupBasedOffId");
-        JSONObject groupJson = row.getJSONObject("group");
+        //JSONObject groupJson = row.getJSONObject("group");
+        JSONObject groupJson = row.getJSONObject("student");
         Integer id = groupJson.getInt("id");
         String name = groupJson.getString("name");
         String updatedAt = groupJson.getString("updated_at");

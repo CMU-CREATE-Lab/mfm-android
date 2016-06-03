@@ -13,7 +13,6 @@
     <string name="button_audio_playback">Playback Audio</string>
     <string name="button_login">Login</string>
 
-    <!-- Strings related to login -->
     <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
@@ -21,5 +20,10 @@
     <string name="error_field_required">This field is required</string>
     <string name="title_activity_view_students_and_groups">ViewStudentsAndGroupsActivity</string>
     <string name="action_settings">Settings</string>
+    <string name="order_by_group">Order By Group</string>
+    <string name="select_school">Select School</string>
+    <string name="all_students_and_groups">All Students and Groups</string>
+    <string name="groups">Groups</string>
+    <string name="students">Students</string>
 
 </resources>

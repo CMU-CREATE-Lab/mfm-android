@@ -1,8 +1,8 @@
 package org.cmucreatelab.mfm_android.activities;
 
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,22 +21,20 @@ import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 
 import java.util.ArrayList;
 
-public class StudentsGroupsActivity extends BaseRefreshableActivity {
+public class OrderedActivity extends BaseRefreshableActivity {
 
 
     private BaseRefreshableActivity thisActivity;
     private GlobalHandler globalHandler;
     private ExtendedHeightGridView gridViewStudents;
     private ExtendedHeightGridView gridViewGroups;
+    private Group mGroup;
 
 
     private final AdapterView.OnItemClickListener onStudentClick = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            thisActivity.onButtonClick(globalHandler.appContext);
-            globalHandler.sessionHandler.startSession(globalHandler.mfmLoginHandler.getSchool().getStudents().get(i));
-            // TODO - start activity
-            Log.d(Constants.LOG_TAG, "Start User selection activity");
+            // TODO
         }
     };
 
@@ -44,10 +42,7 @@ public class StudentsGroupsActivity extends BaseRefreshableActivity {
     private final AdapterView.OnItemClickListener onGroupClick = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            thisActivity.onButtonClick(globalHandler.appContext);
-            globalHandler.sessionHandler.startSession(globalHandler.mfmLoginHandler.getSchool().getGroups().get(i));
-            // TODO - start activity
-            Log.d(Constants.LOG_TAG, "Start the session with a group activity");
+            // TODO
         }
     };
 
@@ -55,34 +50,24 @@ public class StudentsGroupsActivity extends BaseRefreshableActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_students_groups);
+        setContentView(R.layout.activity_ordered);
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
-        setTitle(globalHandler.mfmLoginHandler.getSchool().getName() + " - " +  getString(R.string.all_students_and_groups));
         thisActivity = this;
 
-        if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
-            if (globalHandler.mfmLoginHandler.getSchool().getStudents().size() == 0) {
-                globalHandler.mfmLoginHandler.login(globalHandler.mfmLoginHandler.getSchool(), globalHandler.mfmLoginHandler.getKioskUid());
-            }
+        mGroup = (Group) getIntent().getExtras().getSerializable(Constants.GROUP_KEY);
 
-            // display students
-            ArrayList<Student> students = globalHandler.mfmLoginHandler.getSchool().getStudents();
-            this.gridViewStudents = (ExtendedHeightGridView) findViewById(R.id.gridViewStudent);
-            this.gridViewStudents.setAdapter(new StudentAdapter(getApplicationContext(), students));
-            this.gridViewStudents.setOnItemClickListener(onStudentClick);
+        // display students
+        ArrayList<Student> students = mGroup.getStudents();
+        this.gridViewStudents = (ExtendedHeightGridView) findViewById(R.id.gridViewStudent);
+        this.gridViewStudents.setAdapter(new StudentAdapter(getApplicationContext(), students));
+        this.gridViewStudents.setOnItemClickListener(onStudentClick);
 
-            // display groups
-            ArrayList<Group> groups = globalHandler.mfmLoginHandler.getSchool().getGroups();
-            this.gridViewGroups = (ExtendedHeightGridView) findViewById(R.id.gridViewGroup);
-            this.gridViewGroups.setAdapter(new GroupAdapter(getApplicationContext(), groups));
-            this.gridViewGroups.setOnItemClickListener(onGroupClick);
-
-            Log.d(Constants.LOG_TAG, String.format("%d", groups.size()));
-        } else {
-            globalHandler.appState = AppState.LOGIN;
-            Intent intent = new Intent(this, NewLoginActivity.class);
-            startActivity(intent);
-        }
+        // display group
+        ArrayList<Group> groups = new ArrayList<>();
+        groups.add(mGroup);
+        this.gridViewGroups = (ExtendedHeightGridView) findViewById(R.id.gridViewGroup);
+        this.gridViewGroups.setAdapter(new GroupAdapter(getApplicationContext(), groups));
+        this.gridViewGroups.setOnItemClickListener(onGroupClick);
     }
 
 
@@ -103,11 +88,11 @@ public class StudentsGroupsActivity extends BaseRefreshableActivity {
             return true;
         } else if (id == R.id.orderByGroup) {
             globalHandler.appState = AppState.SELECTION_ORDER_BY_GROUP;
-            Intent intent = new Intent(this, OrderByGroupActivity.class);
-            startActivity(intent);
+            finish();
             return true;
         } else if (id == R.id.showAll) {
             globalHandler.appState = AppState.SELECTION_SHOW_ALL;
+            finish();
             return true;
         }
 

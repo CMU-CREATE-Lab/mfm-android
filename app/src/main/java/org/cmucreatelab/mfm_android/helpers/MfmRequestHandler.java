@@ -260,7 +260,7 @@ public class MfmRequestHandler {
     }
 
 
-    public void logout(final StudentsGroupsActivity activity) {
+    public void logout(final BaseRefreshableActivity activity) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;

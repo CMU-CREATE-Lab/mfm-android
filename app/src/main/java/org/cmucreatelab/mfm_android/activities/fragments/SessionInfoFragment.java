@@ -272,6 +272,7 @@ public class SessionInfoFragment extends Fragment {
     public void onClickAudio() {
         if (globalHandler.sessionHandler.getMessagePhoto() != null) {
             ((ImageView) rootView.findViewById(R.id.f_session_info_media_audio)).setImageResource(R.drawable.button_down_talk);
+            ((ImageView) rootView.findViewById(R.id.f_session_info_send)).setImageResource(R.drawable.send_disabled);
             ((SessionInfoListener) parentActivity).onAudio();
         }
     }
@@ -279,7 +280,7 @@ public class SessionInfoFragment extends Fragment {
 
     @OnClick(R.id.f_session_info_send)
     public void onClickSend() {
-        if (globalHandler.sessionHandler.getMessageAudio() != null && !((SessionActivity) parentActivity).isSent) {
+        if (globalHandler.sessionHandler.getMessageAudio() != null) {
             ((ImageView) rootView.findViewById(R.id.f_session_info_send)).setImageResource(R.drawable.send_down);
             ((SessionInfoListener) parentActivity).onSend();
         }

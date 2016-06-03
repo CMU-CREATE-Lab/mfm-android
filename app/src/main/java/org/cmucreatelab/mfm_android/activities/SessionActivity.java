@@ -67,7 +67,8 @@ public class SessionActivity extends OnButtonClickAudio implements CameraFragmen
     private AudioRecorder audioRecorder;
     private AudioPlayer audioPlayer;
 
-    public boolean isSent;
+    private boolean isSending;
+    private boolean isReplaying;
 
     // class methods
 
@@ -114,7 +115,8 @@ public class SessionActivity extends OnButtonClickAudio implements CameraFragmen
         audioRecorder = new AudioRecorder(globalHandler.appContext);
         audioPlayer = AudioPlayer.newInstance(globalHandler.appContext);
         selectedUsers = new ArrayList<>();
-        isSent = false;
+        isSending = false;
+        isReplaying = false;
 
         if (savedInstanceState == null) {
             mSender = globalHandler.sessionHandler.getMessageSender();
@@ -214,6 +216,11 @@ public class SessionActivity extends OnButtonClickAudio implements CameraFragmen
 
     @Override
     public void onPhoto(int id) {
+        if (audioRecorder.isRecording) {
+            audioRecorder.stopRecording();
+        }
+        // reset the audio clip
+        globalHandler.sessionHandler.setMessageAudio(null);
         super.onButtonClick(globalHandler.appContext);
         audioPlayer.stop();
         showCamera(id);
@@ -241,6 +248,7 @@ public class SessionActivity extends OnButtonClickAudio implements CameraFragmen
                     @Override
                     public void onCompletion(MediaPlayer mediaPlayer) {
                         mediaPlayer.release();
+                        isReplaying = false;
                         ((ImageView) findViewById(R.id.f_session_info_send)).setImageResource(R.drawable.send_up);
                         audioPlayer.addAudio(R.raw.press_the_green_button);
                         audioPlayer.playAudio();
@@ -250,6 +258,7 @@ public class SessionActivity extends OnButtonClickAudio implements CameraFragmen
                     mediaPlayer.setDataSource(this.getApplicationContext(), uri);
                     mediaPlayer.prepare();
                     mediaPlayer.start();
+                    isReplaying = true;
                     Toast toast = Toast.makeText(globalHandler.appContext, "Replaying audio recorded.", Toast.LENGTH_SHORT);
                     toast.show();
                 } catch (IOException e) {
@@ -263,10 +272,15 @@ public class SessionActivity extends OnButtonClickAudio implements CameraFragmen
 
     @Override
     public void onSend() {
-        super.onButtonClick(globalHandler.appContext);
-        audioPlayer.stop();
-        if (!audioRecorder.isRecording)
+
+        if (!isSending && !audioRecorder.isRecording && !isReplaying) {
+            super.onButtonClick(globalHandler.appContext);
+            audioPlayer.stop();
+            isSending = true;
             globalHandler.sessionHandler.sendMessage(this);
+        } else {
+            ((ImageView) findViewById(R.id.f_session_info_send)).setImageResource(R.drawable.send_disabled);
+        }
     }
 
 
@@ -297,12 +311,10 @@ public class SessionActivity extends OnButtonClickAudio implements CameraFragmen
             e.printStackTrace();
         }
         mediaPlayer.start();
-        isSent = true;
     }
 
 
     public void fail() {
-        isSent = false;
         Toast toast = Toast.makeText(this, "Your message failed to send.", Toast.LENGTH_LONG);
         toast.show();
     }

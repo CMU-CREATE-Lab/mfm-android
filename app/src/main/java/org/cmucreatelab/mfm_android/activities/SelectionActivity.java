@@ -35,7 +35,6 @@ public class SelectionActivity extends OnButtonClickAudio implements Refreshable
 
     private static final String STUDENT_TAG = "student";
     private static final String GROUP_TAG = "group";
-    private boolean isOrderByGroup;
     private Fragment students;
     private Fragment groups;
     private GlobalHandler globalHandler;
@@ -48,7 +47,6 @@ public class SelectionActivity extends OnButtonClickAudio implements Refreshable
     private void showAll() {
         this.setTitle(schoolName + " - All Students & Groups");
         globalHandler.appState = AppState.SELECTION_SHOW_ALL;
-        isOrderByGroup = false;
 
         students = StudentFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getStudents());
         groups = GroupFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getGroups());
@@ -61,7 +59,6 @@ public class SelectionActivity extends OnButtonClickAudio implements Refreshable
     private void orderByGroup() {
         this.setTitle(schoolName + " - Order By Group");
         globalHandler.appState = AppState.SELECTION_ORDER_BY_GROUP;
-        isOrderByGroup = true;
 
         groups = GroupFragment.newInstance(globalHandler.mfmLoginHandler.getSchool().getGroups());
         FragmentManager fm = this.getFragmentManager();
@@ -73,7 +70,6 @@ public class SelectionActivity extends OnButtonClickAudio implements Refreshable
     private void showGroup() {
         this.setTitle(schoolName + " - " + selectedGroup.getName());
         globalHandler.appState = AppState.SELECTION_GROUP;
-        this.isOrderByGroup = false;
 
         ArrayList<Group> newGroupsList = new ArrayList<>();
         newGroupsList.add(selectedGroup);
@@ -180,7 +176,7 @@ public class SelectionActivity extends OnButtonClickAudio implements Refreshable
     @Override
     public void onGroupSelected(Group group) {
         super.onButtonClick(globalHandler.appContext);
-        if (!isOrderByGroup) {
+        if (globalHandler.appState == AppState.SELECTION_ORDER_BY_GROUP) {
             globalHandler.sessionHandler.startSession(group);
             Intent intent = new Intent(this, SessionActivity.class);
             startActivity(intent);

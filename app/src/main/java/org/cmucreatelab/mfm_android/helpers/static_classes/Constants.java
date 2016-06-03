@@ -42,5 +42,6 @@ public class Constants {
     // keys for serializable items
     public static final String SCHOOL_KEY = "school";
     public static final String GROUP_KEY = "group";
+    public static final String STUDENT_KEY = "student";
 
 }

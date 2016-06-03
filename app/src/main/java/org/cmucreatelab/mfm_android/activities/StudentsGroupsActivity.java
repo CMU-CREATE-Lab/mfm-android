@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.adapters.GroupAdapter;
 import org.cmucreatelab.mfm_android.adapters.StudentAdapter;
-import org.cmucreatelab.mfm_android.classes.BaseRefreshableActivity;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.AppState;
@@ -30,30 +29,8 @@ public class StudentsGroupsActivity extends BaseRefreshableActivity {
     private ExtendedHeightGridView gridViewGroups;
 
 
-    private final AdapterView.OnItemClickListener onStudentClick = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            thisActivity.onButtonClick(globalHandler.appContext);
-            globalHandler.sessionHandler.startSession(globalHandler.mfmLoginHandler.getSchool().getStudents().get(i));
-            // TODO - start activity
-            Log.d(Constants.LOG_TAG, "Start User selection activity");
-        }
-    };
-
-
-    private final AdapterView.OnItemClickListener onGroupClick = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            thisActivity.onButtonClick(globalHandler.appContext);
-            globalHandler.sessionHandler.startSession(globalHandler.mfmLoginHandler.getSchool().getGroups().get(i));
-            // TODO - start activity
-            Log.d(Constants.LOG_TAG, "Start the session with a group activity");
-        }
-    };
-
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_students_groups);
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());

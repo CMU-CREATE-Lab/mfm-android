@@ -1,7 +1,5 @@
 package org.cmucreatelab.mfm_android.activities;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,7 +9,6 @@ import android.widget.AdapterView;
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.adapters.GroupAdapter;
 import org.cmucreatelab.mfm_android.adapters.StudentAdapter;
-import org.cmucreatelab.mfm_android.classes.BaseRefreshableActivity;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.AppState;
@@ -23,6 +20,7 @@ import java.util.ArrayList;
 
 public class OrderedActivity extends BaseRefreshableActivity {
 
+    // TODO
 
     private BaseRefreshableActivity thisActivity;
     private GlobalHandler globalHandler;
@@ -31,27 +29,12 @@ public class OrderedActivity extends BaseRefreshableActivity {
     private Group mGroup;
 
 
-    private final AdapterView.OnItemClickListener onStudentClick = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            // TODO
-        }
-    };
-
-
-    private final AdapterView.OnItemClickListener onGroupClick = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            // TODO
-        }
-    };
-
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ordered);
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
+        globalHandler.appState = AppState.ORDERED;
         thisActivity = this;
 
         mGroup = (Group) getIntent().getExtras().getSerializable(Constants.GROUP_KEY);

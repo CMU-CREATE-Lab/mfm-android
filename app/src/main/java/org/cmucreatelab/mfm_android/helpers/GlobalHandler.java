@@ -4,30 +4,18 @@ import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
-
 //import org.cmucreatelab.mfm_android.activities.LoginActivity;
 //import org.cmucreatelab.mfm_android.activities.SessionActivity;
-import org.cmucreatelab.mfm_android.classes.BaseRefreshableActivity;
-import org.cmucreatelab.mfm_android.classes.FormFile;
-import org.cmucreatelab.mfm_android.classes.FormValue;
+import org.cmucreatelab.mfm_android.activities.BaseRefreshableActivity;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Kiosk;
-import org.cmucreatelab.mfm_android.classes.Refreshable;
 import org.cmucreatelab.mfm_android.classes.School;
-import org.cmucreatelab.mfm_android.classes.Sender;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.ListHelper;
 import org.cmucreatelab.mfm_android.helpers.static_classes.database.DbHelper;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * Created by mike on 1/28/16.

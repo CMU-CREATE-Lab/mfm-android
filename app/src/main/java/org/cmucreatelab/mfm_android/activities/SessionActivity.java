@@ -24,7 +24,6 @@ import org.cmucreatelab.mfm_android.activities.fragments.UserFragment;
 import org.cmucreatelab.mfm_android.helpers.AppState;
 import org.cmucreatelab.mfm_android.helpers.AudioRecorder;
 import org.cmucreatelab.mfm_android.classes.Group;
-import org.cmucreatelab.mfm_android.classes.ClickableActivity;
 import org.cmucreatelab.mfm_android.classes.Sender;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;

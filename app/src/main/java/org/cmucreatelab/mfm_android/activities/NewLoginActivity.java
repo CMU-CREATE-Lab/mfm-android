@@ -3,7 +3,6 @@ package org.cmucreatelab.mfm_android.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,7 +14,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import org.cmucreatelab.mfm_android.R;
-import org.cmucreatelab.mfm_android.classes.BaseRefreshableActivity;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.helpers.AudioPlayer;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
@@ -42,10 +40,8 @@ public class NewLoginActivity extends BaseRefreshableActivity {
     private String username;
     private String password;
 
-    // TODO - make the layout of the login activity
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_login);
         ButterKnife.bind(this);
@@ -84,7 +80,6 @@ public class NewLoginActivity extends BaseRefreshableActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        // TODO - the school has been selected...do the rest of the login process
         if (currentSchool != null) {
             globalHandler.mfmRequestHandler.login(this, username, password, currentSchool.getId().toString());
             finish();

@@ -11,7 +11,7 @@ import org.cmucreatelab.mfm_android.helpers.AudioPlayer;
 /**
  * Created by Steve on 5/23/2016.
  */
-public abstract class OnButtonClickAudio extends AppCompatActivity{
+public abstract class ClickableActivity extends AppCompatActivity{
 
     public void onButtonClick(Context context) {
         AudioPlayer audio = AudioPlayer.newInstance(context);

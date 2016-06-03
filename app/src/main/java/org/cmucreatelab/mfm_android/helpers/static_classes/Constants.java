@@ -9,11 +9,11 @@ public class Constants {
 
     public static final String LOG_TAG = "MfmAndroid";
 
-    public static final String APP_PACKAGE_NAME = "org.cmucreatelab.mfm_android";
+    public static final String APP_PACKAGE_NAME = "dev.org.cmucreatelab.mfm_android";
 
     public static final String APP_VERSION = "1.0";
 
-    public static final String MFM_API_URL = "http://messagefromme.org";
+    public static final String MFM_API_URL = "http://dev.messagefromme.org";
 
     public static final int DEFAULT_CAMERA_ID = 0;
 
@@ -37,5 +37,9 @@ public class Constants {
         put(PreferencesKeys.kioskSchoolName, "");
         put(PreferencesKeys.kioskUid, "");
     }};
+
+
+    // keys for serializable items
+    public static final String SCHOOL_KEY = "schools";
 
 }

@@ -16,7 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import org.cmucreatelab.mfm_android.R;
-import org.cmucreatelab.mfm_android.activities.SessionActivity;
+//import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import org.cmucreatelab.mfm_android.classes.Refreshable;
 import org.cmucreatelab.mfm_android.helpers.CameraPreview;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
@@ -100,7 +100,7 @@ public class CameraFragment extends Fragment {
         ButterKnife.bind(this, rootView);
         this.audioPlayer = AudioPlayer.newInstance(globalHandler.appContext);
 
-        final SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.camera_swipe_layout);
+        /*final SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.camera_swipe_layout);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -115,7 +115,7 @@ public class CameraFragment extends Fragment {
                     }
                 }, 1000);
             }
-        });
+        });*/
 
         return rootView;
     }

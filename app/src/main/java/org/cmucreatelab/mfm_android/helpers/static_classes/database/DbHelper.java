@@ -86,8 +86,6 @@ public class DbHelper {
             for (Group group : dbGroups) {
                 school.addGroup(group);
             }
-            Log.d(Constants.LOG_TAG, "load from db " + String.format("%d", school.getStudents().size()));
-            Log.d(Constants.LOG_TAG, "load from db " + String.format("%d", school.getGroups().size()));
         } else {
             Log.e(Constants.LOG_TAG, "trying to load from database but Kiosk is not logged in.");
         }

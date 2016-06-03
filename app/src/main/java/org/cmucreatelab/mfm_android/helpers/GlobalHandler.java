@@ -9,8 +9,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
-import org.cmucreatelab.mfm_android.activities.LoginActivity;
-import org.cmucreatelab.mfm_android.activities.SessionActivity;
+//import org.cmucreatelab.mfm_android.activities.LoginActivity;
+//import org.cmucreatelab.mfm_android.activities.SessionActivity;
+import org.cmucreatelab.mfm_android.classes.BaseRefreshableActivity;
 import org.cmucreatelab.mfm_android.classes.FormFile;
 import org.cmucreatelab.mfm_android.classes.FormValue;
 import org.cmucreatelab.mfm_android.classes.Group;
@@ -46,7 +47,7 @@ public class GlobalHandler {
     public AppState appState;
 
 
-    public void sendPost(byte[] photo, byte[] audio, final SessionActivity activity) {
+    /*public void sendPost(byte[] photo, byte[] audio, final SessionActivity activity) {
         int requestMethod = Request.Method.POST;
         String requestUrl = Constants.MFM_API_URL + "/api/v2/message";
 
@@ -78,17 +79,17 @@ public class GlobalHandler {
 
         FormRequestHandler request = new FormRequestHandler(requestMethod,requestUrl,formElements,response,error);
         Volley.newRequestQueue(appContext).add(request);
-    }
+    }*/
 
 
     // refresh the list of students and groups in a school
-    public void refreshStudentsAndGroups(final Refreshable activity) {
+    public void refreshStudentsAndGroups(final BaseRefreshableActivity activity) {
         mfmRequestHandler.requestListStudents(activity);
         mfmRequestHandler.requestListGroups(activity);
     }
 
 
-    public void checkAndUpdateStudents(ArrayList<Student> studentsFromMfmRequest, final Refreshable activity) {
+    public void checkAndUpdateStudents(ArrayList<Student> studentsFromMfmRequest, final BaseRefreshableActivity activity) {
         if (mfmLoginHandler.kioskIsLoggedIn) {
             School school = mfmLoginHandler.getSchool();
             ArrayList<Student> studentsFromDB = school.getStudents();
@@ -113,15 +114,13 @@ public class GlobalHandler {
         } else {
             Log.e(Constants.LOG_TAG, "Tried to checkAndUpdateStudents with Kiosk not logged in");
         }
-        // To make sure the list of students and groups are populated before displaying them.
-        // I would get empty lists every so often and would have to refresh the activity.
-        if (activity.getClass().getSimpleName().equals(LoginActivity.class.getSimpleName()))
-            ((LoginActivity)activity).isStudentsDone = true;
+
+        activity.isStudentsDone = true;
         activity.populatedGroupsAndStudentsList();
     }
 
 
-    public void checkAndUpdateGroups(ArrayList<Group> groupsFromMfmRequest, final Refreshable activity) {
+    public void checkAndUpdateGroups(ArrayList<Group> groupsFromMfmRequest, final BaseRefreshableActivity activity) {
         if (mfmLoginHandler.kioskIsLoggedIn) {
             School school = mfmLoginHandler.getSchool();
             ArrayList<Group> groupsFromDB = school.getGroups();
@@ -146,12 +145,7 @@ public class GlobalHandler {
         } else {
             Log.e(Constants.LOG_TAG, "Tried to checkAndUpdateGroups with Kiosk not logged in");
         }
-        // To make sure the list of students and groups are populated before displaying them.
-
-        // I would get empty lists every so often and would have to refresh the activity.
-        // I hate how I'm doing this...
-        if (activity.getClass().getSimpleName().equals(LoginActivity.class.getSimpleName()))
-            ((LoginActivity)activity).isGroupsDone = true;
+        activity.isGroupsDone = true;
         activity.populatedGroupsAndStudentsList();
     }
 

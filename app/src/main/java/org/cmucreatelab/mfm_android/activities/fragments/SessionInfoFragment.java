@@ -21,7 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.cmucreatelab.mfm_android.R;
-import org.cmucreatelab.mfm_android.activities.SessionActivity;
+//import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import org.cmucreatelab.mfm_android.adapters.GroupAdapter;
 import org.cmucreatelab.mfm_android.adapters.StudentAdapter;
 import org.cmucreatelab.mfm_android.adapters.UserAdapter;

@@ -1,3 +1,4 @@
+/*
 package org.cmucreatelab.mfm_android.activities;
 
 import android.app.Activity;
@@ -10,8 +11,6 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ import org.cmucreatelab.mfm_android.activities.fragments.UserFragment;
 import org.cmucreatelab.mfm_android.helpers.AppState;
 import org.cmucreatelab.mfm_android.helpers.AudioRecorder;
 import org.cmucreatelab.mfm_android.classes.Group;
-import org.cmucreatelab.mfm_android.classes.OnButtonClickAudio;
+import org.cmucreatelab.mfm_android.classes.ClickableActivity;
 import org.cmucreatelab.mfm_android.classes.Sender;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
@@ -33,7 +32,6 @@ import org.cmucreatelab.mfm_android.helpers.AudioPlayer;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.FragmentHandler;
-import org.cmucreatelab.mfm_android.helpers.static_classes.SaveFileHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +41,7 @@ import java.util.TimerTask;
 
 
 // TODO - may add interfaces to the fragments that use this activity....similar to SelectionActivity
-public class SessionActivity extends OnButtonClickAudio implements CameraFragment.CameraListener,
+public class SessionActivity extends ClickableActivity implements CameraFragment.CameraListener,
                                                                 UserFragment.UserListener,
                                                                 SessionInfoFragment.SessionInfoListener{
 
@@ -320,3 +318,4 @@ public class SessionActivity extends OnButtonClickAudio implements CameraFragmen
     }
 
 }
+*/

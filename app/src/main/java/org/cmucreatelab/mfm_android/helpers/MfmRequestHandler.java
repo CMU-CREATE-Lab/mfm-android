@@ -4,8 +4,12 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
 
-import org.cmucreatelab.mfm_android.activities.LoginActivity;
-import org.cmucreatelab.mfm_android.activities.SelectionActivity;
+//import org.cmucreatelab.mfm_android.activities.LoginActivity;
+import org.cmucreatelab.mfm_android.activities.NewLoginActivity;
+//import org.cmucreatelab.mfm_android.activities.SelectionActivity;
+import org.cmucreatelab.mfm_android.activities.SchoolActivity;
+import org.cmucreatelab.mfm_android.activities.StudentsGroupsActivity;
+import org.cmucreatelab.mfm_android.classes.BaseRefreshableActivity;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Kiosk;
 import org.cmucreatelab.mfm_android.classes.Refreshable;
@@ -37,7 +41,7 @@ public class MfmRequestHandler {
     }
 
 
-    public void requestListStudents(final Refreshable activity) {
+    public void requestListStudents(final BaseRefreshableActivity activity) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;
@@ -61,7 +65,7 @@ public class MfmRequestHandler {
     }
 
 
-    public void requestListGroups(final Refreshable activity) {
+    public void requestListGroups(final BaseRefreshableActivity activity) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;
@@ -185,7 +189,7 @@ public class MfmRequestHandler {
     }
 
 
-    public void requestListSchools(final LoginActivity login, String username, String password) {
+    public void requestListSchools(final NewLoginActivity login, String username, String password) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;
@@ -214,7 +218,7 @@ public class MfmRequestHandler {
     }
 
 
-    public void login(final LoginActivity login, final String username, final String password, String schoolId) {
+    public void login(final BaseRefreshableActivity activity, final String username, final String password, String schoolId) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;
@@ -240,9 +244,9 @@ public class MfmRequestHandler {
                         School school = new School(schoolId, schoolName);
 
                         globalHandler.mfmLoginHandler.login(school, kioskId);
-                        login.loginSuccess();
+                        activity.refreshStudentsAndGroups();
                     } else{
-                        login.loginFailure();
+                        activity.loginFailure();
                     }
 
                 } catch (JSONException e) {
@@ -256,7 +260,7 @@ public class MfmRequestHandler {
     }
 
 
-    public void logout(final SelectionActivity activity) {
+    public void logout(final StudentsGroupsActivity activity) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;

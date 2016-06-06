@@ -57,7 +57,9 @@ public abstract class BaseSelectionActivity extends BaseActivity {
                 intent.putExtra(Constants.GROUP_KEY, mGroups.get(i));
                 startActivity(intent);
             } else {
-                // TODO - start session with group
+                globalHandler.sessionHandler.startSession(mGroups.get(i));
+                Intent intent = new Intent(mActivity, CameraActivity.class);
+                startActivity(intent);
             }
         }
     };

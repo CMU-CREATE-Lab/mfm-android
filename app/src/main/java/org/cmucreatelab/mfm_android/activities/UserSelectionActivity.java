@@ -8,7 +8,6 @@ import android.widget.AbsListView;
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.adapters.UserAdapter;
 import org.cmucreatelab.mfm_android.classes.Student;
-import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 
@@ -20,17 +19,11 @@ import butterknife.OnClick;
 public class UserSelectionActivity extends BaseSelectionActivity {
 
 
-    private BaseSelectionActivity thisActivity;
-    private GlobalHandler globalHandler;
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_selection);
-        globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
         ButterKnife.bind(this);
-        thisActivity = this;
         mSelectedUsers = new ArrayList<>();
 
         // display users

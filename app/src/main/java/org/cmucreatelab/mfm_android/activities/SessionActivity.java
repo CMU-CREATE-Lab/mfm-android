@@ -132,7 +132,6 @@ public class SessionActivity extends BaseActivity {
             // To content
             recipientsView = (ExtendedHeightGridView) findViewById(R.id.recipients_content);
             recipientsView.setAdapter(new UserAdapter(globalHandler.appContext, globalHandler.sessionHandler.getRecipients()));
-            Log.d(Constants.LOG_TAG, String.format("%d", globalHandler.sessionHandler.getRecipients().size()));
         } else {
             // From content
             ArrayList<Group> groupList = new ArrayList<>();
@@ -182,7 +181,7 @@ public class SessionActivity extends BaseActivity {
             ((ImageView) findViewById(R.id.media_photo)).setImageBitmap(rotated);
             ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.button_up_talk);
         }
-        if (globalHandler.sessionHandler.getMessageAudio() != null) {
+        if (globalHandler.sessionHandler.getMessageAudio() != null && !audioRecorder.isRecording) {
             ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.soundwave_final);
             ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_up);
         }
@@ -234,6 +233,16 @@ public class SessionActivity extends BaseActivity {
     }
 
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (audioRecorder.isRecording) {
+            globalHandler.sessionHandler.setMessageAudio(null);
+            audioRecorder.stopRecording();
+        }
+
+    }
+
     @OnClick(R.id.media_photo)
     public void onClickPhoto() {
         super.onButtonClick(globalHandler.appContext);
@@ -241,6 +250,8 @@ public class SessionActivity extends BaseActivity {
             audioRecorder.stopRecording();
         }
 
+        // reset audio clip
+        globalHandler.sessionHandler.setMessageAudio(null);
         ((ImageView) findViewById(R.id.media_photo)).setImageResource(R.drawable.button_down_photo);
         Intent intent = new Intent(this, CameraActivity.class);
         startActivity(intent);
@@ -256,7 +267,7 @@ public class SessionActivity extends BaseActivity {
         if (globalHandler.sessionHandler.getMessagePhoto() != null && !audioRecorder.isRecording) {
             send.setImageResource(R.drawable.send_disabled);
             audioRecorder.startRecording();
-            ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.button_up_talkstop);
+            audio.setImageResource(R.drawable.button_up_talkstop);
         } else if (audioRecorder.isRecording) {
             audioRecorder.stopRecording();
             audio.setImageResource(R.drawable.soundwave_final);
@@ -298,9 +309,9 @@ public class SessionActivity extends BaseActivity {
 
     @OnClick(R.id.send_button)
     public void onClickSend() {
-        if (globalHandler.sessionHandler.getMessageAudio() != null && !isSending && !isReplaying) {
-            audioPlayer.stop();
+        if (globalHandler.sessionHandler.getMessageAudio() != null && !isSending && !isReplaying && !audioRecorder.isRecording) {
             super.onButtonClick(globalHandler.appContext);
+            audioPlayer.stop();
             isSending = true;
             ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_down);
             globalHandler.sessionHandler.sendMessage(this);
@@ -323,7 +334,8 @@ public class SessionActivity extends BaseActivity {
 
 
     public void failure() {
-        // TODO - handle the failure of sending a message
+        Toast toast = Toast.makeText(this, "Your message failed to send.", Toast.LENGTH_LONG);
+        toast.show();
     }
 
 }

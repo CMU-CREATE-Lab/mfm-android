@@ -163,7 +163,9 @@ public class CameraActivity extends BaseActivity {
 
             // We may not need to save the image to any directory if we do this.
             globalHandler.sessionHandler.setMessagePhoto(picture);
-            // TODO - start sessionActivity
+            Intent intent = new Intent(this, NewSessionActivity.class);
+            startActivity(intent);
+            finish();
 
         } catch (FileNotFoundException e) {
             Log.e(Constants.LOG_TAG, "File not found: " + e.getMessage());

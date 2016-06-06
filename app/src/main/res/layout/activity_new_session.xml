@@ -7,6 +7,141 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="org.cmucreatelab.mfm_android.activities.NewSessionActivity">
+    tools:context="org.cmucreatelab.mfm_android.activities.NewSessionActivity"
+    android:background="@color/Mfm_Background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="10">
+
+        <LinearLayout
+            android:id="@+id/from_container"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="1.5">
+
+            <TextView
+                android:id="@+id/from_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="From:"
+                android:textStyle="italic"
+                android:textSize="30dp"
+                android:textColor="@color/White"/>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView
+                    android:id="@+id/from_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:numColumns="auto_fit">
+                </org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView>
+
+            </ScrollView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/to_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="2"
+            android:layout_margin="2dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="To:"
+                android:textStyle="italic"
+                android:textSize="30dp"
+                android:textColor="@color/White"/>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView
+                    android:id="@+id/recipients_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:numColumns="auto_fit">
+                </org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView>
+
+            </ScrollView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/media_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_margin="2dp" >
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:padding="2dp">
+
+                <ImageView
+                    android:id="@+id/media_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/button_up_photo"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:layout_centerInParent="true"
+                    android:padding="50dp"
+                    android:background="@drawable/box" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:padding="2dp">
+
+                <ImageView
+                    android:id="@+id/media_audio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/button_disabled_talk"
+                    android:adjustViewBounds="true"
+                    android:padding="50dp"
+                    android:scaleType="centerInside"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/box" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.5">
+
+            <ImageView
+                android:id="@+id/send_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/send_disabled"
+                android:adjustViewBounds="true"
+                android:layout_centerHorizontal="true"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>

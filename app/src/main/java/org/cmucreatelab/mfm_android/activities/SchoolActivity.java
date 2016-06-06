@@ -36,7 +36,7 @@ public class SchoolActivity extends AppCompatActivity {
         this.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 // TODO - figure out a cleaner way to pass the school to NewLoginActivity
-                NewLoginActivity.currentSchool = mSchools.get(position);
+                LoginActivity.currentSchool = mSchools.get(position);
                 finish();
             }
         });

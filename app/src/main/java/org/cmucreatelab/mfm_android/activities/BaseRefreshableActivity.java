@@ -39,7 +39,7 @@ public abstract class BaseRefreshableActivity extends BaseSelectionActivity {
 
 
     public void logoutSuccess() {
-        Intent intent = new Intent(this, NewLoginActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }

@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.NewLoginActivity"
+            android:name=".activities.LoginActivity"
             android:label="@string/title_mfm" />
         <activity
             android:name=".activities.SchoolActivity"

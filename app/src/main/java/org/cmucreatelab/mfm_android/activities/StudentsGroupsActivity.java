@@ -53,7 +53,7 @@ public class StudentsGroupsActivity extends BaseRefreshableActivity {
             this.gridViewGroups.setOnItemClickListener(onGroupClick);
         } else {
             globalHandler.appState = AppState.LOGIN;
-            Intent intent = new Intent(this, NewLoginActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
     }

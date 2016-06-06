@@ -5,7 +5,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 
 //import org.cmucreatelab.mfm_android.activities.LoginActivity;
-import org.cmucreatelab.mfm_android.activities.NewLoginActivity;
+import org.cmucreatelab.mfm_android.activities.LoginActivity;
 //import org.cmucreatelab.mfm_android.activities.SelectionActivity;
 import org.cmucreatelab.mfm_android.activities.BaseRefreshableActivity;
 import org.cmucreatelab.mfm_android.classes.Group;
@@ -186,7 +186,7 @@ public class MfmRequestHandler {
     }
 
 
-    public void requestListSchools(final NewLoginActivity login, String username, String password) {
+    public void requestListSchools(final LoginActivity login, String username, String password) {
         int requestMethod;
         String requestUrl;
         Response.Listener<JSONObject> response;

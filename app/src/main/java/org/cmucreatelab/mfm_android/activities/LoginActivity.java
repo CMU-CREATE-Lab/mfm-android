@@ -1,46 +1,34 @@
-/*
 package org.cmucreatelab.mfm_android.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Fragment;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.cmucreatelab.mfm_android.R;
-import org.cmucreatelab.mfm_android.activities.fragments.SchoolFragment;
-import org.cmucreatelab.mfm_android.classes.Refreshable;
 import org.cmucreatelab.mfm_android.classes.School;
 import org.cmucreatelab.mfm_android.helpers.AudioPlayer;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
-import org.cmucreatelab.mfm_android.helpers.static_classes.FragmentHandler;
 
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-*/
-/**
- * A login screen that offers login via email/password.
- *//*
+public class LoginActivity extends BaseRefreshableActivity {
 
-public class LoginActivity extends AppCompatActivity implements Refreshable, SchoolFragment.SchoolListener {
 
-    private static final String SCHOOL_TAG = "school";
+    // could not pass by using intent so I am doing this for now.
+    public static School currentSchool;
 
     public boolean isStudentsDone;
     public boolean isGroupsDone;
@@ -51,59 +39,9 @@ public class LoginActivity extends AppCompatActivity implements Refreshable, Sch
     private View mLoginFormView;
     private String username;
     private String password;
-    private Fragment schools;
-
 
     @Override
-    public void populatedGroupsAndStudentsList() {
-        if (isStudentsDone && isGroupsDone) {
-            Intent intent = new Intent(this, SelectionActivity.class);
-            startActivity(intent);
-            showProgress(false);
-            finish();
-        }
-    }
-
-
-    // If the user successfully belonged to a school, then this will be called.
-    @Override
-    public void requestListSchoolsSuccess(ArrayList<School> schools) {
-        globalHandler = GlobalHandler.getInstance(getApplicationContext());
-
-        if (schools.size() == 1) {
-            showProgress(true);
-            globalHandler.mfmRequestHandler.login(this, username, password, schools.get(0).getId().toString());
-        } else {
-            showProgress(false);
-            this.schools  = SchoolFragment.newInstance(schools);
-            FragmentHandler.addFragment(this, R.id.login_schools_scrollable_container, this.schools, SCHOOL_TAG);
-            ScrollView scrollView = (ScrollView) findViewById(R.id.login_form);
-            scrollView.removeAllViews();
-        }
-    }
-
-
-    // If the entire loging process was successful then this should be called.
-    @Override
-    public void loginSuccess() {
-        GlobalHandler.getInstance(getApplicationContext()).refreshStudentsAndGroups(this);
-    }
-
-
-    // If at any point the login process failed, call this method.
-    @Override
-    public void loginFailure() {
-        // TODO Have more possible failures instead of just username or password being invalid.
-        showProgress(false);
-        Toast.makeText(this.getApplicationContext(), R.string.error_invalid_credentials, Toast.LENGTH_LONG).show();
-    }
-
-
-    // Activity methods and listeners
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
@@ -134,21 +72,19 @@ public class LoginActivity extends AppCompatActivity implements Refreshable, Sch
             School school  = this.globalHandler.mfmLoginHandler.getSchool();
             String id = this.globalHandler.mfmLoginHandler.getKioskUid();
             this.globalHandler.mfmLoginHandler.login(school, id);
-            this.loginSuccess();
+            this.refreshStudentsAndGroups();
         }
     }
 
 
     @Override
-    public void onBackPressed() {
-        finish();
-        super.onBackPressed();
+    protected void onRestart() {
+        super.onRestart();
+        if (currentSchool != null) {
+            globalHandler.mfmRequestHandler.login(this, username, password, currentSchool.getId().toString());
+            finish();
+        }
     }
-
-    */
-/**
-     * Shows the progress UI and hides the login form.
-     *//*
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public void showProgress(final boolean show) {
@@ -193,6 +129,7 @@ public class LoginActivity extends AppCompatActivity implements Refreshable, Sch
 
     @OnClick(R.id.sign_in_button)
     public void attemptLogin() {
+        super.onButtonClick(this.getApplicationContext());
         Log.i(Constants.LOG_TAG, "Attempting to login.");
 
         // Reset errors.
@@ -231,11 +168,21 @@ public class LoginActivity extends AppCompatActivity implements Refreshable, Sch
     }
 
 
-    @Override
-    public void onSchoolSelected(School school) {
-        showProgress(true);
-        globalHandler.mfmRequestHandler.login(this, username, password, school.getId().toString());
-    }
-}
+    public void requestListSchoolsSuccess(ArrayList<School> schools) {
+        globalHandler = GlobalHandler.getInstance(getApplicationContext());
 
-*/
+        if (schools.size() == 1) {
+            showProgress(true);
+            globalHandler.mfmRequestHandler.login(this, username, password, schools.get(0).getId().toString());
+        } else {
+            /*showProgress(false);
+            Intent intent = new Intent(this, SchoolActivity.class);
+            intent.putExtra(Constants.SCHOOL_KEY, schools);
+            startActivity(intent);*/
+
+            showProgress(true);
+            globalHandler.mfmRequestHandler.login(this, username, password, schools.get(0).getId().toString());
+        }
+    }
+
+}

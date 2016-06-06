@@ -41,6 +41,7 @@ public class OrderedActivity extends BaseRefreshableActivity {
 
         // display students
         ArrayList<Student> students = mGroup.getStudents();
+        super.initStudents(students);
         this.gridViewStudents = (ExtendedHeightGridView) findViewById(R.id.gridViewStudent);
         this.gridViewStudents.setAdapter(new StudentAdapter(getApplicationContext(), students));
         this.gridViewStudents.setOnItemClickListener(onStudentClick);
@@ -48,6 +49,7 @@ public class OrderedActivity extends BaseRefreshableActivity {
         // display group
         ArrayList<Group> groups = new ArrayList<>();
         groups.add(mGroup);
+        super.initGroups(groups);
         this.gridViewGroups = (ExtendedHeightGridView) findViewById(R.id.gridViewGroup);
         this.gridViewGroups.setAdapter(new GroupAdapter(getApplicationContext(), groups));
         this.gridViewGroups.setOnItemClickListener(onGroupClick);

@@ -1,18 +1,14 @@
 package org.cmucreatelab.mfm_android.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.adapters.GroupAdapter;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.helpers.AppState;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
-import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 
 import java.util.ArrayList;
@@ -34,6 +30,7 @@ public class OrderByGroupActivity extends BaseRefreshableActivity {
 
         // display groups
         ArrayList<Group> groups = globalHandler.mfmLoginHandler.getSchool().getGroups();
+        super.initGroups(groups);
         this.gridViewGroups = (ExtendedHeightGridView) findViewById(R.id.gridViewGroup);
         this.gridViewGroups.setAdapter(new GroupAdapter(getApplicationContext(), groups));
         this.gridViewGroups.setOnItemClickListener(onGroupClick);

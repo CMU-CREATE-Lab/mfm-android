@@ -40,9 +40,9 @@ public abstract class BaseSelectionActivity extends BaseActivity {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             mActivity.onButtonClick(globalHandler.appContext);
-            globalHandler.sessionHandler.startSession(globalHandler.mfmLoginHandler.getSchool().getStudents().get(i));
+            globalHandler.sessionHandler.startSession(mStudents.get(i));
             Intent intent = new Intent(mActivity, UserSelection.class);
-            intent.putExtra(Constants.STUDENT_KEY, globalHandler.mfmLoginHandler.getSchool().getStudents().get(i));
+            intent.putExtra(Constants.STUDENT_KEY, mStudents.get(i));
             startActivity(intent);
         }
     };
@@ -54,7 +54,7 @@ public abstract class BaseSelectionActivity extends BaseActivity {
             if (globalHandler.appState == AppState.SELECTION_ORDER_BY_GROUP) {
                 mActivity.onButtonClick(globalHandler.appContext);
                 Intent intent = new Intent(mActivity, OrderedActivity.class);
-                intent.putExtra(Constants.GROUP_KEY, globalHandler.mfmLoginHandler.getSchool().getGroups().get(i));
+                intent.putExtra(Constants.GROUP_KEY, mGroups.get(i));
                 startActivity(intent);
             } else {
                 // TODO - start session with group
@@ -93,6 +93,16 @@ public abstract class BaseSelectionActivity extends BaseActivity {
             }
         }
     };
+
+
+    public void initStudents(ArrayList<Student> students) {
+        mStudents = students;
+    }
+
+
+    public void initGroups(ArrayList<Group> groups) {
+        mGroups = groups;
+    }
 
 
     @Override

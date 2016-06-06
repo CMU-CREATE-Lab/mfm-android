@@ -12,7 +12,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
 import org.cmucreatelab.mfm_android.activities.BaseRefreshableActivity;
-import org.cmucreatelab.mfm_android.activities.NewSessionActivity;
+import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import org.cmucreatelab.mfm_android.classes.FormFile;
 import org.cmucreatelab.mfm_android.classes.FormValue;
 import org.cmucreatelab.mfm_android.classes.Group;
@@ -47,7 +47,7 @@ public class GlobalHandler {
     public AppState appState;
 
 
-    public void sendPost(byte[] photo, byte[] audio, final NewSessionActivity activity) {
+    public void sendPost(byte[] photo, byte[] audio, final SessionActivity activity) {
         int requestMethod = Request.Method.POST;
         String requestUrl = Constants.MFM_API_URL + "/api/v2/message";
 

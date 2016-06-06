@@ -92,7 +92,6 @@ public class LoginActivity extends BaseRefreshableActivity {
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
         if (show) {
-            AudioPlayer audioPlayer = AudioPlayer.newInstance(this.getApplicationContext());
             audioPlayer.addAudio(R.raw.please_wait);
             audioPlayer.playAudio();
         }

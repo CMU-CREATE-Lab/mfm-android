@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="org.cmucreatelab.mfm_android.activities.NewSessionActivity"
+    tools:context=".activities.SessionActivity"
     android:background="@color/Mfm_Background">
 
     <LinearLayout

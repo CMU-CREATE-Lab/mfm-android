@@ -15,6 +15,7 @@ import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.AppState;
+import org.cmucreatelab.mfm_android.helpers.AudioPlayer;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
@@ -28,6 +29,7 @@ public abstract class BaseSelectionActivity extends BaseActivity {
 
 
     private BaseSelectionActivity mActivity;
+
     private GlobalHandler globalHandler;
     protected ArrayList<Student> mStudents;
     protected ArrayList<Group> mGroups;
@@ -51,8 +53,8 @@ public abstract class BaseSelectionActivity extends BaseActivity {
     protected AdapterView.OnItemClickListener onGroupClick = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            mActivity.onButtonClick(globalHandler.appContext);
             if (globalHandler.appState == AppState.SELECTION_ORDER_BY_GROUP) {
-                mActivity.onButtonClick(globalHandler.appContext);
                 Intent intent = new Intent(mActivity, OrderedActivity.class);
                 intent.putExtra(Constants.GROUP_KEY, mGroups.get(i));
                 startActivity(intent);
@@ -68,11 +70,22 @@ public abstract class BaseSelectionActivity extends BaseActivity {
     protected final AdapterView.OnItemClickListener onUserClick = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            if (audioPlayer.isPlaying() && !audioPlayer.playedBlueButton) {
+                audioPlayer.stop();
+            }
+
             mActivity.onButtonClick(globalHandler.appContext);
             User user = mUsers.get(i);
 
             ImageView chooseButton = (ImageView) findViewById(R.id.choose_button);
             if (gridViewUsers.isItemChecked(i)) {
+
+                if (!audioPlayer.playedBlueButton) {
+                    audioPlayer.addAudio(R.raw.press_the_blue_button);
+                    audioPlayer.playAudio();
+                    audioPlayer.playedBlueButton = true;
+                }
+
                 mSelectedUsers.add(user);
                 Log.i(Constants.LOG_TAG, "Selected " + user.getId() + " to be added to the recipients list.");
                 GradientDrawable drawable = new GradientDrawable();
@@ -108,7 +121,6 @@ public abstract class BaseSelectionActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(Constants.LOG_TAG, "initializing global handler in Base Activity");
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
         mActivity = this;
     }

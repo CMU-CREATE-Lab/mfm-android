@@ -5,7 +5,7 @@ import android.util.Log;
 
 import org.apache.commons.io.FileUtils;
 //import org.cmucreatelab.mfm_android.activities.SessionActivity;
-import org.cmucreatelab.mfm_android.activities.NewSessionActivity;
+import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import org.cmucreatelab.mfm_android.classes.Message;
 import org.cmucreatelab.mfm_android.classes.Sender;
 import org.cmucreatelab.mfm_android.classes.User;
@@ -80,7 +80,7 @@ public class SessionHandler {
     }
 
 
-    public void sendMessage(final NewSessionActivity activity) {
+    public void sendMessage(final SessionActivity activity) {
         byte[] binPhoto = new byte[0];
         byte[] binAudio = new byte[0];
         try {

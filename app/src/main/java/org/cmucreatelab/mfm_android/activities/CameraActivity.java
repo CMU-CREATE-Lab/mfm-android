@@ -37,7 +37,7 @@ public class CameraActivity extends BaseActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
         ButterKnife.bind(this);
@@ -121,6 +121,7 @@ public class CameraActivity extends BaseActivity {
 
     @OnClick(R.id.take_picture)
     public void onTakePicture(){
+        super.onButtonClick(globalHandler.appContext);
         // call back for creating the picture
         Camera.PictureCallback jpegCallBack = new Camera.PictureCallback() {
             @Override
@@ -131,7 +132,8 @@ public class CameraActivity extends BaseActivity {
                 photoYes.setImageResource(R.drawable.photo_yes);
                 findViewById(R.id.take_picture).setVisibility(View.INVISIBLE);
                 possiblePhoto = bytes;
-
+                audioPlayer.addAudio(R.raw.picture_to_share);
+                audioPlayer.playAudio();
             }
         };
 
@@ -141,6 +143,7 @@ public class CameraActivity extends BaseActivity {
 
     @OnClick(R.id.photo_no)
     public void retakePhoto() {
+        super.onButtonClick(globalHandler.appContext);
         finish();
         Intent intent = new Intent(this, CameraActivity.class);
         startActivity(intent);
@@ -149,6 +152,7 @@ public class CameraActivity extends BaseActivity {
 
     @OnClick(R.id.photo_yes)
     public void acceptPhoto() {
+        super.onButtonClick(globalHandler.appContext);
         File picture = SaveFileHandler.getOutputMediaFile(globalHandler.appContext, SaveFileHandler.MEDIA_TYPE_IMAGE, globalHandler);
 
         if (picture == null) {
@@ -163,7 +167,7 @@ public class CameraActivity extends BaseActivity {
 
             // We may not need to save the image to any directory if we do this.
             globalHandler.sessionHandler.setMessagePhoto(picture);
-            Intent intent = new Intent(this, NewSessionActivity.class);
+            Intent intent = new Intent(this, SessionActivity.class);
             startActivity(intent);
             finish();
 

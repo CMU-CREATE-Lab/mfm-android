@@ -38,7 +38,7 @@
             android:name=".activities.UserSelectionActivity"
             android:label="@string/select_users" />
         <activity android:name=".activities.CameraActivity" />
-        <activity android:name=".activities.NewSessionActivity"></activity>
+        <activity android:name=".activities.SessionActivity"></activity>
     </application>
 
 </manifest>

@@ -47,7 +47,7 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, Serializab
     }
 
 
-    public static AudioPlayer newInstance(Context context) {
+    public static AudioPlayer getInstance(Context context) {
         if (classInstance == null) {
             return new AudioPlayer(context);
         } else {
@@ -56,12 +56,12 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, Serializab
     }
 
 
-    public synchronized void addAudio(Integer fileId) {
+    public void addAudio(Integer fileId) {
         fileIds.add(fileId);
     }
 
 
-    public synchronized void playAudio() {
+    public void playAudio() {
         if (!fileIds.isEmpty() && !mediaPlayer.isPlaying()) {
             try {
                 playNext();
@@ -72,7 +72,7 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, Serializab
     }
 
 
-    public synchronized void stop() {
+    public void stop() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             fileIds.clear();
             mediaPlayer.stop();
@@ -81,7 +81,7 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, Serializab
     }
 
 
-    public synchronized void release() {
+    public void release() {
         if (mediaPlayer != null) {
             mediaPlayer.release();
             mediaPlayer = null;
@@ -95,7 +95,7 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, Serializab
 
 
     @Override
-    public synchronized void onCompletion(MediaPlayer mediaPlayer) {
+    public void onCompletion(MediaPlayer mediaPlayer) {
         if (!fileIds.isEmpty()) {
             try {
                 playNext();

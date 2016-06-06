@@ -44,14 +44,15 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/selection_done_selecting_users"
+                android:id="@+id/choose_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:padding="2dp" />
+                android:padding="2dp"
+                android:src="@drawable/choose_disabled"/>
 
         </RelativeLayout>
 

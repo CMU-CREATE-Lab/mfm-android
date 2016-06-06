@@ -1,238 +1,265 @@
-/*
 package org.cmucreatelab.mfm_android.activities;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
+import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.media.AudioManager;
+import android.media.ExifInterface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.Surface;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.cmucreatelab.mfm_android.R;
-import org.cmucreatelab.mfm_android.activities.fragments.CameraFragment;
-import org.cmucreatelab.mfm_android.activities.fragments.SessionInfoFragment;
-import org.cmucreatelab.mfm_android.activities.fragments.UserFragment;
-import org.cmucreatelab.mfm_android.helpers.AppState;
-import org.cmucreatelab.mfm_android.helpers.AudioRecorder;
+import org.cmucreatelab.mfm_android.adapters.GroupAdapter;
+import org.cmucreatelab.mfm_android.adapters.StudentAdapter;
+import org.cmucreatelab.mfm_android.adapters.UserAdapter;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Sender;
 import org.cmucreatelab.mfm_android.classes.Student;
-import org.cmucreatelab.mfm_android.classes.User;
-import org.cmucreatelab.mfm_android.helpers.AudioPlayer;
+import org.cmucreatelab.mfm_android.helpers.AudioRecorder;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
-import org.cmucreatelab.mfm_android.helpers.static_classes.FragmentHandler;
+import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class SessionActivity extends BaseActivity {
 
 
-// TODO - may add interfaces to the fragments that use this activity....similar to SelectionActivity
-public class SessionActivity extends ClickableActivity implements CameraFragment.CameraListener,
-                                                                UserFragment.UserListener,
-                                                                SessionInfoFragment.SessionInfoListener{
-
-    private final String STUDENT_TAG = "student";
-    private final String GROUP_TAG = "group";
-    private final String CAMERA_TAG = "camera";
-    private final String INFO_TAG = "info";
-    private final String USER_TAG = "user";
-
-    private Activity activity;
-    private GlobalHandler globalHandler;
-    private Timer timer;    // used to delay the display of the camera fragment
-    private TimerTask task;
-    private Fragment camera;
-    private Fragment sessionInfo;
-    private Fragment users;
-    private ArrayList<User> selectedUsers;
-    private Sender mSender;
-    private Student mStudent;
-    private Group mGroup;
+    private GlobalHandler globalHandler;;
+    private ExtendedHeightGridView recipientsView;
+    private ExtendedHeightGridView fromView;
     private AudioRecorder audioRecorder;
-    private AudioPlayer audioPlayer;
-
     private boolean isSending;
     private boolean isReplaying;
 
-    // class methods
 
+    private int getScreenOrientation() {
+        int rotation = getWindowManager().getDefaultDisplay().getRotation();
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+        int orientation;
+        // if the device's natural orientation is portrait:
+        if ((rotation == Surface.ROTATION_0
+                || rotation == Surface.ROTATION_180) && height > width ||
+                (rotation == Surface.ROTATION_90
+                        || rotation == Surface.ROTATION_270) && width > height) {
+            switch(rotation) {
+                case Surface.ROTATION_0:
+                    orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+                    break;
+                case Surface.ROTATION_90:
+                    orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+                    break;
+                case Surface.ROTATION_180:
+                    orientation =
+                            ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+                    break;
+                case Surface.ROTATION_270:
+                    orientation =
+                            ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+                    break;
+                default:
+                    Log.e(Constants.LOG_TAG, "Unknown screen orientation. Defaulting to " +
+                            "portrait.");
+                    orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+                    break;
+            }
+        }
+        // if the device's natural orientation is landscape or if the device
+        // is square:
+        else {
+            switch(rotation) {
+                case Surface.ROTATION_0:
+                    orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+                    break;
+                case Surface.ROTATION_90:
+                    orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+                    break;
+                case Surface.ROTATION_180:
+                    orientation =
+                            ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+                    break;
+                case Surface.ROTATION_270:
+                    orientation =
+                            ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+                    break;
+                default:
+                    Log.e(Constants.LOG_TAG, "Unknown screen orientation. Defaulting to " +
+                            "landscape.");
+                    orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+                    break;
+            }
+        }
 
-    private void showUsers() {
-        globalHandler.appState = AppState.SESSION_USER;
-
-        FragmentManager fm = this.getFragmentManager();
-        FragmentHandler.hideFragment(this, fm.findFragmentByTag(INFO_TAG));
-        FragmentHandler.hideFragment(this, fm.findFragmentByTag(CAMERA_TAG));
-        users = UserFragment.newInstance(mStudent.getUsers());
-        FragmentHandler.replaceFragment(this, R.id.session_users, users, USER_TAG);
-    }
-
-
-    private void showInfo() {
-        globalHandler.appState = AppState.SESSION_INFO;
-
-        FragmentManager fm = this.getFragmentManager();
-        FragmentHandler.hideFragment(this, fm.findFragmentByTag(USER_TAG));
-        FragmentHandler.hideFragment(this, fm.findFragmentByTag(CAMERA_TAG));
-        sessionInfo = SessionInfoFragment.newInstance();
-        FragmentHandler.replaceFragment(this, R.id.session_info, sessionInfo, INFO_TAG);
-    }
-
-
-    private void showCamera(int id) {
-        globalHandler.appState = AppState.SESSION_CAMERA;
-
-        FragmentManager fm = this.getFragmentManager();
-        FragmentHandler.hideFragment(this, fm.findFragmentByTag(USER_TAG));
-        FragmentHandler.hideFragment(this, fm.findFragmentByTag(INFO_TAG));
-        camera = CameraFragment.newInstance(id);
-        FragmentHandler.replaceFragment(this, R.id.session_camera, camera, CAMERA_TAG);
+        return orientation;
     }
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session);
+        ButterKnife.bind(this);
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
-        activity = this;
         audioRecorder = new AudioRecorder(globalHandler.appContext);
-        audioPlayer = AudioPlayer.newInstance(globalHandler.appContext);
-        selectedUsers = new ArrayList<>();
         isSending = false;
         isReplaying = false;
 
-        if (savedInstanceState == null) {
-            mSender = globalHandler.sessionHandler.getMessageSender();
+        if (globalHandler.sessionHandler.getMessageSender().getSenderType() == Sender.Type.student) {
+            // From content
+            ArrayList<Student> studentList = new ArrayList<>();
+            studentList.add((Student) globalHandler.sessionHandler.getMessageSender());
+            fromView = (ExtendedHeightGridView) findViewById(R.id.from_content);
+            fromView.setAdapter(new StudentAdapter(globalHandler.appContext, studentList));
 
-            sessionInfo = SessionInfoFragment.newInstance();
-            camera = CameraFragment.newInstance(Constants.DEFAULT_CAMERA_ID);
-            FragmentManager fm = this.getFragmentManager();
-            FragmentHandler.addFragment(this, R.id.session_info, sessionInfo, INFO_TAG);
-            FragmentHandler.addFragment(this, R.id.session_camera, camera, CAMERA_TAG);
-            FragmentHandler.hideFragment(this, sessionInfo);
-            FragmentHandler.hideFragment(this, camera);
-
-            if (mSender.getSenderType() == Sender.Type.student) {
-                mStudent = (Student) mSender;
-                users = UserFragment.newInstance(mStudent.getUsers());
-                FragmentHandler.addFragment(this, R.id.session_users, users, USER_TAG);
-                FragmentHandler.hideFragment(this, users);
-                audioPlayer.stop();
-                audioPlayer.addAudio(R.raw.send_your_message_to_short);
-                audioPlayer.playAudio();
-                showUsers();
-            } else {
-                mGroup = (Group) mSender;
-                showCamera(Constants.DEFAULT_CAMERA_ID);
-            }
+            // To content
+            recipientsView = (ExtendedHeightGridView) findViewById(R.id.recipients_content);
+            recipientsView.setAdapter(new UserAdapter(globalHandler.appContext, globalHandler.sessionHandler.getRecipients()));
+            Log.d(Constants.LOG_TAG, String.format("%d", globalHandler.sessionHandler.getRecipients().size()));
         } else {
-            mStudent = (Student) savedInstanceState.getSerializable(STUDENT_TAG);
-            mGroup = (Group) savedInstanceState.getSerializable(GROUP_TAG);
-            switch (globalHandler.appState) {
-                case SESSION_USER:
-                    showUsers();
-                    break;
-                case SESSION_INFO:
-                    showInfo();
-                    break;
-                case SESSION_CAMERA:
-                    showCamera(Constants.DEFAULT_CAMERA_ID);
-                    break;
-            }
+            // From content
+            ArrayList<Group> groupList = new ArrayList<>();
+            groupList.add((Group) globalHandler.sessionHandler.getMessageSender());
+            fromView = (ExtendedHeightGridView) findViewById(R.id.from_content);
+            fromView.setAdapter(new GroupAdapter(globalHandler.appContext, groupList));
+
+            // To content
+            recipientsView = (ExtendedHeightGridView) findViewById(R.id.recipients_content);
+            recipientsView.setAdapter(new GroupAdapter(globalHandler.appContext, groupList));
         }
+
+        // Media content and send
+        if (globalHandler.sessionHandler.getMessagePhoto() != null) {
+            int orientation = 0;
+            int rotation = 0;
+            try {
+                ExifInterface exif = new ExifInterface(globalHandler.sessionHandler.getMessagePhoto().getAbsolutePath());
+                orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+
+                if (CameraActivity.cameraId == Constants.DEFAULT_CAMERA_ID) {
+                    if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
+                        rotation = 270;
+                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
+                        rotation = 90;
+                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
+                        rotation = 180;
+                    }
+                } else {
+                    if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
+                        rotation = 90;
+                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
+                        rotation = 270;
+                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
+                        rotation = 180;
+                    }
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Matrix matrix = new Matrix();
+            matrix.postRotate(rotation);
+            Bitmap bitmap = BitmapFactory.decodeFile(globalHandler.sessionHandler.getMessagePhoto().getAbsolutePath());
+            Bitmap rotated = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,false);
+            ((ImageView) findViewById(R.id.media_photo)).setImageBitmap(rotated);
+            ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.button_up_talk);
+        }
+        if (globalHandler.sessionHandler.getMessageAudio() != null) {
+            ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.soundwave_final);
+            ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_up);
+        }
+
+        fromView.post(new Runnable() {
+            @Override
+            public void run() {
+                LinearLayout fromLL = (LinearLayout) findViewById(R.id.from_container);
+                int height = fromLL.getHeight();
+                int orientation = getScreenOrientation();
+
+                if (orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT || orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT) {
+                    // 1 is 100%
+                    // .15 is 15%
+                    // 15% of the Linear Layout height is taken up by the toLL
+                    fromView.setColumnWidth((int) ((height * (1-.15))/(1+.15)));
+                } else if(orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE || orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE){
+                    TextView fromText = (TextView) findViewById(R.id.from_text);
+                    int heightText = fromText.getHeight();
+                    height -= heightText;
+                    // 1 is 100%
+                    // .3 is 30%
+                    // 30% of the Linear Layout height is taken up by the toLL
+                    fromView.setColumnWidth((int) ((height * (1-.3))/(1+.3)));
+                }
+            }
+        });
+        recipientsView.post(new Runnable() {
+            @Override
+            public void run() {
+                LinearLayout toLL = (LinearLayout) findViewById(R.id.to_container);
+                int height = toLL.getHeight();
+                int orientation = getScreenOrientation();
+
+                if (orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT || orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT) {
+                    // 1 is 100%
+                    // .2 is 20%
+                    // 20% of the Linear Layout height is taken up by the toLL
+                    recipientsView.setColumnWidth((int) ((height * (1-.2))/(1+.2)));
+                } else if(orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE || orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE){
+                    // 1 is 100%
+                    // .7 is 70%
+                    // 70% of the Linear Layout height is taken up by the toLL
+                    recipientsView.setColumnWidth((int) ((height * (1-.7))/(1+.7)));
+                }
+
+            }
+        });
     }
 
 
-    @Override
-    protected void onSaveInstanceState(Bundle out) {
-        super.onSaveInstanceState(out);
-        out.putSerializable(STUDENT_TAG, mStudent);
-        out.putSerializable(GROUP_TAG, mGroup);
-        audioPlayer.stop();
-    }
-
-
-    @Override
-    public void onUserSelected(User user, boolean isChecked, View v) {
+    @OnClick(R.id.media_photo)
+    public void onClickPhoto() {
         super.onButtonClick(globalHandler.appContext);
-        if (audioPlayer.playedBlueButton == false) {
-            audioPlayer.stop();
-            audioPlayer.addAudio(R.raw.press_the_blue_button);
-            audioPlayer.playAudio();
-            audioPlayer.playedBlueButton = true;
-        }
-        ImageView chooseButton = (ImageView) findViewById(R.id.selection_done_selecting_users);
-        if (isChecked) {
-            selectedUsers.add(user);
-            Log.i(Constants.LOG_TAG, "Selected " + user.getId() + " to be added to the recipients list.");
-            GradientDrawable drawable = new GradientDrawable();
-            drawable.setShape(GradientDrawable.RECTANGLE);
-            drawable.setStroke(50, Color.GREEN);
-            Log.i(Constants.LOG_TAG, ((ViewGroup) v).getChildAt(0).toString());
-            ((ViewGroup) v).getChildAt(0).setBackgroundDrawable(drawable);
-        } else {
-            selectedUsers.remove(user);
-            Log.i(Constants.LOG_TAG, "Deselected " + user.getId() + " to be added to the recipients list.");
-            ((ViewGroup) v).getChildAt(0).setBackgroundColor(Color.alpha(0));
-        }
-
-        if (!selectedUsers.isEmpty()) {
-            chooseButton.setImageResource(R.drawable.choose_up);
-        } else {
-            chooseButton.setImageResource(R.drawable.choose_disabled);
-        }
-    }
-
-    @Override
-    public void onDoneSelectingUsers() {
-        if (!selectedUsers.isEmpty()) {
-            ((ImageView) findViewById(R.id.selection_done_selecting_users)).setImageResource(R.drawable.choose_down);
-            audioPlayer.stop();
-            super.onButtonClick(globalHandler.appContext);
-            globalHandler.sessionHandler.setMessageRecipients(selectedUsers);
-            showInfo();
-            if (globalHandler.sessionHandler.getMessagePhoto() == null)
-                showCamera(Constants.DEFAULT_CAMERA_ID);
-        }
-    }
-
-
-    @Override
-    public void onPhoto(int id) {
         if (audioRecorder.isRecording) {
             audioRecorder.stopRecording();
         }
-        // reset the audio clip
-        globalHandler.sessionHandler.setMessageAudio(null);
-        super.onButtonClick(globalHandler.appContext);
-        audioPlayer.stop();
-        showCamera(id);
+
+        ((ImageView) findViewById(R.id.media_photo)).setImageResource(R.drawable.button_down_photo);
+        Intent intent = new Intent(this, CameraActivity.class);
+        startActivity(intent);
     }
 
-    @Override
-    public void onAudio() {
+
+    @OnClick(R.id.media_audio)
+    public void onClickAudio() {
         super.onButtonClick(globalHandler.appContext);
-        if (!audioRecorder.isRecording) {
-            audioPlayer.stop();
-            ((ImageView) findViewById(R.id.f_session_info_media_audio)).setImageResource(R.drawable.button_up_talkstop);
+        ImageView audio = (ImageView) findViewById(R.id.media_audio);
+        ImageView send = (ImageView) findViewById(R.id.send_button);
+
+        if (globalHandler.sessionHandler.getMessagePhoto() != null && !audioRecorder.isRecording) {
+            send.setImageResource(R.drawable.send_disabled);
             audioRecorder.startRecording();
-        } else {
-            ((ImageView) findViewById(R.id.f_session_info_media_audio)).setImageResource(R.drawable.soundwave_final);
+            ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.button_up_talkstop);
+        } else if (audioRecorder.isRecording) {
             audioRecorder.stopRecording();
+            audio.setImageResource(R.drawable.soundwave_final);
 
             // playback the audio clip you recorded
             File audioFile = globalHandler.sessionHandler.getMessageAudio();
@@ -244,9 +271,10 @@ public class SessionActivity extends ClickableActivity implements CameraFragment
                 mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mediaPlayer) {
+                        ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_up);
                         mediaPlayer.release();
                         isReplaying = false;
-                        ((ImageView) findViewById(R.id.f_session_info_send)).setImageResource(R.drawable.send_up);
+                        ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_up);
                         audioPlayer.addAudio(R.raw.press_the_green_button);
                         audioPlayer.playAudio();
                     }
@@ -267,54 +295,35 @@ public class SessionActivity extends ClickableActivity implements CameraFragment
         }
     }
 
-    @Override
-    public void onSend() {
 
-        if (!isSending && !audioRecorder.isRecording && !isReplaying) {
-            super.onButtonClick(globalHandler.appContext);
+    @OnClick(R.id.send_button)
+    public void onClickSend() {
+        if (globalHandler.sessionHandler.getMessageAudio() != null && !isSending && !isReplaying) {
             audioPlayer.stop();
+            super.onButtonClick(globalHandler.appContext);
             isSending = true;
+            ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_down);
             globalHandler.sessionHandler.sendMessage(this);
-        } else {
-            ((ImageView) findViewById(R.id.f_session_info_send)).setImageResource(R.drawable.send_disabled);
         }
-    }
-
-
-    @Override
-    public void onPictureTaken() {
-        audioPlayer.addAudio(R.raw.what_did_take);
-        audioPlayer.playAudio();
-        showInfo();
     }
 
 
     public void success() {
-        Uri uri = Uri.parse("android.resource://" + globalHandler.appContext.getPackageName() + "/" + R.raw.your_message_has_been_sent);
-        MediaPlayer mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        audioPlayer.addAudio(R.raw.your_message_has_been_sent);
+        audioPlayer.mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
-                mediaPlayer.release();
-                Intent intent = new Intent(globalHandler.appContext, SelectionActivity.class);
+                Intent intent = new Intent(globalHandler.appContext, StudentsGroupsActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
-        try {
-            mediaPlayer.setDataSource(globalHandler.appContext, uri);
-            mediaPlayer.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mediaPlayer.start();
+        audioPlayer.playAudio();
     }
 
 
-    public void fail() {
-        Toast toast = Toast.makeText(this, "Your message failed to send.", Toast.LENGTH_LONG);
-        toast.show();
+    public void failure() {
+        // TODO - handle the failure of sending a message
     }
 
 }
-*/

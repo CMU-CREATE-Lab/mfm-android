@@ -60,6 +60,7 @@ public abstract class BaseSelectionActivity extends BaseActivity {
                 startActivity(intent);
             } else {
                 globalHandler.sessionHandler.startSession(mGroups.get(i));
+                CameraActivity.cameraId = Constants.DEFAULT_CAMERA_ID;
                 Intent intent = new Intent(mActivity, CameraActivity.class);
                 startActivity(intent);
             }

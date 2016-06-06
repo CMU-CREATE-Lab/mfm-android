@@ -253,6 +253,7 @@ public class SessionActivity extends BaseActivity {
         // reset audio clip
         globalHandler.sessionHandler.setMessageAudio(null);
         ((ImageView) findViewById(R.id.media_photo)).setImageResource(R.drawable.button_down_photo);
+        CameraActivity.cameraId = Constants.DEFAULT_CAMERA_ID;
         Intent intent = new Intent(this, CameraActivity.class);
         startActivity(intent);
     }

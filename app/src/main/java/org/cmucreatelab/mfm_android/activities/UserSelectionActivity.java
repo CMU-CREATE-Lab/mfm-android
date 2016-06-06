@@ -52,6 +52,7 @@ public class UserSelectionActivity extends BaseSelectionActivity {
         super.onButtonClick(globalHandler.appContext);
         if (!mSelectedUsers.isEmpty()) {
             globalHandler.sessionHandler.setMessageRecipients(mSelectedUsers);
+            CameraActivity.cameraId = Constants.DEFAULT_CAMERA_ID;
             Intent intent = new Intent(this, CameraActivity.class);
             startActivity(intent);
             finish();

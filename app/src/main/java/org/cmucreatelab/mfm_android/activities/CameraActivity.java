@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Surface;
 import android.view.View;
@@ -29,7 +31,7 @@ public class CameraActivity extends BaseActivity {
 
     public static int cameraId;
 
-    private Activity parentActivity;
+    private Activity mActivity;
     private GlobalHandler globalHandler;
     private Camera mCamera;
     private CameraPreview mPreview;
@@ -42,6 +44,29 @@ public class CameraActivity extends BaseActivity {
         setContentView(R.layout.activity_camera);
         ButterKnife.bind(this);
         this.globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
+        mActivity = this;
+
+        final SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) findViewById(R.id.camera_swipe_layout);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override public void run() {
+                        Intent intent = new Intent(mActivity, CameraActivity.class);
+                        if (cameraId == Constants.DEFAULT_CAMERA_ID){
+                            CameraActivity.cameraId = Constants.FRONT_FACING_CAMERA_ID;
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            CameraActivity.cameraId = Constants.DEFAULT_CAMERA_ID;
+                            startActivity(intent);
+                            finish();
+                        }
+                        swipeLayout.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
     }
 
 
@@ -68,7 +93,7 @@ public class CameraActivity extends BaseActivity {
         Camera c = null;
 
         try{
-            c = Camera.open(Constants.DEFAULT_CAMERA_ID);
+            c = Camera.open(cameraId);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -82,7 +107,7 @@ public class CameraActivity extends BaseActivity {
         int result = 0;
 
         Camera.CameraInfo info = new Camera.CameraInfo();
-        Camera.getCameraInfo(Constants.DEFAULT_CAMERA_ID, info);
+        Camera.getCameraInfo(cameraId, info);
 
         int rotation = this.getWindowManager().getDefaultDisplay().getRotation();
         int degrees = 0;

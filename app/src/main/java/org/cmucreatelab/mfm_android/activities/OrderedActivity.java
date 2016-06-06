@@ -3,8 +3,6 @@ package org.cmucreatelab.mfm_android.activities;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.adapters.GroupAdapter;

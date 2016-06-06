@@ -11,9 +11,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import org.cmucreatelab.mfm_android.R;
-import org.cmucreatelab.mfm_android.activities.fragments.CameraFragment;
-import org.cmucreatelab.mfm_android.activities.fragments.SessionInfoFragment;
-import org.cmucreatelab.mfm_android.helpers.AudioPlayer;
 import org.cmucreatelab.mfm_android.helpers.CameraPreview;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;

@@ -70,10 +70,8 @@ public abstract class BaseSelectionActivity extends BaseActivity {
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             mActivity.onButtonClick(globalHandler.appContext);
             User user = mUsers.get(i);
-            // TODO - refactor audio
 
             ImageView chooseButton = (ImageView) findViewById(R.id.choose_button);
-            Log.d(Constants.LOG_TAG, String.format("%b", gridViewUsers.isItemChecked(i)));
             if (gridViewUsers.isItemChecked(i)) {
                 mSelectedUsers.add(user);
                 Log.i(Constants.LOG_TAG, "Selected " + user.getId() + " to be added to the recipients list.");

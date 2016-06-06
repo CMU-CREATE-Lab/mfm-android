@@ -2,11 +2,8 @@ package org.cmucreatelab.mfm_android.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.adapters.GroupAdapter;
@@ -15,7 +12,6 @@ import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.AppState;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
-import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 
 import java.util.ArrayList;

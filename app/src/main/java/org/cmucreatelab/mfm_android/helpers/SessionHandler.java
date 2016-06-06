@@ -5,6 +5,7 @@ import android.util.Log;
 
 import org.apache.commons.io.FileUtils;
 //import org.cmucreatelab.mfm_android.activities.SessionActivity;
+import org.cmucreatelab.mfm_android.activities.NewSessionActivity;
 import org.cmucreatelab.mfm_android.classes.Message;
 import org.cmucreatelab.mfm_android.classes.Sender;
 import org.cmucreatelab.mfm_android.classes.User;
@@ -79,7 +80,7 @@ public class SessionHandler {
     }
 
 
-    /*public void sendMessage(final SessionActivity activity) {
+    public void sendMessage(final NewSessionActivity activity) {
         byte[] binPhoto = new byte[0];
         byte[] binAudio = new byte[0];
         try {
@@ -89,6 +90,6 @@ public class SessionHandler {
             Log.e(Constants.LOG_TAG, "Error in reading a file to a byte array in sendMessage.");
         }
         globalHandler.sendPost(binPhoto, binAudio, activity);
-    }*/
+    }
 
 }

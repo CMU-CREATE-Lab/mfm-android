@@ -21,6 +21,7 @@ import org.cmucreatelab.mfm_android.adapters.UserAdapter;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Sender;
 import org.cmucreatelab.mfm_android.classes.Student;
+import org.cmucreatelab.mfm_android.helpers.AudioRecorder;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
@@ -37,6 +38,8 @@ public class NewSessionActivity extends BaseActivity {
     private GlobalHandler globalHandler;;
     private ExtendedHeightGridView recipientsView;
     private ExtendedHeightGridView fromView;
+    private AudioRecorder audioRecorder;
+    private boolean isSending;
 
 
     private int getScreenOrientation() {
@@ -109,6 +112,8 @@ public class NewSessionActivity extends BaseActivity {
         setContentView(R.layout.activity_new_session);
         ButterKnife.bind(this);
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
+        audioRecorder = new AudioRecorder(globalHandler.appContext);
+        isSending = false;
 
         if (globalHandler.sessionHandler.getMessageSender().getSenderType() == Sender.Type.student) {
             // From content
@@ -223,6 +228,11 @@ public class NewSessionActivity extends BaseActivity {
 
     @OnClick(R.id.media_photo)
     public void onClickPhoto() {
+        super.onButtonClick(globalHandler.appContext);
+        if (audioRecorder.isRecording) {
+            audioRecorder.stopRecording();
+        }
+
         ((ImageView) findViewById(R.id.media_photo)).setImageResource(R.drawable.button_down_photo);
         Intent intent = new Intent(this, CameraActivity.class);
         startActivity(intent);
@@ -231,20 +241,40 @@ public class NewSessionActivity extends BaseActivity {
 
     @OnClick(R.id.media_audio)
     public void onClickAudio() {
-        if (globalHandler.sessionHandler.getMessagePhoto() != null) {
-            ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.button_down_talk);
-            ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_disabled);
-            // TODO - record audio
+        super.onButtonClick(globalHandler.appContext);
+        ImageView audio = (ImageView) findViewById(R.id.media_audio);
+        ImageView send = (ImageView) findViewById(R.id.send_button);
+
+        if (globalHandler.sessionHandler.getMessagePhoto() != null && !audioRecorder.isRecording) {
+            send.setImageResource(R.drawable.send_disabled);
+            audioRecorder.startRecording();
+            ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.button_up_talkstop);
+        } else if (audioRecorder.isRecording) {
+            audioRecorder.stopRecording();
+            audio.setImageResource(R.drawable.soundwave_final);
+            send.setImageResource(R.drawable.send_up);
         }
     }
 
 
     @OnClick(R.id.send_button)
     public void onClickSend() {
-        if (globalHandler.sessionHandler.getMessageAudio() != null) {
+        if (globalHandler.sessionHandler.getMessageAudio() != null && !isSending) {
+            super.onButtonClick(globalHandler.appContext);
+            isSending = true;
             ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_down);
-            // TODO - send message
+            globalHandler.sessionHandler.sendMessage(this);
         }
+    }
+
+
+    public void success() {
+        // TODO - message was sent
+    }
+
+
+    public void failure() {
+        // TODO - message was not sent
     }
 
 }

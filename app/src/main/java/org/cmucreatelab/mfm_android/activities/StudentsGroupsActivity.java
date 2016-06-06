@@ -44,17 +44,17 @@ public class StudentsGroupsActivity extends BaseRefreshableActivity {
 
             // display students
             ArrayList<Student> students = globalHandler.mfmLoginHandler.getSchool().getStudents();
+            super.initStudents(students);
             this.gridViewStudents = (ExtendedHeightGridView) findViewById(R.id.gridViewStudent);
             this.gridViewStudents.setAdapter(new StudentAdapter(getApplicationContext(), students));
             this.gridViewStudents.setOnItemClickListener(onStudentClick);
 
             // display groups
             ArrayList<Group> groups = globalHandler.mfmLoginHandler.getSchool().getGroups();
+            super.initGroups(groups);
             this.gridViewGroups = (ExtendedHeightGridView) findViewById(R.id.gridViewGroup);
             this.gridViewGroups.setAdapter(new GroupAdapter(getApplicationContext(), groups));
             this.gridViewGroups.setOnItemClickListener(onGroupClick);
-
-            Log.d(Constants.LOG_TAG, String.format("%d", groups.size()));
         } else {
             globalHandler.appState = AppState.LOGIN;
             Intent intent = new Intent(this, NewLoginActivity.class);

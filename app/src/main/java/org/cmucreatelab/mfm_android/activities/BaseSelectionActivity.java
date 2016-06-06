@@ -41,7 +41,7 @@ public abstract class BaseSelectionActivity extends BaseActivity {
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             mActivity.onButtonClick(globalHandler.appContext);
             globalHandler.sessionHandler.startSession(mStudents.get(i));
-            Intent intent = new Intent(mActivity, UserSelection.class);
+            Intent intent = new Intent(mActivity, UserSelectionActivity.class);
             intent.putExtra(Constants.STUDENT_KEY, mStudents.get(i));
             startActivity(intent);
         }

@@ -34,8 +34,10 @@
             android:label="@string/select_school" />
         <activity android:name=".activities.OrderByGroupActivity" />
         <activity android:name=".activities.OrderedActivity" />
-        <activity android:name=".activities.UserSelection"
-            android:label="@string/select_users"/>
+        <activity
+            android:name=".activities.UserSelectionActivity"
+            android:label="@string/select_users" />
+        <activity android:name=".activities.CameraActivity"></activity>
     </application>
 
 </manifest>

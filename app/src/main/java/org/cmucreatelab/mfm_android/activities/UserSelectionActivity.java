@@ -1,38 +1,27 @@
 package org.cmucreatelab.mfm_android.activities;
 
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ImageView;
 
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.adapters.UserAdapter;
 import org.cmucreatelab.mfm_android.classes.Student;
-import org.cmucreatelab.mfm_android.classes.User;
-import org.cmucreatelab.mfm_android.helpers.AudioPlayer;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 
 import java.util.ArrayList;
 
-public class UserSelection extends BaseSelectionActivity {
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class UserSelectionActivity extends BaseSelectionActivity {
 
 
     private BaseSelectionActivity thisActivity;
     private GlobalHandler globalHandler;
-
-
-    private void onChoose() {
-        if (!mSelectedUsers.isEmpty()) {
-            // TODO - start next activity
-        }
-    }
 
 
     @Override
@@ -40,6 +29,7 @@ public class UserSelection extends BaseSelectionActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_selection);
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
+        ButterKnife.bind(this);
         thisActivity = this;
         mSelectedUsers = new ArrayList<>();
 
@@ -50,6 +40,17 @@ public class UserSelection extends BaseSelectionActivity {
         this.gridViewUsers.setAdapter(new UserAdapter(getApplicationContext(), mUsers));
         this.gridViewUsers.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
         this.gridViewUsers.setOnItemClickListener(onUserClick);
+    }
+
+
+    @OnClick(R.id.choose_button)
+    public void onChoose() {
+        Log.d(Constants.LOG_TAG, "onChoose()");
+        if (!mSelectedUsers.isEmpty()) {
+            Log.d(Constants.LOG_TAG, "start camera activity");
+            Intent intent = new Intent(this, CameraActivity.class);
+            startActivity(intent);
+        }
     }
 
 }

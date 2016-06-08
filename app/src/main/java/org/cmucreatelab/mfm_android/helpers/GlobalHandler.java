@@ -103,7 +103,7 @@ public class GlobalHandler {
                         Log.i(Constants.LOG_TAG, "dbStudent not up to date in checkAndUpdateStudents...updating.");
                         mfmRequestHandler.updateStudent(dbStudent);
                     }
-                    // If the student was not found in the database.
+                    Log.d(Constants.LOG_TAG, "Student was found in the database. Doing nothing.");
                 } catch (Exception e) {
                     Log.i(Constants.LOG_TAG, "No student found in the database that matched the mfmRequest. Adding to database");
                     school.addStudent(mfmStudent);
@@ -134,7 +134,7 @@ public class GlobalHandler {
                         Log.i(Constants.LOG_TAG, "dbGroup not up to date in checkAndUpdateGroups...updating.");
                         mfmRequestHandler.updateGroup(dbGroup);
                     }
-                    // If the group was not found in the database.
+                    Log.d(Constants.LOG_TAG, "Group was found in the database. Doing nothing.");
                 } catch (Exception e) {
                     Log.i(Constants.LOG_TAG, "No group found in the database that matched the mfmRequest. Adding to database");
                     school.addGroup(mfmGroup);

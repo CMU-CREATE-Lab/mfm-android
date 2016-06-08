@@ -3,6 +3,7 @@ package org.cmucreatelab.mfm_android.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -174,13 +175,10 @@ public class LoginActivity extends BaseRefreshableActivity {
             showProgress(true);
             globalHandler.mfmRequestHandler.login(this, username, password, schools.get(0).getId().toString());
         } else {
-            /*showProgress(false);
+            showProgress(false);
             Intent intent = new Intent(this, SchoolActivity.class);
             intent.putExtra(Constants.SCHOOL_KEY, schools);
-            startActivity(intent);*/
-
-            showProgress(true);
-            globalHandler.mfmRequestHandler.login(this, username, password, schools.get(0).getId().toString());
+            startActivity(intent);
         }
     }
 

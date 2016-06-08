@@ -58,4 +58,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         audioPlayer.stop();
         audioPlayer.release();
     }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
+
 }

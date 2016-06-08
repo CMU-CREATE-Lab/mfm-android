@@ -9,20 +9,27 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@color/Mfm_Background">
 
-    <ScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/selection_swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <include layout="@layout/student_container"/>
-            <include layout="@layout/group_container"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <include layout="@layout/student_container"/>
+                <include layout="@layout/group_container"/>
 
-    </ScrollView>
+            </LinearLayout>
+
+        </ScrollView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

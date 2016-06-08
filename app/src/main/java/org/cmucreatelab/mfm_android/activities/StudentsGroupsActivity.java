@@ -2,6 +2,8 @@ package org.cmucreatelab.mfm_android.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -23,6 +25,7 @@ public class StudentsGroupsActivity extends BaseRefreshableActivity {
     private GlobalHandler globalHandler;
     private ExtendedHeightGridView gridViewStudents;
     private ExtendedHeightGridView gridViewGroups;
+    private SwipeRefreshLayout swipeLayout;
 
 
     @Override
@@ -30,13 +33,11 @@ public class StudentsGroupsActivity extends BaseRefreshableActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_students_groups);
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
-        setTitle(globalHandler.mfmLoginHandler.getSchool().getName() + " - " +  getString(R.string.all_students_and_groups));
         thisActivity = this;
 
         if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
-            if (globalHandler.mfmLoginHandler.getSchool().getStudents().size() == 0) {
-                globalHandler.mfmLoginHandler.login(globalHandler.mfmLoginHandler.getSchool(), globalHandler.mfmLoginHandler.getKioskUid());
-            }
+            globalHandler.mfmLoginHandler.login(globalHandler.mfmLoginHandler.getSchool(), globalHandler.mfmLoginHandler.getKioskUid());
+            setTitle(globalHandler.mfmLoginHandler.getSchool().getName() + " - " +  getString(R.string.all_students_and_groups));
 
             // display students
             ArrayList<Student> students = globalHandler.mfmLoginHandler.getSchool().getStudents();
@@ -56,6 +57,20 @@ public class StudentsGroupsActivity extends BaseRefreshableActivity {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
+
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.selection_swipe_layout);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override public void run() {
+                        refreshStudentsAndGroups();
+                        finish();
+                        startActivity(getIntent());
+                    }
+                }, 1000);
+            }
+        });
     }
 
 

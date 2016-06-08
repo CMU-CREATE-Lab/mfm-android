@@ -84,6 +84,8 @@ public class LoginActivity extends BaseRefreshableActivity {
         if (currentSchool != null) {
             globalHandler.mfmRequestHandler.login(this, username, password, currentSchool.getId().toString());
             finish();
+            Intent intent = new Intent(this, StudentsGroupsActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -180,6 +182,12 @@ public class LoginActivity extends BaseRefreshableActivity {
             intent.putExtra(Constants.SCHOOL_KEY, schools);
             startActivity(intent);
         }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 
 }

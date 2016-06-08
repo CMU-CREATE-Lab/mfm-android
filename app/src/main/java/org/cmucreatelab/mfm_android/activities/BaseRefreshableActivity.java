@@ -26,8 +26,8 @@ public abstract class BaseRefreshableActivity extends BaseSelectionActivity {
 
     public void populatedGroupsAndStudentsList() {
         if (isStudentsDone && isGroupsDone) {
-            //Intent intent = new Intent(this, StudentsGroupsActivity.class);
-            //startActivity(intent);
+            Intent intent = new Intent(this, StudentsGroupsActivity.class);
+            startActivity(intent);
             finish();
         }
     }

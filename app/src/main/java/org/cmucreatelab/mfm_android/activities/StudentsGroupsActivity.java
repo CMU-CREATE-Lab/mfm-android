@@ -54,6 +54,7 @@ public class StudentsGroupsActivity extends BaseRefreshableActivity {
             this.gridViewGroups.setOnItemClickListener(onGroupClick);
         } else {
             globalHandler.appState = AppState.LOGIN;
+            finish();
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
@@ -100,6 +101,12 @@ public class StudentsGroupsActivity extends BaseRefreshableActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 
 }

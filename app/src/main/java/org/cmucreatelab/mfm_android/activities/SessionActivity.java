@@ -230,6 +230,9 @@ public class SessionActivity extends BaseActivity {
 
             }
         });
+
+        // bring the camera button to the foreground since there is not an option in xml....
+        findViewById(R.id.camera_button).bringToFront();
     }
 
 
@@ -243,7 +246,7 @@ public class SessionActivity extends BaseActivity {
 
     }
 
-    @OnClick(R.id.media_photo)
+    @OnClick(R.id.camera_button)
     public void onClickPhoto() {
         super.onButtonClick(globalHandler.appContext);
         if (audioRecorder.isRecording) {

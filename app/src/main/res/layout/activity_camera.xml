@@ -60,6 +60,7 @@
                         android:layout_height="match_parent"
                         android:src="@drawable/ic_switch_camera_black_48dp"
                         android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
                         android:padding="10dp"/>
 
                 </RelativeLayout>

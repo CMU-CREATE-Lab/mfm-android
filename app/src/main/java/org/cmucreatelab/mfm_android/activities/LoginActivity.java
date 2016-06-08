@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.classes.School;
-import org.cmucreatelab.mfm_android.helpers.AudioPlayer;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 

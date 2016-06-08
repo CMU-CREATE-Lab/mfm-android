@@ -45,28 +45,6 @@ public class CameraActivity extends BaseActivity {
         ButterKnife.bind(this);
         this.globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
         mActivity = this;
-
-        final SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) findViewById(R.id.camera_swipe_layout);
-        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override public void run() {
-                        Intent intent = new Intent(mActivity, CameraActivity.class);
-                        if (cameraId == Constants.DEFAULT_CAMERA_ID){
-                            CameraActivity.cameraId = Constants.FRONT_FACING_CAMERA_ID;
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            CameraActivity.cameraId = Constants.DEFAULT_CAMERA_ID;
-                            startActivity(intent);
-                            finish();
-                        }
-                        swipeLayout.setRefreshing(false);
-                    }
-                }, 1000);
-            }
-        });
     }
 
 
@@ -200,6 +178,22 @@ public class CameraActivity extends BaseActivity {
             Log.e(Constants.LOG_TAG, "File not found: " + e.getMessage());
         } catch (IOException e) {
             Log.e(Constants.LOG_TAG, "Error gaining access to the file: " + e.getMessage());
+        }
+    }
+
+
+    @OnClick(R.id.flip_camera)
+    public void flipCamera() {
+        super.onButtonClick(this);
+        Intent intent = getIntent();
+        if (cameraId == Constants.DEFAULT_CAMERA_ID){
+            CameraActivity.cameraId = Constants.FRONT_FACING_CAMERA_ID;
+            startActivity(intent);
+            finish();
+        } else {
+            CameraActivity.cameraId = Constants.DEFAULT_CAMERA_ID;
+            startActivity(intent);
+            finish();
         }
     }
 

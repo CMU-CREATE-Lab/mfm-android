@@ -10,11 +10,6 @@
     tools:context="org.cmucreatelab.mfm_android.activities.CameraActivity"
     android:background="@color/Mfm_Background">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/camera_swipe_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -54,10 +49,20 @@
                 android:weightSum="100"
                 android:orientation="vertical">
 
-                <FrameLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="20"></FrameLayout>
+                    android:layout_weight="20">
+
+                    <ImageView
+                        android:id="@+id/flip_camera"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_switch_camera_black_48dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"/>
+
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -82,7 +87,5 @@
             </LinearLayout>
 
         </RelativeLayout>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

@@ -60,7 +60,7 @@
                         android:layout_height="match_parent"
                         android:src="@drawable/ic_switch_camera_black_48dp"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"/>
+                        android:padding="10dp"/>
 
                 </RelativeLayout>
 
@@ -75,7 +75,8 @@
                         android:id="@+id/take_picture"
                         android:src="@drawable/white_circle"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:padding="10dp"/>
 
                 </RelativeLayout>
 

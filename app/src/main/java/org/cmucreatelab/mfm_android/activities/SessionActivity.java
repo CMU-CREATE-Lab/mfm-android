@@ -252,7 +252,6 @@ public class SessionActivity extends BaseActivity {
 
         // reset audio clip
         globalHandler.sessionHandler.setMessageAudio(null);
-        ((ImageView) findViewById(R.id.media_photo)).setImageResource(R.drawable.button_down_photo);
         CameraActivity.cameraId = Constants.DEFAULT_CAMERA_ID;
         Intent intent = new Intent(this, CameraActivity.class);
         startActivity(intent);
@@ -262,6 +261,7 @@ public class SessionActivity extends BaseActivity {
     @OnClick(R.id.media_audio)
     public void onClickAudio() {
         super.onButtonClick(globalHandler.appContext);
+        audioPlayer.stop();
         ImageView audio = (ImageView) findViewById(R.id.media_audio);
         ImageView send = (ImageView) findViewById(R.id.send_button);
 
@@ -283,12 +283,14 @@ public class SessionActivity extends BaseActivity {
                 mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mediaPlayer) {
-                        ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_up);
+                        if (!audioRecorder.isRecording) {
+                            ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_up);
+                            ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_up);
+                            audioPlayer.addAudio(R.raw.press_the_green_button);
+                            audioPlayer.playAudio();
+                        }
                         mediaPlayer.release();
                         isReplaying = false;
-                        ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_up);
-                        audioPlayer.addAudio(R.raw.press_the_green_button);
-                        audioPlayer.playAudio();
                     }
                 });
                 try {

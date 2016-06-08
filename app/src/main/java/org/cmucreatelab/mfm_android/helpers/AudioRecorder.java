@@ -46,7 +46,7 @@ public class AudioRecorder {
 
 
     public void stopRecording() {
-        if (mediaRecorder != null) {
+        if (mediaRecorder != null && isRecording) {
             this.mediaRecorder.stop();
             this.mediaRecorder.release();
             this.mediaRecorder = null;

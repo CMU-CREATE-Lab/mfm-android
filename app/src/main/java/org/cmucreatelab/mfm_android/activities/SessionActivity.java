@@ -263,53 +263,71 @@ public class SessionActivity extends BaseActivity {
 
     @OnClick(R.id.media_audio)
     public void onClickAudio() {
-        super.onButtonClick(globalHandler.appContext);
-        audioPlayer.stop();
-        ImageView audio = (ImageView) findViewById(R.id.media_audio);
-        ImageView send = (ImageView) findViewById(R.id.send_button);
+        if (globalHandler.sessionHandler.getMessageAudio() == null || audioRecorder.isRecording) {
+            super.onButtonClick(globalHandler.appContext);
+            audioPlayer.stop();
+            ImageView audio = (ImageView) findViewById(R.id.media_audio);
+            ImageView send = (ImageView) findViewById(R.id.send_button);
 
-        if (globalHandler.sessionHandler.getMessagePhoto() != null && !audioRecorder.isRecording) {
-            send.setImageResource(R.drawable.send_disabled);
-            audioRecorder.startRecording();
-            audio.setImageResource(R.drawable.button_up_talkstop);
-        } else if (audioRecorder.isRecording) {
-            audioRecorder.stopRecording();
-            audio.setImageResource(R.drawable.soundwave_final);
+            if (globalHandler.sessionHandler.getMessagePhoto() != null && !audioRecorder.isRecording) {
+                send.setImageResource(R.drawable.send_disabled);
+                audioRecorder.startRecording();
+                audio.setImageResource(R.drawable.button_up_talkstop);
+            } else if (audioRecorder.isRecording) {
+                audioRecorder.stopRecording();
+                audio.setImageResource(R.drawable.soundwave_final);
+                findViewById(R.id.audio_button).bringToFront();
 
-            // playback the audio clip you recorded
-            File audioFile = globalHandler.sessionHandler.getMessageAudio();
-            if (audioFile != null) {
-                Uri uri = Uri.parse(audioFile.getAbsolutePath());
-                Log.i(Constants.LOG_TAG, uri.toString());
-                MediaPlayer mediaPlayer = new MediaPlayer();
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mediaPlayer) {
-                        if (!audioRecorder.isRecording) {
-                            ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_up);
-                            ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_up);
-                            audioPlayer.addAudio(R.raw.press_the_green_button);
-                            audioPlayer.playAudio();
+                // playback the audio clip you recorded
+                File audioFile = globalHandler.sessionHandler.getMessageAudio();
+                if (audioFile != null) {
+                    Uri uri = Uri.parse(audioFile.getAbsolutePath());
+                    Log.i(Constants.LOG_TAG, uri.toString());
+                    MediaPlayer mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mediaPlayer) {
+                            if (!audioRecorder.isRecording) {
+                                ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_up);
+                                ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_up);
+                                audioPlayer.addAudio(R.raw.press_the_green_button);
+                                audioPlayer.playAudio();
+                            }
+                            mediaPlayer.release();
+                            isReplaying = false;
                         }
-                        mediaPlayer.release();
-                        isReplaying = false;
+                    });
+                    try {
+                        mediaPlayer.setDataSource(this.getApplicationContext(), uri);
+                        mediaPlayer.prepare();
+                        mediaPlayer.start();
+                        isReplaying = true;
+                        Toast toast = Toast.makeText(globalHandler.appContext, "Replaying audio recorded.", Toast.LENGTH_SHORT);
+                        toast.show();
+                    } catch (IOException e) {
+                        Log.e(Constants.LOG_TAG, e.toString());
+                        Log.e(Constants.LOG_TAG, audioFile.getAbsolutePath());
                     }
-                });
-                try {
-                    mediaPlayer.setDataSource(this.getApplicationContext(), uri);
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
-                    isReplaying = true;
-                    Toast toast = Toast.makeText(globalHandler.appContext, "Replaying audio recorded.", Toast.LENGTH_SHORT);
-                    toast.show();
-                } catch (IOException e) {
-                    Log.e(Constants.LOG_TAG, e.toString());
-                    Log.e(Constants.LOG_TAG, audioFile.getAbsolutePath());
-                }
 
+                }
             }
         }
+    }
+
+
+    @OnClick(R.id.audio_button)
+    public void onClickReRecord() {
+        // TODO - record again
+        super.onButtonClick(this);
+        ImageView audio = (ImageView) findViewById(R.id.media_audio);
+        ImageView send = (ImageView) findViewById(R.id.send_button);
+        audioRecorder.stopRecording();
+        audioPlayer.stop();
+        globalHandler.sessionHandler.setMessageAudio(null);
+        audioRecorder.startRecording();
+        audio.setImageResource(R.drawable.button_up_talkstop);
+        send.setImageResource(R.drawable.send_disabled);
     }
 
 

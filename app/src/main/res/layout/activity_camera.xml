@@ -58,7 +58,7 @@
                         android:id="@+id/flip_camera"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_switch_camera_black_48dp"
+                        android:src="@drawable/ic_switch_camera_white_48dp"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentTop="true"
                         android:padding="10dp"/>

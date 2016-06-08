@@ -97,7 +97,7 @@
                     android:id="@+id/camera_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_photo_camera_black_36dp"
+                    android:src="@drawable/ic_photo_camera_white_36dp"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:padding="15dp"/>
@@ -120,6 +120,15 @@
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:padding="2dp">
+
+                <ImageView
+                    android:id="@+id/audio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_record_voice_over_white_36dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:padding="15dp"/>
 
                 <ImageView
                     android:id="@+id/media_audio"

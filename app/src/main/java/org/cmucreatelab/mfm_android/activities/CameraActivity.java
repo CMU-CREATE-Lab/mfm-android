@@ -58,6 +58,7 @@ public class CameraActivity extends BaseActivity {
         this.mCamera.setDisplayOrientation(rotation);
         Camera.Parameters params = mCamera.getParameters();
         params.setRotation(rotation);
+        params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
         mCamera.setParameters(params);
 
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);

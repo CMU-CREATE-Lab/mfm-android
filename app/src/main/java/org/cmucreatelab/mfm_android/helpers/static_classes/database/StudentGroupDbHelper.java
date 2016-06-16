@@ -13,6 +13,11 @@ import java.util.ArrayList;
 
 /**
  * Created by mike on 2/8/16.
+ *
+ * StudentGroupDbHelper
+ *
+ * A helper class to simplify student and group database operations.
+ *
  */
 public class StudentGroupDbHelper {
 

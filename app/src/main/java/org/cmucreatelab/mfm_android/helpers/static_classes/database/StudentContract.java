@@ -2,6 +2,11 @@ package org.cmucreatelab.mfm_android.helpers.static_classes.database;
 
 /**
  * Created by mike on 2/5/16.
+ *
+ * SutdentContract
+ *
+ * The contract information for a Student.
+ *
  */
 public class StudentContract {
 

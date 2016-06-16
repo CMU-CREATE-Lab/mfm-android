@@ -12,6 +12,11 @@ import java.util.ArrayList;
 
 /**
  * Created by mike on 2/8/16.
+ *
+ * GroupDbHelper
+ *
+ * A helper class to simplify group database operations.
+ *
  */
 public class GroupDbHelper {
 

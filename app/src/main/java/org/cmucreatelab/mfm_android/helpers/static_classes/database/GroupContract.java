@@ -2,6 +2,10 @@ package org.cmucreatelab.mfm_android.helpers.static_classes.database;
 
 /**
  * Created by mike on 2/5/16.
+ *
+ * GroupContract
+ *
+ * The contract information for a Group.
  */
 public class GroupContract {
 

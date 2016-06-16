@@ -8,6 +8,11 @@ import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 
 /**
  * Created by Steve on 3/21/2016.
+ *
+ * MessageFromSQLLiteOpenHelper
+ *
+ * A helper class to simplify managing the database.
+ *
  */
 public class MessageFromMeSQLLiteOpenHelper extends SQLiteOpenHelper {
 

@@ -15,8 +15,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * Created by Steve on 5/20/2016.
  *
- * Used to play audio.
- * Make sure to add the audio ids to the queue before calling playAudio().
+ * AudioPlayer
+ *
+ * A helper class to simplify playing audio clips.
  *
  */
 public class AudioPlayer implements MediaPlayer.OnCompletionListener, Serializable {

@@ -12,6 +12,11 @@ import java.io.IOException;
 
 /**
  * Created by Steve on 5/17/2016.
+ *
+ * AudioRecorder
+ *
+ * A helper class to simplify recording audio.
+ *
  */
 public class AudioRecorder {
 

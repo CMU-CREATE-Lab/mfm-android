@@ -4,6 +4,11 @@ import java.util.HashMap;
 
 /**
  * Created by mike on 2/2/16.
+ *
+ * Constants
+ *
+ * A static class that holds commonly accessed information.
+ *
  */
 public class Constants {
 

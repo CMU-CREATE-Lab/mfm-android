@@ -5,6 +5,11 @@ import java.util.ArrayList;
 
 /**
  * Created by mike on 1/28/16.
+ *
+ * Students
+ *
+ * Represents a Student that belongs to a School and/or Group.
+ *
  */
 public class Student implements Sender, Serializable {
 

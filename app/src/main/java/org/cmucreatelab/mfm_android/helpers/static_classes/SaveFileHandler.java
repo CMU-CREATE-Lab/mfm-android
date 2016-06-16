@@ -10,6 +10,8 @@ import java.io.File;
 /**
  * Created by Steve on 3/18/2016.
  *
+ * SaveFileHandler
+ *
  * Used to help create and save files of various types.
  */
 public class SaveFileHandler {

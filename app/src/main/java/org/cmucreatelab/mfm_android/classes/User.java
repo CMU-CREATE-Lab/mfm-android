@@ -4,6 +4,11 @@ import java.io.Serializable;
 
 /**
  * Created by mike on 1/28/16.
+ *
+ * User
+ *
+ * Represents a User who has a Student belonging to a School.
+ *
  */
 public class User implements Serializable {
 

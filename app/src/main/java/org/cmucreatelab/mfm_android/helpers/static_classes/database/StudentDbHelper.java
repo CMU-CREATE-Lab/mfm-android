@@ -12,6 +12,11 @@ import java.util.ArrayList;
 
 /**
  * Created by mike on 2/8/16.
+ *
+ * StudentDbHelper
+ *
+ * A helper class to simplify student database operations.
+ *
  */
 public class StudentDbHelper {
 

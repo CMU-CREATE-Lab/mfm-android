@@ -11,7 +11,10 @@ import java.io.IOException;
 /**
  * Created by Steve on 3/15/2016.
  *
+ * CameraPreview
+ *
  * A helper class that displays the camera.
+ *
  */
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
 

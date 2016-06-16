@@ -5,6 +5,11 @@ import java.util.ArrayList;
 
 /**
  * Created by mike on 1/28/16.
+ *
+ * Group
+ *
+ * Represents a Group that belongs to a School.
+ *
  */
 public class Group implements Sender, Serializable {
 

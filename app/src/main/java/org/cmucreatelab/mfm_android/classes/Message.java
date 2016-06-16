@@ -6,6 +6,11 @@ import java.util.Collection;
 
 /**
  * Created by mike on 2/2/16.
+ *
+ * Message
+ *
+ * Represents the Message to be sent to a User - picture/audio.
+ *
  */
 public class Message {
 

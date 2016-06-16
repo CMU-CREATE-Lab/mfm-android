@@ -8,6 +8,11 @@ import java.util.ArrayList;
 
 /**
  * Created by Steve on 3/14/2016.
+ *
+ * School
+ *
+ * Represents an School that holds Students and Groups.
+ *
  */
 public class School implements Serializable{
 

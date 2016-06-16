@@ -2,6 +2,11 @@ package org.cmucreatelab.mfm_android.helpers.static_classes.database;
 
 /**
  * Created by mike on 2/5/16.
+ *
+ * UserContract
+ *
+ * The contract information for a User.
+ *
  */
 public class UserContract {
 

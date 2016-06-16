@@ -13,6 +13,11 @@ import java.util.ArrayList;
 
 /**
  * Created by mike on 4/11/16.
+ *
+ * DBHelper
+ *
+ * A helper class to simplify database operations.
+ *
  */
 public class DbHelper {
 

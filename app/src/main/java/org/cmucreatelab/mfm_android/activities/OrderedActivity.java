@@ -34,8 +34,8 @@ public class OrderedActivity extends BaseRefreshableActivity {
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
         globalHandler.appState = AppState.ORDERED;
         thisActivity = this;
-
         mGroup = (Group) getIntent().getExtras().getSerializable(Constants.GROUP_KEY);
+        this.setTitle(globalHandler.mfmLoginHandler.getSchool().getName() + " - " + mGroup.getName());
 
         // display students
         ArrayList<Student> students = mGroup.getStudents();

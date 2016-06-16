@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
-//import org.cmucreatelab.mfm_android.activities.LoginActivity;
-//import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;

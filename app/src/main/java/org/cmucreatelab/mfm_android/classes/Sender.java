@@ -1,7 +1,5 @@
 package org.cmucreatelab.mfm_android.classes;
 
-import java.io.Serializable;
-
 /**
  * Created by mike on 2/2/16.
  *

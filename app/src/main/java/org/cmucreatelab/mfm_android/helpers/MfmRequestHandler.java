@@ -4,9 +4,7 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
 
-//import org.cmucreatelab.mfm_android.activities.LoginActivity;
 import org.cmucreatelab.mfm_android.activities.LoginActivity;
-//import org.cmucreatelab.mfm_android.activities.SelectionActivity;
 import org.cmucreatelab.mfm_android.activities.BaseRefreshableActivity;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Kiosk;

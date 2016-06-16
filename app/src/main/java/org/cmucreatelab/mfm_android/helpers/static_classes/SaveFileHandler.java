@@ -4,12 +4,8 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
-import org.cmucreatelab.mfm_android.classes.Sender;
-import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by Steve on 3/18/2016.

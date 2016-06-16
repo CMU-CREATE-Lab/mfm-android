@@ -4,7 +4,6 @@ package org.cmucreatelab.mfm_android.helpers;
 import android.util.Log;
 
 import org.apache.commons.io.FileUtils;
-//import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import org.cmucreatelab.mfm_android.classes.Message;
 import org.cmucreatelab.mfm_android.classes.Sender;

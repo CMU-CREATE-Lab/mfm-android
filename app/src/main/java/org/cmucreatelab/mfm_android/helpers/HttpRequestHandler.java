@@ -1,5 +1,7 @@
 package org.cmucreatelab.mfm_android.helpers;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -48,7 +50,12 @@ public class HttpRequestHandler implements Response.ErrorListener {
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        // TODO handle error response
+        AlertDialog dialog;
+        AlertDialog.Builder builder = new AlertDialog.Builder(globalHandler.appContext);
+        builder.setTitle("Http Request Error");
+        builder.setMessage(error.getMessage() + "\n\nCheck connection status");
+        dialog = builder.create();
+        dialog.show();
     }
 
 }

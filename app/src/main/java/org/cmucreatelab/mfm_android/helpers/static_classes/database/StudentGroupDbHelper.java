@@ -114,7 +114,6 @@ public class StudentGroupDbHelper {
         }
 
         // set group's list of students
-        // TODO order the list of students (by name, most likely)
         group.setStudents(result);
     }
 

@@ -44,7 +44,6 @@ public class UserDbHelper {
             }
 
             // add to data structure
-            // TODO studentId => Student?
             result.setDatabaseId(id);
             result.setFirstName(firstName);
             result.setLastName(lastName);

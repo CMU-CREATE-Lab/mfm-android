@@ -318,7 +318,6 @@ public class SessionActivity extends BaseActivity {
 
     @OnClick(R.id.audio_button)
     public void onClickReRecord() {
-        // TODO - record again
         super.onButtonClick(this);
         ImageView audio = (ImageView) findViewById(R.id.media_audio);
         ImageView send = (ImageView) findViewById(R.id.send_button);

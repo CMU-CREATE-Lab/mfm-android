@@ -39,7 +39,6 @@ public abstract class BaseRefreshableActivity extends BaseSelectionActivity {
 
 
     public void loginFailure() {
-        // TODO - handle failures
         Log.d(Constants.LOG_TAG, "Failed to login");
         AlertDialog dialog;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

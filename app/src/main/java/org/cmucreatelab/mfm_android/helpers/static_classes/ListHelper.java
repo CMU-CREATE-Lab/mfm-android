@@ -22,7 +22,6 @@ public class ListHelper {
                 return student;
             }
         }
-        // TODO is this how throwing exceptions should look?
         Log.e(Constants.LOG_TAG, "could not find studentId="+studentId+" in findStudentWithId");
         throw new Exception();
     }
@@ -34,7 +33,6 @@ public class ListHelper {
                 return group;
             }
         }
-        // TODO is this how throwing exceptions should look?
         Log.e(Constants.LOG_TAG, "could not find groupId="+groupId+" in findGroupWithId");
         throw new Exception();
     }

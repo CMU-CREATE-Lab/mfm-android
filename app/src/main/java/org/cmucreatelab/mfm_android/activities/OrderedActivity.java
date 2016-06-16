@@ -18,7 +18,6 @@ import java.util.ArrayList;
 
 public class OrderedActivity extends BaseRefreshableActivity {
 
-    // TODO
 
     private BaseRefreshableActivity thisActivity;
     private GlobalHandler globalHandler;

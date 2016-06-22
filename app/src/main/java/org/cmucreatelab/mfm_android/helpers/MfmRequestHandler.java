@@ -201,7 +201,8 @@ public class MfmRequestHandler {
                         ArrayList<School> schools = JSONParser.parseSchoolsFromJSON(response);
                         login.requestListSchoolsSuccess(schools);
                     } else {
-                        login.loginFailure();
+                        String message = response.getString("status_message");
+                        login.loginFailure(message);
                     }
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "JSONException in response for requestListSchools.");
@@ -241,7 +242,8 @@ public class MfmRequestHandler {
                         globalHandler.mfmLoginHandler.login(school, kioskId);
                         activity.refreshStudentsAndGroups();
                     } else{
-                        activity.loginFailure();
+                        String message = response.getString("status_message");
+                        activity.loginFailure(message);
                     }
 
                 } catch (JSONException e) {

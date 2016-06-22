@@ -38,12 +38,12 @@ public abstract class BaseRefreshableActivity extends BaseSelectionActivity {
     }
 
 
-    public void loginFailure() {
+    public void loginFailure(String message) {
         Log.d(Constants.LOG_TAG, "Failed to login");
         AlertDialog dialog;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Failed to login");
-        builder.setMessage("Check internet connection and retry.");
+        builder.setMessage(message);
         final Activity activity = this;
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override

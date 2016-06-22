@@ -1,13 +1,18 @@
 package org.cmucreatelab.mfm_android.helpers;
 
-import android.content.DialogInterface;
+import android.app.Activity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.internal.view.ContextThemeWrapper;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.json.JSONObject;
 
@@ -50,12 +55,14 @@ public class HttpRequestHandler implements Response.ErrorListener {
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        AlertDialog dialog;
-        AlertDialog.Builder builder = new AlertDialog.Builder(globalHandler.appContext);
+        // TODO - I couldn't use a dialog because of issues with getting a valid instance of an Activity and its context.  It shouldn't be hard to get working but for now I am just using a toast.
+        Toast.makeText(globalHandler.appContext, "Check internet connection", Toast.LENGTH_LONG).show();
+        /*AlertDialog dialog;
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(globalHandler.appContext, R.style.AppTheme));
         builder.setTitle("Http Request Error");
         builder.setMessage(error.getMessage() + "\n\nCheck connection status");
         dialog = builder.create();
-        dialog.show();
+        dialog.show();*/
     }
 
 }

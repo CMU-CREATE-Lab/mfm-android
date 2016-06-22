@@ -158,6 +158,13 @@ public class LoginActivity extends BaseRefreshableActivity {
             cancel = true;
         }
 
+        if (username.contains(" ")) {
+            username = username.replace(" ", "%20");
+        }
+        if (password.contains(" ")) {
+            password = password.replace(" ", "%20");
+        }
+
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.

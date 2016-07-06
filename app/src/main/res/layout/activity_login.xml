@@ -21,6 +21,7 @@
         android:visibility="gone" />
 
     <TextView
+        android:id="@+id/login_explained"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Enter your Message from Me login credentials."

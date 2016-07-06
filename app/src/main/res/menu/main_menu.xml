@@ -6,7 +6,7 @@
         android:title="@string/menu_log_out"/>
     <item
         android:id="@+id/orderByGroup"
-        android:title="Order by Group"/>
+        android:title="@string/order_by_group"/>
     <item
         android:id="@+id/showAll"
         android:title="Show All"/>

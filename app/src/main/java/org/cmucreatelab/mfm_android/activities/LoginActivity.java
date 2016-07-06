@@ -119,11 +119,13 @@ public class LoginActivity extends BaseRefreshableActivity {
                     mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
                 }
             });
+            findViewById(R.id.login_explained).setVisibility(show ? View.GONE : View.VISIBLE);
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            findViewById(R.id.login_explained).setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 

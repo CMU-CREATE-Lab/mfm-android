@@ -10,13 +10,10 @@
     tools:context="org.cmucreatelab.mfm_android.activities.CameraActivity"
     android:background="@color/Mfm_Background">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true">
 
@@ -26,6 +23,12 @@
                     android:layout_height="match_parent"
                     android:id="@+id/camera_preview"
                     android:screenOrientation="portrait"/>
+
+                <ImageView
+                    android:id="@+id/image_preview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="invisible"/>
 
                 <ImageView
                     android:id="@+id/photo_no"
@@ -87,7 +90,5 @@
                     android:layout_weight="20"></FrameLayout>
 
             </LinearLayout>
-
-        </RelativeLayout>
 
 </RelativeLayout>

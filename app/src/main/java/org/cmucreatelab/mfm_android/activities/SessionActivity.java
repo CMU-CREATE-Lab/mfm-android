@@ -25,6 +25,7 @@ import org.cmucreatelab.mfm_android.adapters.UserAdapter;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Sender;
 import org.cmucreatelab.mfm_android.classes.Student;
+import org.cmucreatelab.mfm_android.helpers.AudioPlayer;
 import org.cmucreatelab.mfm_android.helpers.AudioRecorder;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
@@ -40,6 +41,7 @@ import butterknife.OnClick;
 public class SessionActivity extends BaseActivity {
 
 
+    private static boolean isFirst = true;
     private GlobalHandler globalHandler;
     private ExtendedHeightGridView recipientsView;
     private ExtendedHeightGridView fromView;
@@ -180,6 +182,13 @@ public class SessionActivity extends BaseActivity {
             Bitmap rotated = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,false);
             ((ImageView) findViewById(R.id.media_photo)).setImageBitmap(rotated);
             ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.button_up_talk);
+
+            if (isFirst) {
+                isFirst = false;
+                audioPlayer = AudioPlayer.getInstance(this);
+                audioPlayer.addAudio(R.raw.what_did_take);
+                audioPlayer.playAudio();
+            }
         }
         if (globalHandler.sessionHandler.getMessageAudio() != null && !audioRecorder.isRecording) {
             ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.soundwave_final);

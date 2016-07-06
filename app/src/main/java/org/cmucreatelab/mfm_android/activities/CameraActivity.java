@@ -2,8 +2,11 @@ package org.cmucreatelab.mfm_android.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Camera;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Surface;
@@ -145,11 +148,17 @@ public class CameraActivity extends BaseActivity {
                 possiblePhoto = bytes;
                 audioPlayer.addAudio(R.raw.picture_to_share);
                 audioPlayer.playAudio();
+
+                Matrix matrix = new Matrix();
+                matrix.postRotate(getCameraOrientation());
                 ImageView imagePreview = (ImageView) findViewById(R.id.image_preview);
-                imagePreview.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                Bitmap rotated = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,false);
+                imagePreview.setImageBitmap(rotated);
                 imagePreview.setVisibility(View.VISIBLE);
                 FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
                 preview.removeAllViews();
+                preview.setVisibility(View.INVISIBLE);
             }
         };
 

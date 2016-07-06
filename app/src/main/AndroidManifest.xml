@@ -37,8 +37,10 @@
         <activity
             android:name=".activities.UserSelectionActivity"
             android:label="@string/select_users" />
-        <activity android:name=".activities.CameraActivity" />
-        <activity android:name=".activities.SessionActivity"></activity>
+        <activity android:name=".activities.CameraActivity"
+            android:label="@string/title_mfm"/>
+        <activity android:name=".activities.SessionActivity"
+            android:label="@string/title_mfm"></activity>
     </application>
 
 </manifest>

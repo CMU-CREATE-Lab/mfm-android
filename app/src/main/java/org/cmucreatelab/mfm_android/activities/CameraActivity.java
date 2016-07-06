@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -58,7 +59,14 @@ public class CameraActivity extends BaseActivity {
         this.mCamera.setDisplayOrientation(rotation);
         Camera.Parameters params = mCamera.getParameters();
         params.setRotation(rotation);
-        params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+
+        ArrayList<String> list = (ArrayList<String>) params.getSupportedFocusModes();
+        for (String item : list) {
+            if (item.equals("continuous-picture")) {
+                params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+            }
+        }
+
         mCamera.setParameters(params);
 
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);

@@ -40,7 +40,7 @@ import butterknife.OnClick;
 public class SessionActivity extends BaseActivity {
 
 
-    private GlobalHandler globalHandler;;
+    private GlobalHandler globalHandler;
     private ExtendedHeightGridView recipientsView;
     private ExtendedHeightGridView fromView;
     private AudioRecorder audioRecorder;

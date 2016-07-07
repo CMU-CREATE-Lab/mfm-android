@@ -41,7 +41,6 @@ import butterknife.OnClick;
 public class SessionActivity extends BaseActivity {
 
 
-    private static boolean isFirst = true;
     private GlobalHandler globalHandler;
     private ExtendedHeightGridView recipientsView;
     private ExtendedHeightGridView fromView;
@@ -115,8 +114,8 @@ public class SessionActivity extends BaseActivity {
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
         setContentView(R.layout.activity_session);
         ButterKnife.bind(this);
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
@@ -182,13 +181,6 @@ public class SessionActivity extends BaseActivity {
             Bitmap rotated = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,false);
             ((ImageView) findViewById(R.id.media_photo)).setImageBitmap(rotated);
             ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.button_up_talk);
-
-            if (isFirst) {
-                isFirst = false;
-                audioPlayer = AudioPlayer.getInstance(this);
-                audioPlayer.addAudio(R.raw.what_did_take);
-                audioPlayer.playAudio();
-            }
         }
         if (globalHandler.sessionHandler.getMessageAudio() != null && !audioRecorder.isRecording) {
             ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.soundwave_final);
@@ -246,6 +238,16 @@ public class SessionActivity extends BaseActivity {
 
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (globalHandler.sessionHandler.getMessageAudio() == null && globalHandler.sessionHandler.getMessagePhoto() != null) {
+            audioPlayer.stop();
+            audioPlayer.addAudio(R.raw.what_did_take);
+            audioPlayer.playAudio();
+        }
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         if (audioRecorder.isRecording) {
@@ -263,10 +265,12 @@ public class SessionActivity extends BaseActivity {
         }
 
         // reset audio clip
+        audioPlayer.stop();
         globalHandler.sessionHandler.setMessageAudio(null);
         CameraActivity.cameraId = Constants.DEFAULT_CAMERA_ID;
         Intent intent = new Intent(this, CameraActivity.class);
         startActivity(intent);
+        finish();
     }
 
 

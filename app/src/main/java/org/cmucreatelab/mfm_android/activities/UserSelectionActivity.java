@@ -49,13 +49,13 @@ public class UserSelectionActivity extends BaseSelectionActivity {
 
     @OnClick(R.id.choose_button)
     public void onChoose() {
-        super.onButtonClick(globalHandler.appContext);
         if (!mSelectedUsers.isEmpty()) {
+            super.onButtonClick(globalHandler.appContext);
+            audioPlayer.stop();
             globalHandler.sessionHandler.setMessageRecipients(mSelectedUsers);
             CameraActivity.cameraId = Constants.DEFAULT_CAMERA_ID;
             Intent intent = new Intent(this, CameraActivity.class);
             startActivity(intent);
-            finish();
         }
     }
 

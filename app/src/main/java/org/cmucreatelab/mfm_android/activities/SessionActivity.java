@@ -1,8 +1,6 @@
 package org.cmucreatelab.mfm_android.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -12,12 +10,8 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Surface;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -28,7 +22,6 @@ import org.cmucreatelab.mfm_android.adapters.UserAdapter;
 import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Sender;
 import org.cmucreatelab.mfm_android.classes.Student;
-import org.cmucreatelab.mfm_android.helpers.AudioPlayer;
 import org.cmucreatelab.mfm_android.helpers.AudioRecorder;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
@@ -48,7 +41,8 @@ public class SessionActivity extends BaseActivity {
     private ExtendedHeightGridView recipientsView;
     private ExtendedHeightGridView fromView;
     private AudioRecorder audioRecorder;
-    private ViewFlipper viewFlipper;
+    private ViewFlipper audioFlipper;
+    private ViewFlipper sendFliper;
     private boolean isSending;
     private boolean isReplaying;
 
@@ -62,7 +56,8 @@ public class SessionActivity extends BaseActivity {
         audioRecorder = new AudioRecorder(globalHandler.appContext);
         isSending = false;
         isReplaying = false;
-        viewFlipper = (ViewFlipper) findViewById(R.id.audio_flipper);
+        audioFlipper = (ViewFlipper) findViewById(R.id.audio_flipper);
+        sendFliper = (ViewFlipper) findViewById(R.id.send_flipper);
 
         if (globalHandler.sessionHandler.getMessageSender().getSenderType() == Sender.Type.student) {
             // From content
@@ -185,8 +180,8 @@ public class SessionActivity extends BaseActivity {
                 audio.setImageResource(R.drawable.button_up_talkstop);
             } else if (audioRecorder.isRecording) {
                 audioRecorder.stopRecording();
-                viewFlipper.setInAnimation(this, R.anim.in_from_left);
-                viewFlipper.showNext();
+                audioFlipper.setInAnimation(this, R.anim.in_from_left);
+                audioFlipper.showNext();
                 findViewById(R.id.audio_button).bringToFront();
 
                 // playback the audio clip you recorded
@@ -238,8 +233,8 @@ public class SessionActivity extends BaseActivity {
         audioRecorder.startRecording();
         audio.setImageResource(R.drawable.button_up_talkstop);
         send.setImageResource(R.drawable.send_disabled);
-        viewFlipper.setInAnimation(null);
-        viewFlipper.showPrevious();
+        audioFlipper.setInAnimation(null);
+        audioFlipper.showPrevious();
     }
 
 
@@ -252,6 +247,10 @@ public class SessionActivity extends BaseActivity {
                 isSending = true;
                 ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_down);
                 globalHandler.sessionHandler.sendMessage(this);
+
+                sendFliper.setInAnimation(this, R.anim.in_from_left);
+                sendFliper.setOutAnimation(this, R.anim.out_to_right);
+                sendFliper.showNext();
             } else {
                 AlertDialog dialog;
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);

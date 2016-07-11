@@ -42,7 +42,7 @@ public class SessionActivity extends BaseActivity {
     private ExtendedHeightGridView fromView;
     private AudioRecorder audioRecorder;
     private ViewFlipper audioFlipper;
-    private ViewFlipper sendFliper;
+    private ViewFlipper sendFlipper;
     private boolean isSending;
     private boolean isReplaying;
 
@@ -57,7 +57,7 @@ public class SessionActivity extends BaseActivity {
         isSending = false;
         isReplaying = false;
         audioFlipper = (ViewFlipper) findViewById(R.id.audio_flipper);
-        sendFliper = (ViewFlipper) findViewById(R.id.send_flipper);
+        sendFlipper = (ViewFlipper) findViewById(R.id.send_flipper);
 
         if (globalHandler.sessionHandler.getMessageSender().getSenderType() == Sender.Type.student) {
             // From content
@@ -87,7 +87,9 @@ public class SessionActivity extends BaseActivity {
             int rotation = 0;
             try {
                 ExifInterface exif = new ExifInterface(globalHandler.sessionHandler.getMessagePhoto().getAbsolutePath());
-                orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+                orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 0);
+
+                Log.d(Constants.LOG_TAG, "The orientation is: " + orientation);
 
                 if (CameraActivity.cameraId == Constants.DEFAULT_CAMERA_ID) {
                     if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
@@ -248,9 +250,9 @@ public class SessionActivity extends BaseActivity {
                 ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_down);
                 globalHandler.sessionHandler.sendMessage(this);
 
-                sendFliper.setInAnimation(this, R.anim.in_from_left);
-                sendFliper.setOutAnimation(this, R.anim.out_to_right);
-                sendFliper.showNext();
+                sendFlipper.setInAnimation(this, R.anim.in_from_left);
+                sendFlipper.setOutAnimation(this, R.anim.out_to_right);
+                sendFlipper.showNext();
             } else {
                 AlertDialog dialog;
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);

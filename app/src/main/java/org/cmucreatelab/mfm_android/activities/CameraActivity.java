@@ -33,6 +33,7 @@ public class CameraActivity extends BaseActivity {
 
 
     public static int cameraId;
+    public static int orientation;
 
     private Activity mActivity;
     private GlobalHandler globalHandler;
@@ -115,6 +116,8 @@ public class CameraActivity extends BaseActivity {
             result = (info.orientation - degrees + 360) % 360;
         }
 
+        orientation = result;
+
         return result;
     }
 
@@ -148,17 +151,7 @@ public class CameraActivity extends BaseActivity {
                 possiblePhoto = bytes;
                 audioPlayer.addAudio(R.raw.picture_to_share);
                 audioPlayer.playAudio();
-
-                Matrix matrix = new Matrix();
-                matrix.postRotate(getCameraOrientation());
-                ImageView imagePreview = (ImageView) findViewById(R.id.image_preview);
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                Bitmap rotated = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,false);
-                imagePreview.setImageBitmap(rotated);
-                imagePreview.setVisibility(View.VISIBLE);
-                FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
-                preview.removeAllViews();
-                preview.setVisibility(View.INVISIBLE);
+                mCamera.stopPreview();
             }
         };
 

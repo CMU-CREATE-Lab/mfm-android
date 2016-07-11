@@ -35,13 +35,6 @@ public class StudentsGroupsActivity extends BaseRefreshableActivity {
     private SwipeRefreshLayout swipeLayout;
 
 
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null;
-    }
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,8 +42,7 @@ public class StudentsGroupsActivity extends BaseRefreshableActivity {
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
         thisActivity = this;
 
-        Log.d(Constants.LOG_TAG, "isConnected: " + String.valueOf(isNetworkConnected()));
-        if (isNetworkConnected()) {
+        if (globalHandler.isNetworkConnected(this)) {
             if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
                 globalHandler.mfmLoginHandler.login(globalHandler.mfmLoginHandler.getSchool(), globalHandler.mfmLoginHandler.getKioskUid());
                 setTitle(globalHandler.mfmLoginHandler.getSchool().getName() + " - " +  getString(R.string.all_students_and_groups));

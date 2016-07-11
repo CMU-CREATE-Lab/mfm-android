@@ -1,6 +1,8 @@
 package org.cmucreatelab.mfm_android.helpers;
 
+import android.app.Activity;
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.util.Log;
 
@@ -43,6 +45,12 @@ public class GlobalHandler {
     public MfmLoginHandler mfmLoginHandler;
     public SessionHandler sessionHandler;
     public AppState appState;
+
+
+    public boolean isNetworkConnected(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
+    }
 
 
     public void sendPost(byte[] photo, byte[] audio, final SessionActivity activity) {

@@ -1,5 +1,6 @@
 package org.cmucreatelab.mfm_android.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -10,6 +11,7 @@ import android.media.ExifInterface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Surface;
@@ -244,11 +246,21 @@ public class SessionActivity extends BaseActivity {
     @OnClick(R.id.send_button)
     public void onClickSend() {
         if (globalHandler.sessionHandler.getMessageAudio() != null && !isSending && !isReplaying && !audioRecorder.isRecording) {
-            super.onButtonClick(globalHandler.appContext);
-            audioPlayer.stop();
-            isSending = true;
-            ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_down);
-            globalHandler.sessionHandler.sendMessage(this);
+            if (globalHandler.isNetworkConnected(this)) {
+                super.onButtonClick(globalHandler.appContext);
+                audioPlayer.stop();
+                isSending = true;
+                ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_down);
+                globalHandler.sessionHandler.sendMessage(this);
+            } else {
+                AlertDialog dialog;
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("No Internet Connection");
+                builder.setMessage("Connect to the internet to send your message.");
+                builder.setPositiveButton("Ok", null);
+                dialog = builder.create();
+                dialog.show();
+            }
         }
     }
 

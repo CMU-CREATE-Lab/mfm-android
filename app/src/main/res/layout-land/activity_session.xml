@@ -29,12 +29,18 @@
                 android:textSize="30dp"
                 android:textColor="@color/White"/>
 
-            <org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView
-                android:id="@+id/from_content"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:numColumns="auto_fit">
-            </org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView>
+                android:layout_height="match_parent">
+
+                <org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView
+                    android:id="@+id/from_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:numColumns="auto_fit">
+                </org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView>
+
+            </ScrollView>
 
         </LinearLayout>
 
@@ -61,7 +67,7 @@
                 <org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView
                     android:id="@+id/recipients_content"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:numColumns="auto_fit">
                 </org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView>
 
@@ -94,6 +100,11 @@
                 android:padding="2dp">
 
                 <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/box"/>
+
+                <ImageView
                     android:id="@+id/camera_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -122,6 +133,11 @@
                 android:padding="2dp">
 
                 <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/box"/>
+
+                <ImageView
                     android:id="@+id/audio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -130,16 +146,28 @@
                     android:layout_centerHorizontal="true"
                     android:padding="15dp"/>
 
-                <ImageView
-                    android:id="@+id/media_audio"
+                <ViewFlipper
+                    android:id="@+id/audio_flipper"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/button_disabled_talk"
-                    android:padding="50dp"
-                    android:scaleType="centerInside"
-                    android:layout_centerVertical="true"
-                    android:adjustViewBounds="true"
-                    android:background="@drawable/box"/>
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/media_audio"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/button_disabled_talk"
+                        android:padding="50dp"
+                        android:scaleType="centerInside"
+                        android:layout_centerVertical="true"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/box"/>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/soundwave_final"/>
+
+                </ViewFlipper>
 
             </RelativeLayout>
 

@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.adapters.GroupAdapter;
@@ -45,72 +46,9 @@ public class SessionActivity extends BaseActivity {
     private ExtendedHeightGridView recipientsView;
     private ExtendedHeightGridView fromView;
     private AudioRecorder audioRecorder;
+    private ViewFlipper viewFlipper;
     private boolean isSending;
     private boolean isReplaying;
-
-
-    private int getScreenOrientation() {
-        int rotation = getWindowManager().getDefaultDisplay().getRotation();
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        int width = dm.widthPixels;
-        int height = dm.heightPixels;
-        int orientation;
-        // if the device's natural orientation is portrait:
-        if ((rotation == Surface.ROTATION_0
-                || rotation == Surface.ROTATION_180) && height > width ||
-                (rotation == Surface.ROTATION_90
-                        || rotation == Surface.ROTATION_270) && width > height) {
-            switch(rotation) {
-                case Surface.ROTATION_0:
-                    orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-                    break;
-                case Surface.ROTATION_90:
-                    orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-                    break;
-                case Surface.ROTATION_180:
-                    orientation =
-                            ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
-                    break;
-                case Surface.ROTATION_270:
-                    orientation =
-                            ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-                    break;
-                default:
-                    Log.e(Constants.LOG_TAG, "Unknown screen orientation. Defaulting to " +
-                            "portrait.");
-                    orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-                    break;
-            }
-        }
-        // if the device's natural orientation is landscape or if the device
-        // is square:
-        else {
-            switch(rotation) {
-                case Surface.ROTATION_0:
-                    orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-                    break;
-                case Surface.ROTATION_90:
-                    orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-                    break;
-                case Surface.ROTATION_180:
-                    orientation =
-                            ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-                    break;
-                case Surface.ROTATION_270:
-                    orientation =
-                            ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
-                    break;
-                default:
-                    Log.e(Constants.LOG_TAG, "Unknown screen orientation. Defaulting to " +
-                            "landscape.");
-                    orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-                    break;
-            }
-        }
-
-        return orientation;
-    }
 
 
     @Override
@@ -122,6 +60,7 @@ public class SessionActivity extends BaseActivity {
         audioRecorder = new AudioRecorder(globalHandler.appContext);
         isSending = false;
         isReplaying = false;
+        viewFlipper = (ViewFlipper) findViewById(R.id.audio_flipper);
 
         if (globalHandler.sessionHandler.getMessageSender().getSenderType() == Sender.Type.student) {
             // From content
@@ -185,52 +124,8 @@ public class SessionActivity extends BaseActivity {
         if (globalHandler.sessionHandler.getMessageAudio() != null && !audioRecorder.isRecording) {
             ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.soundwave_final);
             ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_up);
+            findViewById(R.id.audio_button).bringToFront();
         }
-
-        fromView.post(new Runnable() {
-            @Override
-            public void run() {
-                LinearLayout fromLL = (LinearLayout) findViewById(R.id.from_container);
-                int height = fromLL.getHeight();
-                int orientation = getScreenOrientation();
-
-                if (orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT || orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT) {
-                    // 1 is 100%
-                    // .15 is 15%
-                    // 15% of the Linear Layout height is taken up by the toLL
-                    fromView.setColumnWidth((int) ((height * (1-.15))/(1+.15)));
-                } else if(orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE || orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE){
-                    TextView fromText = (TextView) findViewById(R.id.from_text);
-                    int heightText = fromText.getHeight();
-                    height -= heightText;
-                    // 1 is 100%
-                    // .3 is 30%
-                    // 30% of the Linear Layout height is taken up by the toLL
-                    fromView.setColumnWidth((int) ((height * (1-.3))/(1+.3)));
-                }
-            }
-        });
-        recipientsView.post(new Runnable() {
-            @Override
-            public void run() {
-                LinearLayout toLL = (LinearLayout) findViewById(R.id.to_container);
-                int height = toLL.getHeight();
-                int orientation = getScreenOrientation();
-
-                if (orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT || orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT) {
-                    // 1 is 100%
-                    // .2 is 20%
-                    // 20% of the Linear Layout height is taken up by the toLL
-                    recipientsView.setColumnWidth((int) ((height * (1-.2))/(1+.2)));
-                } else if(orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE || orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE){
-                    // 1 is 100%
-                    // .7 is 70%
-                    // 70% of the Linear Layout height is taken up by the toLL
-                    recipientsView.setColumnWidth((int) ((height * (1-.7))/(1+.7)));
-                }
-
-            }
-        });
 
         // bring the camera button to the foreground since there is not an option in xml....
         findViewById(R.id.camera_button).bringToFront();
@@ -288,7 +183,8 @@ public class SessionActivity extends BaseActivity {
                 audio.setImageResource(R.drawable.button_up_talkstop);
             } else if (audioRecorder.isRecording) {
                 audioRecorder.stopRecording();
-                audio.setImageResource(R.drawable.soundwave_final);
+                viewFlipper.setInAnimation(this, R.anim.in_from_left);
+                viewFlipper.showNext();
                 findViewById(R.id.audio_button).bringToFront();
 
                 // playback the audio clip you recorded
@@ -340,6 +236,8 @@ public class SessionActivity extends BaseActivity {
         audioRecorder.startRecording();
         audio.setImageResource(R.drawable.button_up_talkstop);
         send.setImageResource(R.drawable.send_disabled);
+        viewFlipper.setInAnimation(null);
+        viewFlipper.showPrevious();
     }
 
 

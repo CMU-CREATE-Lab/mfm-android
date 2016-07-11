@@ -26,6 +26,9 @@ public class SaveFileHandler {
 
 
         String name = globalHandler.sessionHandler.getMessageSender().getName();
+        if (name.contains(" ")) {
+            name = name.replace(' ', '_');
+        }
         if (type == MEDIA_TYPE_IMAGE) {
             mediaStorageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), name);
         } else if (type == MEDIA_TYPE_AUDIO) {
@@ -41,10 +44,10 @@ public class SaveFileHandler {
 
         if (type == MEDIA_TYPE_IMAGE) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + name + ".jpg");
+                    "IMG_" + name + ".jpeg");
             mediaFile.delete();
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + name + ".jpg");
+                    "IMG_" + name + ".jpeg");
         } else if (type == MEDIA_TYPE_AUDIO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
                     "AUDIO_" + name + ".amr-nb");

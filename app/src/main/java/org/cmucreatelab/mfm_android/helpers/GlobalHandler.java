@@ -1,6 +1,5 @@
 package org.cmucreatelab.mfm_android.helpers;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.os.Build;

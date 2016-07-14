@@ -1,6 +1,8 @@
 package org.cmucreatelab.mfm_android.activities;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -8,9 +10,12 @@ import android.media.AudioManager;
 import android.media.ExifInterface;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Display;
+import android.view.Surface;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -45,6 +50,43 @@ public class SessionActivity extends BaseActivity {
     private ViewFlipper sendFlipper;
     private boolean isSending;
     private boolean isReplaying;
+
+
+    private static boolean isLandscape270() {
+        return android.os.Build.MANUFACTURER.equals("Amazon")
+                && !(android.os.Build.MODEL.equals("KFOT") || android.os.Build.MODEL.equals("Kindle Fire"));
+    }
+
+
+    private int getOrientation() {
+
+        int port = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+        int revP = ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+        int land = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+        int revL = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+        if (Build.VERSION.SDK_INT < 9) {
+            revL = land;
+            revP = port;
+        } else if (isLandscape270()) {
+            land = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+            revL = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+        }
+
+        Display display = this.getWindowManager().getDefaultDisplay();
+        boolean wide = this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        switch (display.getRotation()) {
+            case Surface.ROTATION_0:
+                return wide ? land : port;
+            case Surface.ROTATION_90:
+                return wide ? land : revP;
+            case Surface.ROTATION_180:
+                return wide ? revL : revP;
+            case Surface.ROTATION_270:
+                return wide ? revL : port;
+            default:
+                throw new AssertionError();
+        }
+    }
 
 
     @Override
@@ -85,38 +127,80 @@ public class SessionActivity extends BaseActivity {
         if (globalHandler.sessionHandler.getMessagePhoto() != null) {
             int orientation = 0;
             int rotation = 0;
+            Matrix matrix = new Matrix();
             try {
                 ExifInterface exif = new ExifInterface(globalHandler.sessionHandler.getMessagePhoto().getAbsolutePath());
                 orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 0);
 
-                Log.d(Constants.LOG_TAG, "The orientation is: " + orientation);
-
                 if (CameraActivity.cameraId == Constants.DEFAULT_CAMERA_ID) {
-                    if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
-                        rotation = 270;
-                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
-                        rotation = 90;
-                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
-                        rotation = 180;
+                    switch (orientation) {
+                        case ExifInterface.ORIENTATION_NORMAL:
+                            break;
+                        case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+                            matrix.setScale(-1, 1);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_180:
+                            matrix.setRotate(180);
+                            break;
+                        case ExifInterface.ORIENTATION_FLIP_VERTICAL:
+                            matrix.setRotate(180);
+                            matrix.postScale(-1, 1);
+                            break;
+                        case ExifInterface.ORIENTATION_TRANSPOSE:
+                            matrix.setRotate(90);
+                            matrix.postScale(-1, 1);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_90:
+                            matrix.setRotate(90);
+                            break;
+                        case ExifInterface.ORIENTATION_TRANSVERSE:
+                            matrix.setRotate(-90);
+                            matrix.postScale(-1, 1);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_270:
+                            matrix.setRotate(-90);
+                            break;
+                        default:
+                            break;
                     }
                 } else {
-                    if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
-                        rotation = 90;
-                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
-                        rotation = 270;
-                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
-                        rotation = 180;
+                    switch (orientation) {
+                        case ExifInterface.ORIENTATION_NORMAL:
+                            break;
+                        case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+                            matrix.setScale(-1, 1);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_180:
+                            matrix.setRotate(180);
+                            break;
+                        case ExifInterface.ORIENTATION_FLIP_VERTICAL:
+                            matrix.setRotate(180);
+                            matrix.postScale(-1, 1);
+                            break;
+                        case ExifInterface.ORIENTATION_TRANSPOSE:
+                            matrix.setRotate(-90);
+                            matrix.postScale(-1, 1);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_90:
+                            matrix.setRotate(-90);
+                            break;
+                        case ExifInterface.ORIENTATION_TRANSVERSE:
+                            matrix.setRotate(90);
+                            matrix.postScale(-1, 1);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_270:
+                            matrix.setRotate(90);
+                            break;
+                        default:
+                            break;
                     }
                 }
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            Matrix matrix = new Matrix();
-            matrix.postRotate(rotation);
             Bitmap bitmap = BitmapFactory.decodeFile(globalHandler.sessionHandler.getMessagePhoto().getAbsolutePath());
-            Bitmap rotated = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,false);
+            Bitmap rotated = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
             ((ImageView) findViewById(R.id.media_photo)).setImageBitmap(rotated);
             ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.button_up_talk);
         }
@@ -148,7 +232,6 @@ public class SessionActivity extends BaseActivity {
             globalHandler.sessionHandler.setMessageAudio(null);
             audioRecorder.stopRecording();
         }
-
     }
 
     @OnClick(R.id.camera_button)

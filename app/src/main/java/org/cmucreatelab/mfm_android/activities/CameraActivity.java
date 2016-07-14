@@ -2,13 +2,17 @@ package org.cmucreatelab.mfm_android.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.media.ExifInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.Surface;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -33,50 +37,12 @@ public class CameraActivity extends BaseActivity {
 
 
     public static int cameraId;
-    public static int orientation;
 
     private Activity mActivity;
     private GlobalHandler globalHandler;
     private Camera mCamera;
     private CameraPreview mPreview;
     private byte[] possiblePhoto;
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
-        ButterKnife.bind(this);
-        this.globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
-        mActivity = this;
-    }
-
-
-    @Override
-    protected void onResume(){
-        super.onResume();
-        this.mCamera = getCameraInstance();
-        this.mCamera.setPreviewCallback(null);
-        this.mPreview = new CameraPreview(getApplicationContext(), this.mCamera);
-
-        // set the orientation and camera parameters
-        int rotation  = this.getCameraOrientation();
-        this.mCamera.setDisplayOrientation(rotation);
-        Camera.Parameters params = mCamera.getParameters();
-        params.setRotation(rotation);
-
-        ArrayList<String> list = (ArrayList<String>) params.getSupportedFocusModes();
-        for (String item : list) {
-            if (item.equals("continuous-picture")) {
-                params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-            }
-        }
-
-        mCamera.setParameters(params);
-
-        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
-        preview.addView(this.mPreview);
-    }
 
 
     private static Camera getCameraInstance(){
@@ -93,7 +59,26 @@ public class CameraActivity extends BaseActivity {
     }
 
 
-    private int getCameraOrientation(){
+    private int getOrientation() {
+        int result = 0;
+
+        int rotation = this.getWindowManager().getDefaultDisplay().getRotation();
+        int degrees = 0;
+
+        switch (rotation) {
+            case Surface.ROTATION_0: degrees = 0; break;
+            case Surface.ROTATION_90: degrees = 1; break;
+            case Surface.ROTATION_180: degrees = 2; break;
+            case Surface.ROTATION_270: degrees = 3; break;
+        }
+
+        result = degrees;
+
+        return result;
+    }
+
+
+    private int getCameraRotation(){
         int result = 0;
 
         Camera.CameraInfo info = new Camera.CameraInfo();
@@ -116,9 +101,44 @@ public class CameraActivity extends BaseActivity {
             result = (info.orientation - degrees + 360) % 360;
         }
 
-        orientation = result;
-
         return result;
+    }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_camera);
+        ButterKnife.bind(this);
+        this.globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
+        mActivity = this;
+    }
+
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        this.mCamera = getCameraInstance();
+        this.mCamera.setPreviewCallback(null);
+        this.mPreview = new CameraPreview(getApplicationContext(), this.mCamera);
+
+        // set the orientation and camera parameters
+        int rotation = this.getCameraRotation();
+        this.mCamera.setDisplayOrientation(rotation);
+        Camera.Parameters params = mCamera.getParameters();
+        params.setRotation(rotation);
+
+        ArrayList<String> list = (ArrayList<String>) params.getSupportedFocusModes();
+        for (String item : list) {
+            if (item.equals("continuous-picture")) {
+                params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+            }
+        }
+
+        mCamera.setParameters(params);
+
+        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
+        preview.addView(this.mPreview);
     }
 
 
@@ -179,12 +199,56 @@ public class CameraActivity extends BaseActivity {
         }
 
         try {
-            FileOutputStream fos = new FileOutputStream(picture);
+            FileOutputStream fos = new FileOutputStream(picture.getPath());
             fos.write(possiblePhoto);
             fos.close();
 
             // We may not need to save the image to any directory if we do this.
             globalHandler.sessionHandler.setMessagePhoto(picture);
+
+            // I have to do this for amazon devices because the kindle does not save exif data on its own...
+            // I also cannot do this for the other devices too because as you can see, the cases for ROTATION_90
+            // and ROTATION_270 do not make sense. I think amazon made some sort of mistake with how they handle orientation.
+            // ...or maybe I am doing this very wrong
+            if (Build.MANUFACTURER.equals("Amazon")) {
+                ExifInterface exifInterface = new ExifInterface(picture.getAbsolutePath());
+                int orientation = getOrientation();
+                switch (orientation) {
+                    case Surface.ROTATION_0:
+                        if (cameraId == Constants.DEFAULT_CAMERA_ID) {
+                            exifInterface.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_NORMAL));
+                        } else {
+                            exifInterface.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_FLIP_VERTICAL));
+                        }
+                        break;
+                    case Surface.ROTATION_90:
+                        if (cameraId == Constants.DEFAULT_CAMERA_ID) {
+                            exifInterface.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_NORMAL));
+                        } else {
+                            exifInterface.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_FLIP_HORIZONTAL));
+                        }
+                        break;
+                    case Surface.ROTATION_180:
+                        if (cameraId == Constants.DEFAULT_CAMERA_ID) {
+                            exifInterface.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_NORMAL));
+                        } else {
+                            exifInterface.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_ROTATE_180));
+                        }
+                        break;
+                    case Surface.ROTATION_270:
+                        if (cameraId == Constants.DEFAULT_CAMERA_ID) {
+                            exifInterface.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_NORMAL));
+                        } else {
+                            exifInterface.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_FLIP_HORIZONTAL));
+                        }
+                        break;
+                    default:
+                        exifInterface.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_NORMAL));
+                        break;
+                }
+                exifInterface.saveAttributes();
+            }
+
             Intent intent = new Intent(this, SessionActivity.class);
             startActivity(intent);
             finish();

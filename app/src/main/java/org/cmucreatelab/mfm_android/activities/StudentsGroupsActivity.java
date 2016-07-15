@@ -20,8 +20,6 @@ import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 
 import java.util.ArrayList;
 
-// TODO - add a parental lock screen for group selection
-
 public class StudentsGroupsActivity extends BaseRefreshableActivity {
 
 

@@ -1,9 +1,12 @@
 package org.cmucreatelab.mfm_android.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +18,10 @@ import org.cmucreatelab.mfm_android.classes.Group;
 import org.cmucreatelab.mfm_android.classes.Student;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.AppState;
-import org.cmucreatelab.mfm_android.helpers.AudioPlayer;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
+import org.cmucreatelab.mfm_android.ui.GestureDialogFragment;
 
 import java.util.ArrayList;
 
@@ -27,10 +30,9 @@ import java.util.ArrayList;
  */
 public abstract class BaseSelectionActivity extends BaseActivity {
 
-
     private BaseSelectionActivity mActivity;
-
     private GlobalHandler globalHandler;
+
     protected ArrayList<Student> mStudents;
     protected ArrayList<Group> mGroups;
     protected ArrayList<User> mUsers;
@@ -52,17 +54,15 @@ public abstract class BaseSelectionActivity extends BaseActivity {
 
     protected AdapterView.OnItemClickListener onGroupClick = new AdapterView.OnItemClickListener() {
         @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
             mActivity.onButtonClick(globalHandler.appContext);
             if (globalHandler.appState == AppState.SELECTION_ORDER_BY_GROUP) {
                 Intent intent = new Intent(mActivity, OrderedActivity.class);
                 intent.putExtra(Constants.GROUP_KEY, mGroups.get(i));
                 startActivity(intent);
             } else {
-                globalHandler.sessionHandler.startSession(mGroups.get(i));
-                CameraActivity.cameraId = Constants.DEFAULT_CAMERA_ID;
-                Intent intent = new Intent(mActivity, CameraActivity.class);
-                startActivity(intent);
+                GestureDialogFragment gestureDialogFragment = new GestureDialogFragment();
+                gestureDialogFragment.show(getSupportFragmentManager(), "gesture_dialog");
             }
         }
     };

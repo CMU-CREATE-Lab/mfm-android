@@ -1,12 +1,9 @@
 package org.cmucreatelab.mfm_android.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +58,7 @@ public abstract class BaseSelectionActivity extends BaseActivity {
                 intent.putExtra(Constants.GROUP_KEY, mGroups.get(i));
                 startActivity(intent);
             } else {
-                GestureDialogFragment gestureDialogFragment = new GestureDialogFragment();
+                GestureDialogFragment gestureDialogFragment = new GestureDialogFragment(i, mGroups);
                 gestureDialogFragment.show(getSupportFragmentManager(), "gesture_dialog");
             }
         }

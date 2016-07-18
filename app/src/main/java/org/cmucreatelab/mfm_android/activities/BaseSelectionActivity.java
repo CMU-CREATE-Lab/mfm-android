@@ -58,7 +58,7 @@ public abstract class BaseSelectionActivity extends BaseActivity {
                 intent.putExtra(Constants.GROUP_KEY, mGroups.get(i));
                 startActivity(intent);
             } else {
-                GestureDialogFragment gestureDialogFragment = new GestureDialogFragment(i, mGroups);
+                GestureDialogFragment gestureDialogFragment = GestureDialogFragment.newInstance(mGroups, i);
                 gestureDialogFragment.show(getSupportFragmentManager(), "gesture_dialog");
             }
         }

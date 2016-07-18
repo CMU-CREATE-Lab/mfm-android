@@ -1,15 +1,10 @@
 package org.cmucreatelab.mfm_android.ui;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-
-import org.cmucreatelab.mfm_android.activities.CameraActivity;
 import org.cmucreatelab.mfm_android.classes.Group;
-import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 
 import java.util.ArrayList;
 
@@ -19,26 +14,24 @@ import java.util.ArrayList;
  */
 public class GestureDialogFragment extends DialogFragment {
 
-    private int index;
-    private ArrayList<Group> groups;
+    private static final String INDEX_KEY = "index_key";
+    private static final String GROUP_KEY = "group_key";
 
-    public GestureDialogFragment(int i, ArrayList<Group> g) {
-        index = i;
-        groups = g;
+
+    public static GestureDialogFragment newInstance(ArrayList<Group> g, int i) {
+        Bundle args = new Bundle();
+        GestureDialogFragment fragment = new GestureDialogFragment();
+        args.putInt(INDEX_KEY, i);
+        args.putSerializable(GROUP_KEY, g);
+        fragment.setArguments(args);
+        return fragment;
     }
 
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new GestureDialog(getActivity());
+        return new GestureDialog(getActivity(), (ArrayList<Group>) getArguments().getSerializable(GROUP_KEY), getArguments().getInt(INDEX_KEY));
     }
 
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-        GlobalHandler.getInstance(getActivity()).sessionHandler.startSession(groups.get(index));
-        Intent intent = new Intent(getActivity(), CameraActivity.class);
-        this.startActivity(intent);
-    }
 }

@@ -1,102 +1,147 @@
 package org.cmucreatelab.mfm_android.ui;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 import org.cmucreatelab.mfm_android.activities.CameraActivity;
+import org.cmucreatelab.mfm_android.classes.Group;
+import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
  * Created by Steve on 7/15/2016.
  */
+
 public class GestureDialog extends AlertDialog{
 
-    private static String title = "Complete the gesture to continue.";
-    private static String appendToMessage = " anywhere outside of this box.";
-    private static String[] messages = {"Double tap",
-            "Swipe quickly",
-            "Long press"};
+    private static final String UP = "up";
+    private static final String RIGHT = "right";
+    private static final String DOWN = "down";
+    private static final String LEFT = "left";
 
-    private boolean isDoubleTap = false;
-    private boolean isFling = false;
-    private boolean isLongPress = false;
+    private String direction;
+    private int numFingers;
+    private boolean isFingerCount;
 
-    private GestureDetector gestureDetector;
-    private MyGestureDetector myGestureDetector;
+    private float downX;
+    private float downY;
 
-    public GestureDialog(Context context) {
+    private ArrayList<Group> groups;
+    private int index;
+
+
+    private void success() {
+        GlobalHandler.getInstance(getContext()).sessionHandler.startSession(groups.get(index));
+        Intent intent = new Intent(getContext(), CameraActivity.class);
+        getContext().startActivity(intent);
+        dismiss();
+    }
+
+
+    public GestureDialog(Context context, ArrayList<Group> g, int i) {
         super(context);
-        myGestureDetector = new MyGestureDetector();
-        gestureDetector = new GestureDetector(myGestureDetector);
         Random random = new Random();
-        int rand = random.nextInt(3);
-        switch (rand) {
+        int result = random.nextInt(2);
+        switch (result) {
             case 0:
-                isDoubleTap = true;
+                numFingers = 2;
                 break;
             case 1:
-                isFling = true;
-                break;
-            case 2:
-                isLongPress = true;
+                numFingers = 3;
                 break;
             default:
-                isDoubleTap = true;
+                numFingers = 2;
                 break;
         }
-        this.setTitle(title);
-        this.setMessage(messages[rand] + appendToMessage);
+        this.setTitle("With " + numFingers + " fingers:");
+
+        result = random.nextInt(4);
+        switch (result) {
+            case 0:
+                direction = UP;
+                break;
+            case 1:
+                direction = RIGHT;
+                break;
+            case 2:
+                direction = DOWN;
+                break;
+            case 3:
+                direction = LEFT;
+                break;
+            default:
+                break;
+        }
+        this.setMessage("Swipe " + direction);
         this.setCanceledOnTouchOutside(false);
+        downX = 0;
+        downY = 0;
+        isFingerCount = false;
+        groups = g;
+        index = i;
     }
 
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (gestureDetector.onTouchEvent(event)) {
-            Log.d(Constants.LOG_TAG, "motion event");
-            return true;
-        } else {
-            return false;
+        int action = event.getAction();
+
+        if (event.getPointerCount() == numFingers || isFingerCount) {
+            isFingerCount = true;
+            switch(action) {
+                case MotionEvent.ACTION_DOWN:
+                    downX = event.getX(0);
+                    downY = event.getY(0);
+                    Log.d(Constants.LOG_TAG, "downX: " + downX + " downY: " + downY);
+                    break;
+                case MotionEvent.ACTION_UP:
+                    float upX = event.getX(0);
+                    float upY = event.getY(0);
+                    Log.d(Constants.LOG_TAG, "upX: " + upX + " upY: " + upY);
+
+                    if (Math.abs(downX - upX) > Math.abs(downY - upY)) {
+                        Log.d(Constants.LOG_TAG, "x");
+                        if (downX < upX) {
+                            if (direction.equals(RIGHT)) {
+                                success();
+                            }
+                            Log.d(Constants.LOG_TAG, "right");
+                        }
+                        if (downX > upX) {
+                            if (direction.equals(LEFT)) {
+                                success();
+                            }
+                            Log.d(Constants.LOG_TAG, "left");
+                        }
+
+                    } else {
+                        Log.d(Constants.LOG_TAG, "y ");
+                        if (downY < upY) {
+                            if (direction.equals(DOWN)) {
+                                success();
+                            }
+                            Log.d(Constants.LOG_TAG, "down");
+                        }
+                        if (downY > upY) {
+                            if (direction.equals(UP)) {
+                                success();
+                            }
+                            Log.d(Constants.LOG_TAG, "up");
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
+
+        return super.onTouchEvent(event);
     }
 
-
-    class MyGestureDetector extends GestureDetector.SimpleOnGestureListener {
-
-        @Override
-        public boolean onDoubleTap(MotionEvent e) {
-            if (isDoubleTap) {
-                Log.d(Constants.LOG_TAG, "onDoubleTab");
-                dismiss();
-            }
-            return super.onDoubleTap(e);
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            if (isFling) {
-                Log.d(Constants.LOG_TAG, "onFling");
-                dismiss();
-            }
-            return super.onFling(e1, e2, velocityX, velocityY);
-        }
-
-        @Override
-        public void onLongPress(MotionEvent e) {
-            if (isLongPress) {
-                Log.d(Constants.LOG_TAG, "onLongPress");
-                dismiss();
-            }
-            super.onLongPress(e);
-        }
-
-    }
 }

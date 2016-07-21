@@ -204,8 +204,9 @@ public class CameraActivity extends BaseActivity {
             // I also cannot do this for the other devices too because as you can see, the cases for ROTATION_90
             // and ROTATION_270 do not make sense. I think amazon made some sort of mistake with how they handle orientation.
             // ...or maybe I am doing this very wrong
-            if (Build.MANUFACTURER.equals("Amazon")) {
-                ExifInterface exifInterface = new ExifInterface(picture.getAbsolutePath());
+            ExifInterface exifInterface = new ExifInterface(picture.getAbsolutePath());
+            if (exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1) == 0) {
+
                 int orientation = getOrientation();
                 switch (orientation) {
                     case Surface.ROTATION_0:

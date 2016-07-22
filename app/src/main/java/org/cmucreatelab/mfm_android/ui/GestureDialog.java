@@ -59,7 +59,18 @@ public class GestureDialog extends AlertDialog{
                 numFingers = 2;
                 break;
         }
-        this.setTitle("With " + numFingers + " fingers:");
+
+        switch (numFingers) {
+            case 2:
+                this.setTitle("With two fingers:");
+                break;
+            case 3:
+                this.setTitle("With three fingers:");
+                break;
+            default:
+                this.setTitle("With two fingers:");
+                break;
+        }
 
         result = random.nextInt(4);
         switch (result) {

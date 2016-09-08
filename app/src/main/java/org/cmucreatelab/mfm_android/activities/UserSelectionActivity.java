@@ -2,6 +2,7 @@ package org.cmucreatelab.mfm_android.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.AbsListView;
 
 import org.cmucreatelab.mfm_android.R;
@@ -18,12 +19,13 @@ import butterknife.OnClick;
 
 public class UserSelectionActivity extends BaseSelectionActivity {
 
-
+    private static boolean isPlayed = false;
     private GlobalHandler globalHandler;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(Constants.LOG_TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_selection);
         ButterKnife.bind(this);
@@ -43,8 +45,11 @@ public class UserSelectionActivity extends BaseSelectionActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        audioPlayer.addAudio(R.raw.send_your_message_to_short);
-        audioPlayer.playAudio();
+        if (!isPlayed) {
+            audioPlayer.addAudio(R.raw.send_your_message_to_short);
+            audioPlayer.playAudio();
+            isPlayed = true;
+        }
     }
 
     @OnClick(R.id.choose_button)

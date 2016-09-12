@@ -207,11 +207,7 @@ public class SessionActivity extends BaseActivity {
         if (globalHandler.sessionHandler.getMessageAudio() != null && !audioRecorder.isRecording) {
             ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.soundwave_final);
             ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_up);
-            findViewById(R.id.audio_button).bringToFront();
         }
-
-        // bring the camera button to the foreground since there is not an option in xml....
-        findViewById(R.id.camera_button).bringToFront();
     }
 
 
@@ -267,13 +263,11 @@ public class SessionActivity extends BaseActivity {
                 audioRecorder.stopRecording();
                 audioFlipper.setInAnimation(this, R.anim.in_from_left);
                 audioFlipper.showNext();
-                findViewById(R.id.audio_button).bringToFront();
 
                 // playback the audio clip you recorded
                 File audioFile = globalHandler.sessionHandler.getMessageAudio();
                 if (audioFile != null) {
-                    Uri uri = Uri.parse(audioFile.getAbsolutePath());
-                    Log.i(Constants.LOG_TAG, uri.toString());
+                    Uri uri = Uri.fromFile(audioFile);
                     MediaPlayer mediaPlayer = new MediaPlayer();
                     mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                     mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -290,7 +284,7 @@ public class SessionActivity extends BaseActivity {
                         }
                     });
                     try {
-                        mediaPlayer.setDataSource(this.getApplicationContext(), uri);
+                        mediaPlayer.setDataSource(this, uri);
                         mediaPlayer.prepare();
                         mediaPlayer.start();
                         isReplaying = true;

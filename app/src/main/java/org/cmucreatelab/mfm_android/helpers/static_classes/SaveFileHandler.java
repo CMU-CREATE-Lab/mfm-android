@@ -44,7 +44,7 @@ public class SaveFileHandler {
 
         if (type == MEDIA_TYPE_IMAGE) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + name + ".jpg");
+                    "IMG_" + name + ".jpeg");
         } else if (type == MEDIA_TYPE_AUDIO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
                     "AUDIO_" + name + ".amr-nb");

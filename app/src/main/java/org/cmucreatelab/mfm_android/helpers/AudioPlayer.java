@@ -34,8 +34,13 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, Serializab
         mediaPlayer.reset();
         mediaPlayer.setDataSource(appContext, uri);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mediaPlayer.prepare();
-        mediaPlayer.start();
+        mediaPlayer.prepareAsync();
+        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                mediaPlayer.start();
+            }
+        });
     }
 
 

@@ -208,6 +208,9 @@ public class SessionActivity extends BaseActivity {
             ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.soundwave_final);
             ((ImageView) findViewById(R.id.send_button)).setImageResource(R.drawable.send_up);
         }
+
+        findViewById(R.id.camera_button).bringToFront();
+        findViewById(R.id.audio_button).bringToFront();
     }
 
 

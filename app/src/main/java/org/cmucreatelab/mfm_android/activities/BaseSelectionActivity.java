@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 
@@ -37,35 +36,6 @@ public abstract class BaseSelectionActivity extends BaseActivity {
     protected ArrayList<User> mSelectedUsers;
     protected ExtendedHeightGridView gridViewUsers;
 
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        final ImageView chooseButton = (ImageView) findViewById(R.id.choose_button);
-        final GradientDrawable drawable = new GradientDrawable();
-        drawable.setShape(GradientDrawable.RECTANGLE);
-        drawable.setStroke(50, Color.GREEN);
-        gridViewUsers.getViewTreeObserver().addOnGlobalLayoutListener(
-            new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    for (int i = 0; i < gridViewUsers.getChildCount(); i++) {
-                        if (gridViewUsers.isItemChecked(i)) {
-                            ((ViewGroup) gridViewUsers.getChildAt(i)).getChildAt(0).setBackgroundDrawable(drawable);
-                            if (!mSelectedUsers.contains(mUsers.get(i))) {
-                                mSelectedUsers.add(mUsers.get(i));
-                            }
-                        }
-                    }
-                    if (!mSelectedUsers.isEmpty()) {
-                        chooseButton.setImageResource(R.drawable.choose_up);
-                    } else {
-                        chooseButton.setImageResource(R.drawable.choose_disabled);
-                    }
-                }
-            }
-        );
-    }
 
     protected AdapterView.OnItemClickListener onStudentClick = new AdapterView.OnItemClickListener() {
         @Override

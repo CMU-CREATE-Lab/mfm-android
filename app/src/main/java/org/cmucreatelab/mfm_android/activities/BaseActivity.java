@@ -5,6 +5,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
@@ -20,6 +21,7 @@ import java.io.IOException;
 public abstract class BaseActivity extends AppCompatActivity {
 
 
+    private static final String AUDIO_PLAYER_KEY = "audio_player";
     protected AudioPlayer audioPlayer;
 
 
@@ -47,16 +49,20 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        audioPlayer = AudioPlayer.getInstance(this.getApplicationContext());
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            audioPlayer = (AudioPlayer) savedInstanceState.getParcelable(AUDIO_PLAYER_KEY);
+        } else {
+            audioPlayer = AudioPlayer.getInstance(this.getApplicationContext());
+        }
     }
 
+
     @Override
-    protected void onStop() {
-        super.onStop();
-        audioPlayer.stop();
-        audioPlayer.release();
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(AUDIO_PLAYER_KEY, audioPlayer);
     }
 
 }

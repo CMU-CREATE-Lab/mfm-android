@@ -41,6 +41,7 @@ import butterknife.OnClick;
 
 public class SessionActivity extends BaseActivity {
 
+    private static final String AUDIO_RECORD_KEY = "audio_record";
 
     private GlobalHandler globalHandler;
     private ExtendedHeightGridView recipientsView;
@@ -52,54 +53,30 @@ public class SessionActivity extends BaseActivity {
     private boolean isReplaying;
 
 
-    private static boolean isLandscape270() {
-        return android.os.Build.MANUFACTURER.equals("Amazon")
-                && !(android.os.Build.MODEL.equals("KFOT") || android.os.Build.MODEL.equals("Kindle Fire"));
-    }
-
-
-    private int getOrientation() {
-
-        int port = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-        int revP = ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
-        int land = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-        int revL = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-        if (Build.VERSION.SDK_INT < 9) {
-            revL = land;
-            revP = port;
-        } else if (isLandscape270()) {
-            land = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-            revL = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-        }
-
-        Display display = this.getWindowManager().getDefaultDisplay();
-        boolean wide = this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-        switch (display.getRotation()) {
-            case Surface.ROTATION_0:
-                return wide ? land : port;
-            case Surface.ROTATION_90:
-                return wide ? land : revP;
-            case Surface.ROTATION_180:
-                return wide ? revL : revP;
-            case Surface.ROTATION_270:
-                return wide ? revL : port;
-            default:
-                throw new AssertionError();
-        }
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putSerializable(AUDIO_RECORD_KEY, audioRecorder);
     }
 
 
     @Override
     public void onCreate(Bundle bundle) {
+        Log.d(Constants.LOG_TAG, "onCreate");
         super.onCreate(bundle);
         setContentView(R.layout.activity_session);
         ButterKnife.bind(this);
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
-        audioRecorder = new AudioRecorder(globalHandler.appContext);
         isSending = false;
         isReplaying = false;
         audioFlipper = (ViewFlipper) findViewById(R.id.audio_flipper);
         sendFlipper = (ViewFlipper) findViewById(R.id.send_flipper);
+
+        if (bundle != null) {
+            audioRecorder = (AudioRecorder) bundle.getSerializable(AUDIO_RECORD_KEY);
+        } else {
+            audioRecorder = new AudioRecorder(this);
+        }
 
         if (globalHandler.sessionHandler.getMessageSender().getSenderType() == Sender.Type.student) {
             // From content
@@ -202,7 +179,14 @@ public class SessionActivity extends BaseActivity {
             Bitmap bitmap = BitmapFactory.decodeFile(globalHandler.sessionHandler.getMessagePhoto().getAbsolutePath());
             Bitmap rotated = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
             ((ImageView) findViewById(R.id.media_photo)).setImageBitmap(rotated);
-            ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.button_up_talk);
+
+
+            Log.d(Constants.LOG_TAG, "isRecording: " + audioRecorder.isRecording);
+            if (audioRecorder.isRecording) {
+                ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.button_up_talkstop);
+            } else {
+                ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.button_up_talk);
+            }
         }
         if (globalHandler.sessionHandler.getMessageAudio() != null && !audioRecorder.isRecording) {
             ((ImageView) findViewById(R.id.media_audio)).setImageResource(R.drawable.soundwave_final);
@@ -217,19 +201,11 @@ public class SessionActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (globalHandler.sessionHandler.getMessageAudio() == null && globalHandler.sessionHandler.getMessagePhoto() != null) {
+        if (globalHandler.sessionHandler.getMessageAudio() == null && globalHandler.sessionHandler.getMessagePhoto() != null
+                && !audioRecorder.isRecording && !audioPlayer.isPlaying()) {
             audioPlayer.stop();
             audioPlayer.addAudio(R.raw.what_did_take);
             audioPlayer.playAudio();
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (audioRecorder.isRecording) {
-            globalHandler.sessionHandler.setMessageAudio(null);
-            audioRecorder.stopRecording();
         }
     }
 
@@ -306,17 +282,19 @@ public class SessionActivity extends BaseActivity {
 
     @OnClick(R.id.audio_button)
     public void onClickReRecord() {
-        super.onButtonClick(this);
-        ImageView audio = (ImageView) findViewById(R.id.media_audio);
-        ImageView send = (ImageView) findViewById(R.id.send_button);
-        audioRecorder.stopRecording();
-        audioPlayer.stop();
-        globalHandler.sessionHandler.setMessageAudio(null);
-        audioRecorder.startRecording();
-        audio.setImageResource(R.drawable.button_up_talkstop);
-        send.setImageResource(R.drawable.send_disabled);
-        audioFlipper.setInAnimation(null);
-        audioFlipper.showPrevious();
+        if (!audioRecorder.isRecording && globalHandler.sessionHandler.getMessageAudio() != null) {
+            super.onButtonClick(this);
+            ImageView audio = (ImageView) findViewById(R.id.media_audio);
+            ImageView send = (ImageView) findViewById(R.id.send_button);
+            audioRecorder.stopRecording();
+            audioPlayer.stop();
+            globalHandler.sessionHandler.setMessageAudio(null);
+            audioRecorder.startRecording();
+            audio.setImageResource(R.drawable.button_up_talkstop);
+            send.setImageResource(R.drawable.send_disabled);
+            audioFlipper.setInAnimation(null);
+            audioFlipper.setDisplayedChild(0);
+        }
     }
 
 

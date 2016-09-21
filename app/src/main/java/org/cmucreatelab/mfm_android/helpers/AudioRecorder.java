@@ -9,6 +9,7 @@ import org.cmucreatelab.mfm_android.helpers.static_classes.SaveFileHandler;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Created by Steve on 5/17/2016.
@@ -18,7 +19,7 @@ import java.io.IOException;
  * A helper class to simplify recording audio.
  *
  */
-public class AudioRecorder {
+public class AudioRecorder implements Serializable {
 
     private Context appContext;
     private MediaRecorder mediaRecorder;

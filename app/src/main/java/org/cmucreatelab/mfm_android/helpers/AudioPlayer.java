@@ -4,6 +4,8 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
@@ -20,7 +22,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * A helper class to simplify playing audio clips.
  *
  */
-public class AudioPlayer implements MediaPlayer.OnCompletionListener, Serializable {
+public class AudioPlayer implements MediaPlayer.OnCompletionListener, Parcelable {
 
     public boolean playedBlueButton;
     private static AudioPlayer classInstance;
@@ -28,6 +30,22 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, Serializab
     public MediaPlayer mediaPlayer;
     private ConcurrentLinkedQueue<Integer> fileIds;
 
+
+    protected AudioPlayer(Parcel in) {
+        playedBlueButton = in.readByte() != 0;
+    }
+
+    public static final Creator<AudioPlayer> CREATOR = new Creator<AudioPlayer>() {
+        @Override
+        public AudioPlayer createFromParcel(Parcel in) {
+            return new AudioPlayer(in);
+        }
+
+        @Override
+        public AudioPlayer[] newArray(int size) {
+            return new AudioPlayer[size];
+        }
+    };
 
     private void playNext() throws IOException {
         Uri uri = Uri.parse("android.resource://" + appContext.getPackageName() + "/" + fileIds.poll());
@@ -109,5 +127,15 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, Serializab
                 Log.e(Constants.LOG_TAG, "file I/O error in onCompletion - AudioPlayer.");
             }
         }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeSerializable(fileIds);
     }
 }

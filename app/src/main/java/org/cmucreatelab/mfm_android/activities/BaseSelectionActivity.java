@@ -21,6 +21,8 @@ import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 import org.cmucreatelab.mfm_android.ui.GestureDialogFragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by Steve on 6/3/2016.
@@ -107,11 +109,23 @@ public abstract class BaseSelectionActivity extends BaseActivity {
 
     public void initStudents(ArrayList<Student> students) {
         mStudents = students;
+        Collections.sort(mStudents, new Comparator<Student>() {
+            @Override
+            public int compare(Student student, Student t1) {
+                return student.getName().compareToIgnoreCase(t1.getName());
+            }
+        });
     }
 
 
     public void initGroups(ArrayList<Group> groups) {
         mGroups = groups;
+        Collections.sort(mGroups, new Comparator<Group>() {
+            @Override
+            public int compare(Group group, Group t1) {
+                return group.getName().compareToIgnoreCase(t1.getName());
+            }
+        });
     }
 
 

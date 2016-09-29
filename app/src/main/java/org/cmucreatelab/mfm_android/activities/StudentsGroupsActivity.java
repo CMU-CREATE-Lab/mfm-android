@@ -23,6 +23,10 @@ import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class StudentsGroupsActivity extends BaseRefreshableActivity {
 
@@ -31,7 +35,6 @@ public class StudentsGroupsActivity extends BaseRefreshableActivity {
     private GlobalHandler globalHandler;
     private ExtendedHeightGridView gridViewStudents;
     private ExtendedHeightGridView gridViewGroups;
-    private SwipeRefreshLayout swipeLayout;
 
 
     @Override
@@ -40,6 +43,7 @@ public class StudentsGroupsActivity extends BaseRefreshableActivity {
         setContentView(R.layout.activity_students_groups);
         globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
         thisActivity = this;
+        ButterKnife.bind(this);
 
         if (globalHandler.isNetworkConnected(this)) {
             if (globalHandler.mfmLoginHandler.kioskIsLoggedIn) {
@@ -66,19 +70,6 @@ public class StudentsGroupsActivity extends BaseRefreshableActivity {
                 startActivity(intent);
             }
 
-            swipeLayout = (SwipeRefreshLayout) findViewById(R.id.selection_swipe_layout);
-            swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override public void run() {
-                            refreshStudentsAndGroups();
-                            finish();
-                            startActivity(getIntent());
-                        }
-                    }, 1000);
-                }
-            });
         } else {
             AlertDialog dialog;
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -128,6 +119,16 @@ public class StudentsGroupsActivity extends BaseRefreshableActivity {
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
+    }
+
+
+    @OnClick(R.id.image_refresh)
+    public void onClickRefresh() {
+        Log.d(Constants.LOG_TAG, "onClickRefresh");
+        onButtonClick(this);
+        refreshStudentsAndGroups();
+        finish();
+        startActivity(getIntent());
     }
 
 }

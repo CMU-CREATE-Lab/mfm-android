@@ -2,6 +2,7 @@ package org.cmucreatelab.mfm_android.classes;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * Created by mike on 1/28/16.
@@ -56,4 +57,5 @@ public class Student implements Sender, Serializable {
     public String getName() {
         return this.firstName+" "+this.lastName;
     }
+
 }

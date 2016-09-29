@@ -13,11 +13,14 @@ import android.widget.ImageView;
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.adapters.UserAdapter;
 import org.cmucreatelab.mfm_android.classes.Student;
+import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.GlobalHandler;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.ui.ExtendedHeightGridView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -40,6 +43,13 @@ public class UserSelectionActivity extends BaseSelectionActivity {
         // display users
         Student student = (Student) getIntent().getExtras().getSerializable(Constants.STUDENT_KEY);
         mUsers = student.getUsers();
+        Collections.sort(mUsers, new Comparator<User>() {
+            @Override
+            public int compare(User user, User t1) {
+                return user.getFirstName().compareToIgnoreCase(t1.getFirstName());
+            }
+        });
+
         this.gridViewUsers = (ExtendedHeightGridView) findViewById(R.id.gridViewUser);
         this.gridViewUsers.setAdapter(new UserAdapter(getApplicationContext(), mUsers));
         this.gridViewUsers.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);

@@ -15,8 +15,8 @@ android {
         applicationId "org.cmucreatelab.mfm_android"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 16
-        versionName "1.6"
+        versionCode 17
+        versionName "1.7"
     }
     buildTypes {
         release {

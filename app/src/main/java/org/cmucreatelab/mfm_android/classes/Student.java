@@ -19,9 +19,9 @@ public class Student implements Sender, Serializable {
     // class attributes
     private int id;
     private long databaseId;
-    private String firstName,lastName;
-    private String photoUrl;
-    private String updatedAt;
+    private String firstName = new String(), lastName = new String();
+    private String photoUrl = new String();
+    private String updatedAt = new String();
     private ArrayList<User> users = new ArrayList<>(); // users connected to the student (message recipients)
 
     // getters/setters

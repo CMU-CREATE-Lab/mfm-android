@@ -21,9 +21,9 @@ public class Group implements Sender, Serializable {
     // class attributes
     private int id;
     private long databaseId;
-    private String name;
-    private String photoUrl;
-    private String updatedAt;
+    private String name = new String();
+    private String photoUrl = new String();
+    private String updatedAt = new String();
     private ArrayList<Student> students = new ArrayList<>();
 
     // getters/setters

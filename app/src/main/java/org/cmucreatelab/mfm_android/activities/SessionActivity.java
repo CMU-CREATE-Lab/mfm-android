@@ -1,6 +1,7 @@
 package org.cmucreatelab.mfm_android.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -12,6 +13,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Display;
@@ -41,7 +43,8 @@ import butterknife.OnClick;
 
 public class SessionActivity extends BaseActivity {
 
-    private static final String AUDIO_RECORD_KEY = "audio_record";
+	private static final String AUDIO_RECORD_KEY = "audio_record";
+	private static final String PLAYED_WHAT_DID_TAKE_PROMPT_KEY = "played_what_did_take_prompt";
 
     private GlobalHandler globalHandler;
     private ExtendedHeightGridView recipientsView;
@@ -51,12 +54,14 @@ public class SessionActivity extends BaseActivity {
     private ViewFlipper sendFlipper;
     private boolean isSending;
     private boolean isReplaying;
+    private boolean playedWhatDidTakePrompt;
 
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putSerializable(AUDIO_RECORD_KEY, audioRecorder);
+        savedInstanceState.putSerializable(PLAYED_WHAT_DID_TAKE_PROMPT_KEY, playedWhatDidTakePrompt);
     }
 
 
@@ -74,8 +79,10 @@ public class SessionActivity extends BaseActivity {
 
         if (bundle != null) {
             audioRecorder = (AudioRecorder) bundle.getSerializable(AUDIO_RECORD_KEY);
-        } else {
+			playedWhatDidTakePrompt = bundle.getBoolean(PLAYED_WHAT_DID_TAKE_PROMPT_KEY);
+		} else {
             audioRecorder = new AudioRecorder(this);
+            playedWhatDidTakePrompt = false;
         }
 
         if (globalHandler.sessionHandler.getMessageSender().getSenderType() == Sender.Type.student) {
@@ -204,8 +211,14 @@ public class SessionActivity extends BaseActivity {
         if (globalHandler.sessionHandler.getMessageAudio() == null && globalHandler.sessionHandler.getMessagePhoto() != null
                 && !audioRecorder.isRecording && !audioPlayer.isPlaying()) {
             audioPlayer.stop();
-            audioPlayer.addAudio(R.raw.what_did_take);
-            audioPlayer.playAudio();
+
+			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+			if (sharedPreferences.getBoolean(Constants.PreferencesKeys.whatTakePicturePrompt, true) && !playedWhatDidTakePrompt)
+			{
+				audioPlayer.addAudio(R.raw.what_did_take);
+				audioPlayer.playAudio();
+				playedWhatDidTakePrompt = true;
+			}
         }
     }
 

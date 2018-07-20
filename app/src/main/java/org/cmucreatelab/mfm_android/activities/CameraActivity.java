@@ -2,10 +2,13 @@ package org.cmucreatelab.mfm_android.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.media.ExifInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Surface;
 import android.view.View;
@@ -178,6 +181,7 @@ public class CameraActivity extends BaseActivity {
         super.onButtonClick(globalHandler.appContext);
         finish();
         Intent intent = new Intent(this, CameraActivity.class);
+        audioPlayer.stop();
         startActivity(intent);
     }
 
@@ -185,6 +189,7 @@ public class CameraActivity extends BaseActivity {
     @OnClick(R.id.photo_yes)
     public void acceptPhoto() {
         super.onButtonClick(globalHandler.appContext);
+        audioPlayer.stop();
         File picture = SaveFileHandler.getOutputMediaFile(globalHandler.appContext, SaveFileHandler.MEDIA_TYPE_IMAGE, globalHandler);
 
         if (picture == null) {
@@ -244,7 +249,13 @@ public class CameraActivity extends BaseActivity {
                 exifInterface.saveAttributes();
             }
 
-            Intent intent = new Intent(this, SessionActivity.class);
+			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+			Intent intent;
+            if (sharedPreferences.getBoolean(Constants.PreferencesKeys.drawingImages, true))
+				intent = new Intent(this, DrawingImageActivity.class);
+            else
+            	intent = new Intent(this, SessionActivity.class);
+
             startActivity(intent);
             finish();
 

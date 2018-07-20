@@ -12,7 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:weightSum="5"
-            android:background="@color/Mfm_Background"
+            android:background="@color/mfm_background"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -205,7 +205,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/Mfm_Background">
+            android:background="@color/mfm_background">
 
             <ImageView
                 android:layout_width="match_parent"

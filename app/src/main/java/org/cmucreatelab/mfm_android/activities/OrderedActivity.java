@@ -1,10 +1,12 @@
 package org.cmucreatelab.mfm_android.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import org.cmucreatelab.mfm_android.R;
+import org.cmucreatelab.mfm_android.SettingsActivity;
 import org.cmucreatelab.mfm_android.adapters.GroupAdapter;
 import org.cmucreatelab.mfm_android.adapters.StudentAdapter;
 import org.cmucreatelab.mfm_android.classes.Group;
@@ -75,6 +77,13 @@ public class OrderedActivity extends BaseRefreshableActivity {
         } else if (id == R.id.showAll) {
             globalHandler.appState = AppState.SELECTION_SHOW_ALL;
             finish();
+            return true;
+        }
+        else if (id == R.id.settings)
+        {
+            globalHandler.appState = AppState.SETTINGS;
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
 

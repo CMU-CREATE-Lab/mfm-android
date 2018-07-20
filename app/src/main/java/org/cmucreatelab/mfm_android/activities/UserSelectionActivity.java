@@ -27,7 +27,6 @@ import butterknife.OnClick;
 
 public class UserSelectionActivity extends BaseSelectionActivity {
 
-    private static boolean isPlayed = false;
     private GlobalHandler globalHandler;
 
 
@@ -60,10 +59,10 @@ public class UserSelectionActivity extends BaseSelectionActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!isPlayed) {
+        if (!audioPlayer.playedSendMessageTo) {
             audioPlayer.addAudio(R.raw.send_your_message_to_short);
             audioPlayer.playAudio();
-            isPlayed = true;
+            audioPlayer.playedSendMessageTo = true;
         }
     }
 

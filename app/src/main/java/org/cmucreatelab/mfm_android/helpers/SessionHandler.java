@@ -4,6 +4,7 @@ package org.cmucreatelab.mfm_android.helpers;
 import android.util.Log;
 
 import org.apache.commons.io.FileUtils;
+import org.cmucreatelab.mfm_android.activities.PaintPath;
 import org.cmucreatelab.mfm_android.activities.SessionActivity;
 import org.cmucreatelab.mfm_android.classes.Message;
 import org.cmucreatelab.mfm_android.classes.Sender;
@@ -26,7 +27,7 @@ public class SessionHandler {
 
     private GlobalHandler globalHandler;
     private Message message;
-
+    private ArrayList<PaintPath> paths = new ArrayList<>();
 
     public SessionHandler(GlobalHandler globalHandler) {
         this.globalHandler = globalHandler;
@@ -73,6 +74,25 @@ public class SessionHandler {
         this.message.setAudio(audio);
     }
 
+    public ArrayList<PaintPath> getDrawingPaths()
+    {
+        return paths;
+    }
+
+    public void addDrawingPath(PaintPath paintPath)
+    {
+        paths.add(paintPath);
+    }
+
+    public void removeDrawingPath(int index)
+    {
+        paths.remove(index);
+    }
+
+    public void clearDrawingPaths()
+    {
+        paths.clear();
+    }
 
     public void setMessageRecipients(Collection<User> recipients) {
         this.message.setRecipients(recipients);

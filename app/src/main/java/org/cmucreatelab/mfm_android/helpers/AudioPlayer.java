@@ -25,6 +25,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class AudioPlayer implements MediaPlayer.OnCompletionListener, Parcelable {
 
     public boolean playedBlueButton;
+    public boolean playedSendMessageTo;
     private static AudioPlayer classInstance;
     private Context appContext;
     public MediaPlayer mediaPlayer;
@@ -68,6 +69,7 @@ public class AudioPlayer implements MediaPlayer.OnCompletionListener, Parcelable
         mediaPlayer.setOnCompletionListener(this);
         appContext = context;
         playedBlueButton = false;
+        playedSendMessageTo = false;
     }
 
 

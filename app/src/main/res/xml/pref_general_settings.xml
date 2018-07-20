@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="what_take_picture_prompt"
+            android:title="@string/what_did_you_take_picture_of_voice_prompt" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="drawing_images"
+            android:title="@string/drawing_image" />
+=</PreferenceScreen>

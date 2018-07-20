@@ -37,10 +37,19 @@
         <activity
             android:name=".activities.UserSelectionActivity"
             android:label="@string/select_users" />
-        <activity android:name=".activities.CameraActivity"
-            android:label="@string/title_mfm"/>
-        <activity android:name=".activities.SessionActivity"
-            android:label="@string/title_mfm"></activity>
+        <activity
+            android:name=".activities.CameraActivity"
+            android:label="@string/title_mfm" />
+        <activity
+            android:name=".activities.SessionActivity"
+            android:label="@string/title_mfm" />
+        <activity
+            android:name=".activities.DrawingImageActivity"
+            android:label="@string/title_drawing" />
+        <activity
+            android:name=".SettingsActivity"
+            android:theme="@style/PreferencesTheme"
+            android:label="@string/title_activity_settings"/>
     </application>
 
 </manifest>

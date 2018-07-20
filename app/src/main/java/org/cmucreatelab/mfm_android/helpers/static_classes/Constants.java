@@ -29,6 +29,8 @@ public class Constants {
         public static final String kioskSchoolId = "kiosk_school_id";
         public static final String kioskSchoolName = "kiosk_school_name";
         public static final String kioskUid = "kiosk_uid";
+        public static final String whatTakePicturePrompt = "what_take_picture_prompt";
+        public static final String drawingImages = "drawing_images";
     }
 
     public static final String[] HEADER_TITLES = {
@@ -41,6 +43,8 @@ public class Constants {
         put(PreferencesKeys.kioskSchoolId, 0);
         put(PreferencesKeys.kioskSchoolName, "");
         put(PreferencesKeys.kioskUid, "");
+        put(PreferencesKeys.whatTakePicturePrompt, true);
+        put(PreferencesKeys.drawingImages, true);
     }};
 
 

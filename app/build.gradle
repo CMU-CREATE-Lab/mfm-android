@@ -13,10 +13,11 @@ android {
 
     defaultConfig {
         applicationId "org.cmucreatelab.mfm_android"
-        minSdkVersion 14
+        minSdkVersion 18
         targetSdkVersion 22
         versionCode 17
         versionName "1.7"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -33,7 +34,18 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.android.support:design:22.2.1'
-    compile 'com.jakewharton:butterknife:7.0.1'
+    compile('com.jakewharton:butterknife:8.5.1') {
+        /* Multiple dex file define error (DexException) is thrown, since duplicates of the
+           following libraries are being included with Butterknife starting in 8.5.x. We must
+           therefore exclude them.
+
+           Running 'gradle -q app:dependencies' is a great way to see the dependency tree of an app.
+         */
+        exclude module: 'support-annotations'
+        exclude module: 'support-compat'
+    }
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     compile 'com.android.support:support-v4:22.2.1'
     compile 'commons-io:commons-io:+'
+    compile project(':color-picker')
 }

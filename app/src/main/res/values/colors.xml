@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="Mfm_Background">#313330</color>
+    <color name="mfm_background">#313330</color>
     <color name="Mfm_LoginBackground">#4B4F49</color>
     <color name="White">#FFFFFF</color>
     <color name="Ivory">#FFFFF0</color>

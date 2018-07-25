@@ -3,15 +3,15 @@ package org.cmucreatelab.mfm_android.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
 import android.media.ExifInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Surface;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -40,15 +40,16 @@ public class CameraActivity extends BaseActivity {
     private Camera mCamera;
     private CameraPreview mPreview;
     private byte[] possiblePhoto;
+    private boolean pictureTaken;
 
 
-    private static Camera getCameraInstance(){
+    private static Camera getCameraInstance() {
         Camera c = null;
 
-        try{
+        try {
             c = Camera.open(cameraId);
         }
-        catch (Exception e){
+        catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -63,10 +64,18 @@ public class CameraActivity extends BaseActivity {
         int degrees = 0;
 
         switch (rotation) {
-            case Surface.ROTATION_0: degrees = 0; break;
-            case Surface.ROTATION_90: degrees = 1; break;
-            case Surface.ROTATION_180: degrees = 2; break;
-            case Surface.ROTATION_270: degrees = 3; break;
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
+            case Surface.ROTATION_90:
+                degrees = 1;
+                break;
+            case Surface.ROTATION_180:
+                degrees = 2;
+                break;
+            case Surface.ROTATION_270:
+                degrees = 3;
+                break;
         }
 
         result = degrees;
@@ -75,7 +84,7 @@ public class CameraActivity extends BaseActivity {
     }
 
 
-    private int getCameraRotation(){
+    private int getCameraRotation() {
         int result = 0;
 
         Camera.CameraInfo info = new Camera.CameraInfo();
@@ -85,10 +94,18 @@ public class CameraActivity extends BaseActivity {
         int degrees = 0;
 
         switch (rotation) {
-            case Surface.ROTATION_0: degrees = 0; break;
-            case Surface.ROTATION_90: degrees = 90; break;
-            case Surface.ROTATION_180: degrees = 180; break;
-            case Surface.ROTATION_270: degrees = 270; break;
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
+            case Surface.ROTATION_180:
+                degrees = 180;
+                break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
         }
 
         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
@@ -108,42 +125,60 @@ public class CameraActivity extends BaseActivity {
         setContentView(R.layout.activity_camera);
         ButterKnife.bind(this);
         this.globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
+        pictureTaken = false;
         mActivity = this;
     }
 
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
-        this.mCamera = getCameraInstance();
-        this.mCamera.setPreviewCallback(null);
-        this.mPreview = new CameraPreview(getApplicationContext(), this.mCamera);
+        if (!pictureTaken) {
+            this.mCamera = getCameraInstance();
+            this.mCamera.setPreviewCallback(null);
+            this.mPreview = new CameraPreview(getApplicationContext(), this.mCamera);
 
-        // set the orientation and camera parameters
-        int rotation = this.getCameraRotation();
-        this.mCamera.setDisplayOrientation(rotation);
-        Camera.Parameters params = mCamera.getParameters();
-        params.setRotation(rotation);
+            // set the orientation and camera parameters
+            int rotation = this.getCameraRotation();
+            this.mCamera.setDisplayOrientation(rotation);
+            Camera.Parameters params = mCamera.getParameters();
+            params.setRotation(rotation);
 
-        ArrayList<String> list = (ArrayList<String>) params.getSupportedFocusModes();
-        for (String item : list) {
-            if (item.equals("continuous-picture")) {
-                params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+            ArrayList<String> list = (ArrayList<String>) params.getSupportedFocusModes();
+            for (String item : list) {
+                if (item.equals("continuous-picture")) {
+                    params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+                }
             }
+
+            mCamera.setParameters(params);
+
+            final FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
+
+            //Code that fails
+/*        final ViewTreeObserver observer = preview.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Log.e("Height", Integer.toString(preview.getHeight()));
+                try {
+                    preview.setLayoutParams(new FrameLayout.LayoutParams(preview.getHeight() * 4 / 3, preview.getHeight()));
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });*/
+            preview.addView(this.mPreview);
         }
-
-        mCamera.setParameters(params);
-
-        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
-        preview.addView(this.mPreview);
     }
 
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
 
-        if(this.mCamera != null && this.mPreview != null) {
+        if (this.mCamera != null && this.mPreview != null) {
             this.mCamera.setPreviewCallback(null);
             this.mPreview.getHolder().removeCallback(this.mPreview);
             this.mCamera.release();
@@ -154,8 +189,10 @@ public class CameraActivity extends BaseActivity {
 
 
     @OnClick(R.id.take_picture)
-    public void onTakePicture(){
+    public void onTakePicture() {
         super.onButtonClick(globalHandler.appContext);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+
         // call back for creating the picture
         Camera.PictureCallback jpegCallBack = new Camera.PictureCallback() {
             @Override
@@ -169,6 +206,7 @@ public class CameraActivity extends BaseActivity {
                 audioPlayer.addAudio(R.raw.picture_to_share);
                 audioPlayer.playAudio();
                 mCamera.stopPreview();
+                pictureTaken = true;
             }
         };
 
@@ -249,19 +287,22 @@ public class CameraActivity extends BaseActivity {
                 exifInterface.saveAttributes();
             }
 
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-			Intent intent;
-            if (sharedPreferences.getBoolean(Constants.PreferencesKeys.drawingImages, true))
-				intent = new Intent(this, DrawingImageActivity.class);
-            else
-            	intent = new Intent(this, SessionActivity.class);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            Intent intent;
+            if (sharedPreferences.getBoolean(Constants.PreferencesKeys.drawingImages, true)) {
+                intent = new Intent(this, DrawingImageActivity.class);
+            } else {
+                intent = new Intent(this, SessionActivity.class);
+            }
 
             startActivity(intent);
             finish();
 
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e) {
             Log.e(Constants.LOG_TAG, "File not found: " + e.getMessage());
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             Log.e(Constants.LOG_TAG, "Error gaining access to the file: " + e.getMessage());
         }
     }
@@ -271,7 +312,7 @@ public class CameraActivity extends BaseActivity {
     public void flipCamera() {
         super.onButtonClick(this);
         Intent intent = getIntent();
-        if (cameraId == Constants.DEFAULT_CAMERA_ID){
+        if (cameraId == Constants.DEFAULT_CAMERA_ID) {
             CameraActivity.cameraId = Constants.FRONT_FACING_CAMERA_ID;
             startActivity(intent);
             finish();

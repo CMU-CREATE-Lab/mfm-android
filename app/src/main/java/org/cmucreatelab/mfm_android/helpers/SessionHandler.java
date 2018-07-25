@@ -10,6 +10,7 @@ import org.cmucreatelab.mfm_android.classes.Message;
 import org.cmucreatelab.mfm_android.classes.Sender;
 import org.cmucreatelab.mfm_android.classes.User;
 import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,13 +22,13 @@ import java.util.Collection;
  * SessionHandler
  *
  * Represents the process of the app-user trying to send a message (selecting sender, recipients, photo/audio, and sending)
- *
  */
 public class SessionHandler {
 
     private GlobalHandler globalHandler;
     private Message message;
     private ArrayList<PaintPath> paths = new ArrayList<>();
+
 
     public SessionHandler(GlobalHandler globalHandler) {
         this.globalHandler = globalHandler;
@@ -49,6 +50,7 @@ public class SessionHandler {
         return ids;
     }
 
+
     public ArrayList<User> getRecipients() {
         return message.getRecipients();
     }
@@ -59,10 +61,14 @@ public class SessionHandler {
     }
 
 
-    public File getMessagePhoto() { return this.message.getPhoto(); }
+    public File getMessagePhoto() {
+        return this.message.getPhoto();
+    }
 
 
-    public File getMessageAudio() { return this.message.getAudio(); }
+    public File getMessageAudio() {
+        return this.message.getAudio();
+    }
 
 
     public void setMessagePhoto(File photo) {
@@ -74,25 +80,26 @@ public class SessionHandler {
         this.message.setAudio(audio);
     }
 
-    public ArrayList<PaintPath> getDrawingPaths()
-    {
+
+    public ArrayList<PaintPath> getDrawingPaths() {
         return paths;
     }
 
-    public void addDrawingPath(PaintPath paintPath)
-    {
+
+    public void addDrawingPath(PaintPath paintPath) {
         paths.add(paintPath);
     }
 
-    public void removeDrawingPath(int index)
-    {
+
+    public void removeDrawingPath(int index) {
         paths.remove(index);
     }
 
-    public void clearDrawingPaths()
-    {
+
+    public void clearDrawingPaths() {
         paths.clear();
     }
+
 
     public void setMessageRecipients(Collection<User> recipients) {
         this.message.setRecipients(recipients);
@@ -105,7 +112,8 @@ public class SessionHandler {
         try {
             binPhoto = FileUtils.readFileToByteArray(message.getPhoto());
             binAudio = FileUtils.readFileToByteArray(message.getAudio());
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             Log.e(Constants.LOG_TAG, "Error in reading a file to a byte array in sendMessage.");
         }
         globalHandler.sendPost(binPhoto, binAudio, activity);

@@ -11,13 +11,11 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.color_picker.dialog.ColorPickerDialogFragment;
 
@@ -28,331 +26,301 @@ import org.cmucreatelab.mfm_android.helpers.static_classes.Constants;
 import org.cmucreatelab.mfm_android.helpers.static_classes.SaveFileHandler;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-import static android.os.Environment.DIRECTORY_PICTURES;
+public class DrawingImageActivity extends AppCompatActivity implements Serializable, ColorPickerDialogFragment.ColorPickerDialogListener {
+    @BindView(R.id.image_result)
+    ImageView imageResult;
 
-public class DrawingImageActivity extends AppCompatActivity implements Serializable, ColorPickerDialogFragment.ColorPickerDialogListener
-{
-	@BindView(R.id.image_result)
-	ImageView imageResult;
+    private Bitmap masterBitmap;
+    private Canvas masterCanvas;
+    private GlobalHandler globalHandler;
+    private SessionHandler sessionHandler;
 
-	private Bitmap masterBitmap;
-	private Canvas masterCanvas;
-	private GlobalHandler globalHandler;
-	private SessionHandler sessionHandler;
+    private Paint paintDraw;
 
-	private Paint paintDraw;
+    private float mX, mY;
+    private Path mPath;
+    private static final float TOUCH_TOLERANCE = 4;
 
-	private float mX, mY;
-	private Path mPath;
-	private static final float TOUCH_TOLERANCE = 4;
 
-	public void onColorSelected(int dialogId, int color, int strokeWidth)
-	{
-		paintDraw.setColor(color);
-		paintDraw.setStrokeWidth(strokeWidth);
-	}
+    public void onColorSelected(int dialogId, int color, int strokeWidth) {
+        paintDraw.setColor(color);
+        paintDraw.setStrokeWidth(strokeWidth);
+    }
 
-	@OnClick(R.id.button_done)
-	public void onClickDone()
-	{
-		if (masterBitmap != null)
-		{
-			saveBitmap(masterBitmap);
-		}
-		sessionHandler.clearDrawingPaths();
-		Intent intent = new Intent(this, SessionActivity.class);
-		startActivity(intent);
-		finish();
-	}
 
-	@OnClick(R.id.button_undo)
-	public void onClickUndo()
-	{
-		if (!sessionHandler.getDrawingPaths().isEmpty())
-		{
-			updateCanvasAndImageFromUri();
-			sessionHandler.removeDrawingPath(sessionHandler.getDrawingPaths().size() - 1);
-			imageResult.invalidate();
-			for (PaintPath paintPath : sessionHandler.getDrawingPaths())
-			{
-				masterCanvas.drawPath(paintPath.path, paintPath.paint);
-			}
-		}
-	}
+    @OnClick(R.id.button_done)
+    public void onClickDone() {
+        if (masterBitmap != null) {
+            saveBitmap(masterBitmap);
+        }
+        sessionHandler.clearDrawingPaths();
+        Intent intent = new Intent(this, SessionActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
-	@OnClick(R.id.button_advanced_settings)
-	public void onClickAdavancedSettings()
-	{
-		ColorPickerDialogFragment colorPickerDialogFragment = ColorPickerDialogFragment
-				.newInstance(0, "Color Picker", null, paintDraw.getColor(), false, paintDraw.getStrokeWidth(), this);
-		colorPickerDialogFragment.show(getFragmentManager(), "Color Picker");
-	}
 
-	@OnClick(R.id.button_clear)
-	public void onClickClear()
-	{
-		if (masterBitmap != null)
-		{
-			updateCanvasAndImageFromUri();
-			sessionHandler.clearDrawingPaths();
-			imageResult.invalidate();
-		}
-	}
+    @OnClick(R.id.button_undo)
+    public void onClickUndo() {
+        if (!sessionHandler.getDrawingPaths().isEmpty()) {
+            updateCanvasAndImageFromUri();
+            sessionHandler.removeDrawingPath(sessionHandler.getDrawingPaths().size() - 1);
+            imageResult.invalidate();
+            for (PaintPath paintPath : sessionHandler.getDrawingPaths()) {
+                masterCanvas.drawPath(paintPath.path, paintPath.paint);
+            }
+        }
+    }
 
-	@Override
-	public void onBackPressed() {
-		sessionHandler.clearDrawingPaths();
-		super.onBackPressed();
-	}
 
-	@OnTouch(R.id.image_result)
-	public boolean onTouchImageResult(View view, MotionEvent event)
-	{
-		int x = (int) event.getX();
-		int y = (int) event.getY();
+    @OnClick(R.id.button_advanced_settings)
+    public void onClickAdavancedSettings() {
+        ColorPickerDialogFragment colorPickerDialogFragment = ColorPickerDialogFragment.newInstance(0, "Color Picker", null, paintDraw.getColor(), false, paintDraw.getStrokeWidth(), this);
+        colorPickerDialogFragment.show(getFragmentManager(), "Color Picker");
+    }
 
-		switch (event.getAction())
-		{
-			case MotionEvent.ACTION_DOWN:
-				touchStart(x, y);
-				break;
-			case MotionEvent.ACTION_MOVE:
-				touchMove(x, y);
-				break;
-			case MotionEvent.ACTION_UP:
-				touchUp();
-				break;
-		}
 
-		for (PaintPath paintPath : sessionHandler.getDrawingPaths())
-		{
-			masterCanvas.drawPath(paintPath.path, paintPath.paint);
-		}
+    @OnClick(R.id.button_clear)
+    public void onClickClear() {
+        if (masterBitmap != null) {
+            updateCanvasAndImageFromUri();
+            sessionHandler.clearDrawingPaths();
+            imageResult.invalidate();
+        }
+    }
 
-		imageResult.invalidate();
+
+    @Override
+    public void onBackPressed() {
+        sessionHandler.clearDrawingPaths();
+        super.onBackPressed();
+    }
+
+
+    @OnTouch(R.id.image_result)
+    public boolean onTouchImageResult(View view, MotionEvent event) {
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                touchStart(x, y);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                touchMove(x, y);
+                break;
+            case MotionEvent.ACTION_UP:
+                touchUp();
+                break;
+        }
+
+        for (PaintPath paintPath : sessionHandler.getDrawingPaths()) {
+            masterCanvas.drawPath(paintPath.path, paintPath.paint);
+        }
+
+        imageResult.invalidate();
 
 
 		/*
-		 * Return 'true' to indicate that the event have been consumed.
+         * Return 'true' to indicate that the event have been consumed.
 		 * If auto-generated 'false', your code can detect ACTION_DOWN only,
 		 * cannot detect ACTION_MOVE and ACTION_UP.
 		 */
-		return true;
-	}
+        return true;
+    }
 
-	private void touchStart(float x, float y)
-	{
-		mPath = new Path();
-		sessionHandler.addDrawingPath(new PaintPath(new Paint(paintDraw), mPath));
 
-		mPath.reset();
-		mPath.moveTo(x, y);
-		mX = x;
-		mY = y;
-	}
+    private void touchStart(float x, float y) {
+        mPath = new Path();
+        sessionHandler.addDrawingPath(new PaintPath(new Paint(paintDraw), mPath));
 
-	private void touchMove(float x, float y)
-	{
-		float dx = Math.abs(x - mX);
-		float dy = Math.abs(y - mY);
+        mPath.reset();
+        mPath.moveTo(x, y);
+        mX = x;
+        mY = y;
+    }
 
-		if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE)
-		{
-			mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
-			mX = x;
-			mY = y;
-		}
-	}
 
-	private void touchUp()
-	{
-		mPath.lineTo(mX, mY);
-	}
+    private void touchMove(float x, float y) {
+        float dx = Math.abs(x - mX);
+        float dy = Math.abs(y - mY);
 
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		outState.putInt("paintDrawColor", paintDraw.getColor());
-		outState.putInt("paintDrawStrokeWidth", (int) paintDraw.getStrokeWidth());
-		super.onSaveInstanceState(outState);
-	}
+        if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+            mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
+            mX = x;
+            mY = y;
+        }
+    }
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		Log.e("Wow", "PA");
-		setContentView(R.layout.activity_drawing_picture);
 
-		this.globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
-		this.sessionHandler = globalHandler.sessionHandler;
+    private void touchUp() {
+        mPath.lineTo(mX, mY);
+    }
 
-		paintDraw = new Paint();
-		paintDraw.setStyle(Paint.Style.STROKE);
 
-		if (savedInstanceState != null)
-		{
-			paintDraw.setColor(savedInstanceState.getInt("paintDrawColor"));
-			paintDraw.setStrokeWidth(savedInstanceState.getInt("paintDrawStrokeWidth"));
-		}
-		else
-		{
-			paintDraw.setColor(Color.WHITE);
-			paintDraw.setStrokeWidth(10);
-		}
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt("paintDrawColor", paintDraw.getColor());
+        outState.putInt("paintDrawStrokeWidth", (int) paintDraw.getStrokeWidth());
+        super.onSaveInstanceState(outState);
+    }
 
-		ButterKnife.bind(this);
 
-		updateCanvasAndImageFromUri();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_drawing_picture);
 
-		for (PaintPath paintPath : sessionHandler.getDrawingPaths())
-		{
-			masterCanvas.drawPath(paintPath.path, paintPath.paint);
-		}
-	}
+        this.globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
+        this.sessionHandler = globalHandler.sessionHandler;
 
-	private void updateCanvasAndImageFromUri()
-	{
-		Bitmap immutableBitmap;
-		double scaleFactor;
-		try
-		{
-			int orientation = 0;
-			int rotation = 0;
-			Matrix matrix = new Matrix();
-			try
-			{
-				ExifInterface exif = new ExifInterface(globalHandler.sessionHandler.getMessagePhoto().getAbsolutePath());
-				orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 0);
+        paintDraw = new Paint();
+        paintDraw.setStyle(Paint.Style.STROKE);
 
-				if (CameraActivity.cameraId == Constants.DEFAULT_CAMERA_ID)
-				{
-					switch (orientation)
-					{
-						case ExifInterface.ORIENTATION_NORMAL:
-							break;
-						case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
-							matrix.setScale(-1, 1);
-							break;
-						case ExifInterface.ORIENTATION_ROTATE_180:
-							matrix.setRotate(180);
-							break;
-						case ExifInterface.ORIENTATION_FLIP_VERTICAL:
-							matrix.setRotate(180);
-							matrix.postScale(-1, 1);
-							break;
-						case ExifInterface.ORIENTATION_TRANSPOSE:
-							matrix.setRotate(90);
-							matrix.postScale(-1, 1);
-							break;
-						case ExifInterface.ORIENTATION_ROTATE_90:
-							matrix.setRotate(90);
-							break;
-						case ExifInterface.ORIENTATION_TRANSVERSE:
-							matrix.setRotate(-90);
-							matrix.postScale(-1, 1);
-							break;
-						case ExifInterface.ORIENTATION_ROTATE_270:
-							matrix.setRotate(-90);
-							break;
-						default:
-							break;
-					}
-				} else
-				{
-					switch (orientation)
-					{
-						case ExifInterface.ORIENTATION_NORMAL:
-							break;
-						case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
-							matrix.setScale(-1, 1);
-							break;
-						case ExifInterface.ORIENTATION_ROTATE_180:
-							matrix.setRotate(180);
-							break;
-						case ExifInterface.ORIENTATION_FLIP_VERTICAL:
-							matrix.setRotate(180);
-							matrix.postScale(-1, 1);
-							break;
-						case ExifInterface.ORIENTATION_TRANSPOSE:
-							matrix.setRotate(-90);
-							matrix.postScale(-1, 1);
-							break;
-						case ExifInterface.ORIENTATION_ROTATE_90:
-							matrix.setRotate(-90);
-							break;
-						case ExifInterface.ORIENTATION_TRANSVERSE:
-							matrix.setRotate(90);
-							matrix.postScale(-1, 1);
-							break;
-						case ExifInterface.ORIENTATION_ROTATE_270:
-							matrix.setRotate(90);
-							break;
-						default:
-							break;
-					}
-				}
-			} catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-			Bitmap bitmap = BitmapFactory.decodeFile(globalHandler.sessionHandler.getMessagePhoto().getAbsolutePath());
-			immutableBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-			scaleFactor = 0.32;
+        if (savedInstanceState != null) {
+            paintDraw.setColor(savedInstanceState.getInt("paintDrawColor"));
+            paintDraw.setStrokeWidth(savedInstanceState.getInt("paintDrawStrokeWidth"));
+        } else {
+            paintDraw.setColor(Color.WHITE);
+            paintDraw.setStrokeWidth(5);
+        }
 
-			int canvasWidth = (int) Math.round(immutableBitmap.getWidth() * scaleFactor);
-			int canvasHeight = (int) Math.round(immutableBitmap.getHeight() * scaleFactor);
+        ButterKnife.bind(this);
 
-			//masterBitmap is mutable
-			masterBitmap = Bitmap.createBitmap(
-					canvasWidth,
-					canvasHeight,
-					Bitmap.Config.ARGB_8888);
+        updateCanvasAndImageFromUri();
 
-			masterCanvas = new Canvas(masterBitmap);
-			masterCanvas.drawBitmap(immutableBitmap, null, new RectF(0, 0, canvasWidth, canvasHeight), null);
+        for (PaintPath paintPath : sessionHandler.getDrawingPaths()) {
+            masterCanvas.drawPath(paintPath.path, paintPath.paint);
+        }
+    }
 
-			imageResult.setImageBitmap(masterBitmap);
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
 
-	private void saveBitmap(Bitmap bm)
-	{
-		File picture = SaveFileHandler.getOutputMediaFile(globalHandler.appContext, SaveFileHandler.MEDIA_TYPE_IMAGE, globalHandler);
+    private void updateCanvasAndImageFromUri() {
+        Bitmap immutableBitmap;
+        double scaleFactor;
+        try {
+            int orientation;
+            Matrix matrix = new Matrix();
+            try {
+                ExifInterface exif = new ExifInterface(globalHandler.sessionHandler.getMessagePhoto().getAbsolutePath());
+                orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 0);
 
-		if (picture == null) {
-			Log.e(Constants.LOG_TAG, "Could not create the media file");
-			return;
-		}
+                if (CameraActivity.cameraId == Constants.DEFAULT_CAMERA_ID) {
+                    switch (orientation) {
+                        case ExifInterface.ORIENTATION_NORMAL:
+                            break;
+                        case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+                            matrix.setScale(-1, 1);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_180:
+                            matrix.setRotate(180);
+                            break;
+                        case ExifInterface.ORIENTATION_FLIP_VERTICAL:
+                            matrix.setRotate(180);
+                            matrix.postScale(-1, 1);
+                            break;
+                        case ExifInterface.ORIENTATION_TRANSPOSE:
+                            matrix.setRotate(90);
+                            matrix.postScale(-1, 1);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_90:
+                            matrix.setRotate(90);
+                            break;
+                        case ExifInterface.ORIENTATION_TRANSVERSE:
+                            matrix.setRotate(-90);
+                            matrix.postScale(-1, 1);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_270:
+                            matrix.setRotate(-90);
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    switch (orientation) {
+                        case ExifInterface.ORIENTATION_NORMAL:
+                            break;
+                        case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+                            matrix.setScale(-1, 1);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_180:
+                            matrix.setRotate(180);
+                            break;
+                        case ExifInterface.ORIENTATION_FLIP_VERTICAL:
+                            matrix.setRotate(180);
+                            matrix.postScale(-1, 1);
+                            break;
+                        case ExifInterface.ORIENTATION_TRANSPOSE:
+                            matrix.setRotate(-90);
+                            matrix.postScale(-1, 1);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_90:
+                            matrix.setRotate(-90);
+                            break;
+                        case ExifInterface.ORIENTATION_TRANSVERSE:
+                            matrix.setRotate(90);
+                            matrix.postScale(-1, 1);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_270:
+                            matrix.setRotate(90);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            Bitmap bitmap = BitmapFactory.decodeFile(globalHandler.sessionHandler.getMessagePhoto().getAbsolutePath());
+            immutableBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            scaleFactor = 0.32;
 
-		try
-		{
-			FileOutputStream fileOutputStream = new FileOutputStream(picture.getPath());
-			bm.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-			fileOutputStream.flush();
-			fileOutputStream.close();
+            int canvasWidth = (int) Math.round(immutableBitmap.getWidth() * scaleFactor);
+            int canvasHeight = (int) Math.round(immutableBitmap.getHeight() * scaleFactor);
 
-			// We may not need to save the image to any directory if we do this.
-			globalHandler.sessionHandler.setMessagePhoto(picture);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
+            //masterBitmap is mutable
+            masterBitmap = Bitmap.createBitmap(canvasWidth, canvasHeight, Bitmap.Config.ARGB_8888);
+
+            masterCanvas = new Canvas(masterBitmap);
+            masterCanvas.drawBitmap(immutableBitmap, null, new RectF(0, 0, canvasWidth, canvasHeight), null);
+
+            imageResult.setImageBitmap(masterBitmap);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void saveBitmap(Bitmap bm) {
+        File picture = SaveFileHandler.getOutputMediaFile(globalHandler.appContext, SaveFileHandler.MEDIA_TYPE_IMAGE, globalHandler);
+
+        if (picture == null) {
+            Log.e(Constants.LOG_TAG, "Could not create the media file");
+            return;
+        }
+
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(picture.getPath());
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+
+            // We may not need to save the image to any directory if we do this.
+            globalHandler.sessionHandler.setMessagePhoto(picture);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -24,11 +24,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     private static final String AUDIO_PLAYER_KEY = "audio_player";
     protected AudioPlayer audioPlayer;
 
+
     @Override
     public void onBackPressed() {
         audioPlayer.stop();
         super.onBackPressed();
     }
+
 
     public void onButtonClick(Context context) {
         MediaPlayer mediaPlayer = new MediaPlayer();

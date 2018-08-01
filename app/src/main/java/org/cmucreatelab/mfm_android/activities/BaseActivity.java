@@ -58,18 +58,18 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
+/*        if (savedInstanceState != null) {
             audioPlayer = (AudioPlayer) savedInstanceState.getParcelable(AUDIO_PLAYER_KEY);
-        } else {
+        } else {*/
             audioPlayer = AudioPlayer.getInstance(this.getApplicationContext());
-        }
+        //}
     }
 
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(AUDIO_PLAYER_KEY, audioPlayer);
+        //outState.putParcelable(AUDIO_PLAYER_KEY, audioPlayer);
     }
 
 }

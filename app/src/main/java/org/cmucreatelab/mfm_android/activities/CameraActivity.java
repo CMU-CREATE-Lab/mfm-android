@@ -4,8 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -24,6 +28,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
@@ -40,6 +45,10 @@ public class CameraActivity extends BaseActivity {
     private CameraPreview mPreview;
     private byte[] possiblePhoto;
     private boolean pictureTaken;
+
+    private static final int REQUEST_LOAD_IMAGE = 1;
+    private boolean loadImage;
+    private Uri photoUri;
 
 
     private static Camera getCameraInstance() {
@@ -124,6 +133,7 @@ public class CameraActivity extends BaseActivity {
         setContentView(R.layout.activity_camera);
         ButterKnife.bind(this);
         this.globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
+        loadImage = false;
         pictureTaken = false;
         mActivity = this;
     }
@@ -187,6 +197,56 @@ public class CameraActivity extends BaseActivity {
     }
 
 
+    @OnClick(R.id.load_image)
+    public void onLoadImage() {
+        super.onButtonClick(this);
+
+        if (!pictureTaken && !loadImage) {
+            loadImageIntent();
+        }
+    }
+
+
+    private void loadImageIntent() {
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQUEST_LOAD_IMAGE);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_LOAD_IMAGE:
+                    photoUri = data.getData();
+                    loadImage = true;
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+                    final FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
+
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(photoUri);
+                        preview.setForeground(Drawable.createFromStream(inputStream, photoUri.toString()));
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    ImageView photoNo = (ImageView) findViewById(R.id.photo_no);
+                    ImageView photoYes = (ImageView) findViewById(R.id.photo_yes);
+                    photoNo.setImageResource(R.drawable.photo_no);
+                    photoYes.setImageResource(R.drawable.photo_yes);
+                    findViewById(R.id.take_picture).setVisibility(View.INVISIBLE);
+                    audioPlayer.addAudio(R.raw.picture_to_share);
+                    audioPlayer.playAudio();
+
+                    break;
+            }
+        }
+    }
+
+
     @OnClick(R.id.take_picture)
     public void onTakePicture() {
         super.onButtonClick(globalHandler.appContext);
@@ -236,7 +296,14 @@ public class CameraActivity extends BaseActivity {
 
         try {
             FileOutputStream fos = new FileOutputStream(picture.getPath());
-            fos.write(possiblePhoto);
+
+            if (loadImage) {
+                Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(photoUri));
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            } else {
+                fos.write(possiblePhoto);
+            }
+
             fos.close();
 
             // We may not need to save the image to any directory if we do this.
@@ -310,15 +377,17 @@ public class CameraActivity extends BaseActivity {
     @OnClick(R.id.flip_camera)
     public void flipCamera() {
         super.onButtonClick(this);
-        Intent intent = getIntent();
-        if (cameraId == Constants.DEFAULT_CAMERA_ID) {
-            CameraActivity.cameraId = Constants.FRONT_FACING_CAMERA_ID;
-            startActivity(intent);
-            finish();
-        } else {
-            CameraActivity.cameraId = Constants.DEFAULT_CAMERA_ID;
-            startActivity(intent);
-            finish();
+        if (!pictureTaken && !loadImage) {
+            Intent intent = getIntent();
+            if (cameraId == Constants.DEFAULT_CAMERA_ID) {
+                CameraActivity.cameraId = Constants.FRONT_FACING_CAMERA_ID;
+                startActivity(intent);
+                finish();
+            } else {
+                CameraActivity.cameraId = Constants.DEFAULT_CAMERA_ID;
+                startActivity(intent);
+                finish();
+            }
         }
     }
 

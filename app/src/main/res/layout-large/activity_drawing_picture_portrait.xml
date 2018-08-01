@@ -49,7 +49,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:adjustViewBounds="true"
-        android:padding="3dp"
         android:background="@android:color/white"
+        android:padding="3dp"
         android:scaleType="centerInside" />
 </LinearLayout>

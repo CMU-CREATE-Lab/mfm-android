@@ -52,6 +52,14 @@
                     android:layout_weight="20">
 
                     <ImageView
+                        android:id="@+id/load_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/round_folder_white_48"
+
+                        android:padding="10dp"/>
+
+                    <ImageView
                         android:id="@+id/flip_camera"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"

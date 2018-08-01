@@ -1,6 +1,8 @@
 package org.cmucreatelab.mfm_android.activities;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -34,6 +36,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
+
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 public class DrawingImageActivity extends AppCompatActivity implements Serializable, ColorPickerDialogFragment.ColorPickerDialogListener {
     @BindView(R.id.image_result)
@@ -108,8 +112,10 @@ public class DrawingImageActivity extends AppCompatActivity implements Serializa
 
     @OnTouch(R.id.image_result)
     public boolean onTouchImageResult(View view, MotionEvent event) {
-        int x = (int) event.getX();
-        int y = (int) event.getY();
+        float ratioWidth = (float) masterBitmap.getWidth() / (float) imageResult.getWidth();
+        float ratioHeight = (float) masterBitmap.getHeight() / (float) imageResult.getHeight();
+        int x = Math.round(event.getX() * ratioWidth);
+        int y = Math.round(event.getY() * ratioHeight);
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -178,7 +184,13 @@ public class DrawingImageActivity extends AppCompatActivity implements Serializa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_drawing_picture);
+
+        if (getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT)
+            setContentView(R.layout.activity_drawing_picture_portrait);
+        else
+            setContentView(R.layout.activity_drawing_picture_landscape);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
 
         this.globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
         this.sessionHandler = globalHandler.sessionHandler;
@@ -191,7 +203,7 @@ public class DrawingImageActivity extends AppCompatActivity implements Serializa
             paintDraw.setStrokeWidth(savedInstanceState.getInt("paintDrawStrokeWidth"));
         } else {
             paintDraw.setColor(Color.WHITE);
-            paintDraw.setStrokeWidth(5);
+            paintDraw.setStrokeWidth(10);
         }
 
         ButterKnife.bind(this);
@@ -283,7 +295,7 @@ public class DrawingImageActivity extends AppCompatActivity implements Serializa
             }
             Bitmap bitmap = BitmapFactory.decodeFile(globalHandler.sessionHandler.getMessagePhoto().getAbsolutePath());
             immutableBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-            scaleFactor = 0.32;
+            scaleFactor = 1;
 
             int canvasWidth = (int) Math.round(immutableBitmap.getWidth() * scaleFactor);
             int canvasHeight = (int) Math.round(immutableBitmap.getHeight() * scaleFactor);

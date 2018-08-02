@@ -15,8 +15,11 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Surface;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import org.cmucreatelab.mfm_android.R;
 import org.cmucreatelab.mfm_android.helpers.CameraPreview;
@@ -33,6 +36,9 @@ import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 public class CameraActivity extends BaseActivity {
 
@@ -162,23 +168,79 @@ public class CameraActivity extends BaseActivity {
 
             mCamera.setParameters(params);
 
-            final FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
+            final FrameLayout cameraPreview = (FrameLayout) findViewById(R.id.camera_preview);
 
-            //Code that fails
-/*        final ViewTreeObserver observer = preview.getViewTreeObserver();
-        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            updateCameraLayoutSizes();
+
+            cameraPreview.addView(this.mPreview);
+        }
+    }
+
+
+    private void updateCameraLayoutSizes() {
+        final FrameLayout cameraPreview = (FrameLayout) findViewById(R.id.camera_preview);
+        final RelativeLayout layoutCameraPreview = (RelativeLayout) findViewById(R.id.layout_camera_preview);
+        final LinearLayout layoutCameraButtons = (LinearLayout) findViewById(R.id.layout_camera_buttons);
+
+        final ViewTreeObserver cameraPreviewViewTreeObserver = cameraPreview.getViewTreeObserver();
+        cameraPreviewViewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                Log.e("Height", Integer.toString(preview.getHeight()));
                 try {
-                    preview.setLayoutParams(new FrameLayout.LayoutParams(preview.getHeight() * 4 / 3, preview.getHeight()));
+                    RelativeLayout.LayoutParams lp;
+
+                    if (getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT) {
+                        lp = new RelativeLayout.LayoutParams(cameraPreview.getWidth(), cameraPreview.getWidth() * 4 / 3);
+                        lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+                        cameraPreview.setLayoutParams(lp);
+                    } else {
+                        //for some reason, the layout params have to instantiated every time or they do not work
+                        lp = new RelativeLayout.LayoutParams(cameraPreview.getHeight() * 4 / 3, cameraPreview.getHeight());
+                        lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+                        cameraPreview.setLayoutParams(lp);
+                    }
                 }
                 catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        });*/
-            preview.addView(this.mPreview);
+        });
+
+        if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {
+            final ViewTreeObserver layoutCameraPreviewViewTreeObserver = layoutCameraPreview.getViewTreeObserver();
+            layoutCameraPreviewViewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    try {
+                        RelativeLayout.LayoutParams lp;
+
+                        //for some reason, the layout params have to instantiated every time or they do not work
+                        lp = new RelativeLayout.LayoutParams(layoutCameraPreview.getHeight() * 4 / 3, layoutCameraPreview.getHeight());
+                        lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+                        layoutCameraPreview.setLayoutParams(lp);
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            final ViewTreeObserver layoutCameraButtonsViewTreeObserver = layoutCameraButtons.getViewTreeObserver();
+            layoutCameraButtonsViewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    try {
+                        RelativeLayout.LayoutParams lp;
+
+                        lp = new RelativeLayout.LayoutParams(layoutCameraButtons.getHeight() * 4 / 3, layoutCameraButtons.getHeight());
+                        lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+                        layoutCameraButtons.setLayoutParams(lp);
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
     }
 

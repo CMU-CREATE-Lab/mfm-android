@@ -69,6 +69,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        /* Causes error when exiting and opening app because some classes
+        inside audio player are not parcelable */
         //outState.putParcelable(AUDIO_PLAYER_KEY, audioPlayer);
     }
 

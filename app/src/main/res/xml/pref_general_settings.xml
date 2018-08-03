@@ -8,4 +8,8 @@
             android:defaultValue="true"
             android:key="drawing_images"
             android:title="@string/drawing_image" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="loading_image"
+            android:title="@string/loading_image" />
 =</PreferenceScreen>

@@ -140,6 +140,12 @@ public class CameraActivity extends BaseActivity {
         setContentView(R.layout.activity_camera);
         ButterKnife.bind(this);
         this.globalHandler = GlobalHandler.getInstance(this.getApplicationContext());
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if (!sharedPreferences.getBoolean(Constants.PreferencesKeys.loadingImage, true)) {
+            findViewById(R.id.load_image).setVisibility(View.GONE);
+        }
+
         loadImage = false;
         pictureTaken = false;
         mActivity = this;

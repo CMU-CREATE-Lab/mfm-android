@@ -32,6 +32,7 @@
 
     <string name="general_settings">General Settings</string>
     <string name="drawing_image">Annotating the image</string>
+    <string name="loading_image">Loading an image from device storage</string>
     <string name="what_did_you_take_picture_of_voice_prompt">Play \"what did you take a picture of\" audio prompt</string>
     <string name="title_activity_settings">Settings</string>
 

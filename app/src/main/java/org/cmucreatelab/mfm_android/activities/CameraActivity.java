@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.media.ExifInterface;
@@ -232,6 +233,7 @@ public class CameraActivity extends BaseActivity {
                     try {
                         RelativeLayout.LayoutParams lp;
 
+                        //for some reason, the layout params have to instantiated every time or they do not work
                         lp = new RelativeLayout.LayoutParams(layoutCameraButtons.getHeight() * 4 / 3, layoutCameraButtons.getHeight());
                         lp.addRule(RelativeLayout.CENTER_IN_PARENT);
                         layoutCameraButtons.setLayoutParams(lp);
@@ -324,6 +326,11 @@ public class CameraActivity extends BaseActivity {
                 photoYes.setImageResource(R.drawable.photo_yes);
                 findViewById(R.id.take_picture).setVisibility(View.INVISIBLE);
                 possiblePhoto = bytes;
+
+                final FrameLayout cameraPreview = (FrameLayout) findViewById(R.id.camera_preview);
+
+                cameraPreview.setForeground(new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
+
                 audioPlayer.addAudio(R.raw.picture_to_share);
                 audioPlayer.playAudio();
                 mCamera.stopPreview();

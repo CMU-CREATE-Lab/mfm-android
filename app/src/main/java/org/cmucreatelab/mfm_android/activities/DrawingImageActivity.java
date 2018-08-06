@@ -1,6 +1,5 @@
 package org.cmucreatelab.mfm_android.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -10,13 +9,16 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 import com.color_picker.dialog.ColorPickerDialogFragment;
@@ -47,6 +49,9 @@ public class DrawingImageActivity extends AppCompatActivity implements Serializa
     private Canvas masterCanvas;
     private GlobalHandler globalHandler;
     private SessionHandler sessionHandler;
+
+    private float ratioWidth;
+    private float ratioHeight;
 
     private Paint paintDraw;
 
@@ -112,8 +117,6 @@ public class DrawingImageActivity extends AppCompatActivity implements Serializa
 
     @OnTouch(R.id.image_result)
     public boolean onTouchImageResult(View view, MotionEvent event) {
-        float ratioWidth = (float) masterBitmap.getWidth() / (float) imageResult.getWidth();
-        float ratioHeight = (float) masterBitmap.getHeight() / (float) imageResult.getHeight();
         int x = Math.round(event.getX() * ratioWidth);
         int y = Math.round(event.getY() * ratioHeight);
 
@@ -136,11 +139,11 @@ public class DrawingImageActivity extends AppCompatActivity implements Serializa
         imageResult.invalidate();
 
 
-		/*
+        /*
          * Return 'true' to indicate that the event have been consumed.
-		 * If auto-generated 'false', your code can detect ACTION_DOWN only,
-		 * cannot detect ACTION_MOVE and ACTION_UP.
-		 */
+         * If auto-generated 'false', your code can detect ACTION_DOWN only,
+         * cannot detect ACTION_MOVE and ACTION_UP.
+         */
         return true;
     }
 
@@ -185,10 +188,11 @@ public class DrawingImageActivity extends AppCompatActivity implements Serializa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT)
+        if (getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT) {
             setContentView(R.layout.activity_drawing_picture_portrait);
-        else
+        } else {
             setContentView(R.layout.activity_drawing_picture_landscape);
+        }
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
 
@@ -295,7 +299,21 @@ public class DrawingImageActivity extends AppCompatActivity implements Serializa
             }
             Bitmap bitmap = BitmapFactory.decodeFile(globalHandler.sessionHandler.getMessagePhoto().getAbsolutePath());
             immutableBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-            scaleFactor = 1;
+
+
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x;
+            int height = size.y;
+
+            if (getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT) {
+                scaleFactor = (double) width / immutableBitmap.getWidth();
+            }
+            else
+            {
+                scaleFactor = (double) height / immutableBitmap.getHeight();
+            }
 
             int canvasWidth = (int) Math.round(immutableBitmap.getWidth() * scaleFactor);
             int canvasHeight = (int) Math.round(immutableBitmap.getHeight() * scaleFactor);
@@ -307,6 +325,15 @@ public class DrawingImageActivity extends AppCompatActivity implements Serializa
             masterCanvas.drawBitmap(immutableBitmap, null, new RectF(0, 0, canvasWidth, canvasHeight), null);
 
             imageResult.setImageBitmap(masterBitmap);
+
+            final ViewTreeObserver imageResultViewTreeObserver = imageResult.getViewTreeObserver();
+            imageResultViewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    ratioWidth = (float) masterBitmap.getWidth() / (float) imageResult.getWidth();
+                    ratioHeight = (float) masterBitmap.getHeight() / (float) imageResult.getHeight();
+                }
+            });
         }
         catch (Exception e) {
             e.printStackTrace();

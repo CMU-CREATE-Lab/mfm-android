@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -52,6 +53,9 @@ public class CameraActivity extends BaseActivity {
     private CameraPreview mPreview;
     private byte[] possiblePhoto;
     private boolean pictureTaken;
+
+    @BindView(R.id.flip_camera) ImageView flipCameraImageView;
+    @BindView(R.id.load_image) ImageView loadImageView;
 
     private static final int REQUEST_LOAD_IMAGE = 1;
     private boolean loadImage;
@@ -345,6 +349,9 @@ public class CameraActivity extends BaseActivity {
         };
 
         this.mCamera.takePicture(null, null, jpegCallBack);
+
+        flipCameraImageView.setVisibility(View.GONE);
+        loadImageView.setVisibility(View.GONE);
     }
 
 

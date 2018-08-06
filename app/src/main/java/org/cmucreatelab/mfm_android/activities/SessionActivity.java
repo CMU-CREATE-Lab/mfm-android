@@ -2,8 +2,6 @@ package org.cmucreatelab.mfm_android.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -11,13 +9,10 @@ import android.media.AudioManager;
 import android.media.ExifInterface;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.Display;
-import android.view.Surface;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -43,8 +38,8 @@ import butterknife.OnClick;
 
 public class SessionActivity extends BaseActivity {
 
-	private static final String AUDIO_RECORD_KEY = "audio_record";
-	private static final String PLAYED_WHAT_DID_TAKE_PROMPT_KEY = "played_what_did_take_prompt";
+    private static final String AUDIO_RECORD_KEY = "audio_record";
+    private static final String PLAYED_WHAT_DID_TAKE_PROMPT_KEY = "played_what_did_take_prompt";
 
     private GlobalHandler globalHandler;
     private ExtendedHeightGridView recipientsView;
@@ -79,8 +74,8 @@ public class SessionActivity extends BaseActivity {
 
         if (bundle != null) {
             audioRecorder = (AudioRecorder) bundle.getSerializable(AUDIO_RECORD_KEY);
-			playedWhatDidTakePrompt = bundle.getBoolean(PLAYED_WHAT_DID_TAKE_PROMPT_KEY);
-		} else {
+            playedWhatDidTakePrompt = bundle.getBoolean(PLAYED_WHAT_DID_TAKE_PROMPT_KEY);
+        } else {
             audioRecorder = new AudioRecorder(this);
             playedWhatDidTakePrompt = false;
         }
@@ -179,12 +174,13 @@ public class SessionActivity extends BaseActivity {
                             break;
                     }
                 }
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
 
             Bitmap bitmap = BitmapFactory.decodeFile(globalHandler.sessionHandler.getMessagePhoto().getAbsolutePath());
-            Bitmap rotated = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
+            Bitmap rotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
             ((ImageView) findViewById(R.id.media_photo)).setImageBitmap(rotated);
 
 
@@ -208,19 +204,18 @@ public class SessionActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (globalHandler.sessionHandler.getMessageAudio() == null && globalHandler.sessionHandler.getMessagePhoto() != null
-                && !audioRecorder.isRecording && !audioPlayer.isPlaying()) {
+        if (globalHandler.sessionHandler.getMessageAudio() == null && globalHandler.sessionHandler.getMessagePhoto() != null && !audioRecorder.isRecording && !audioPlayer.isPlaying()) {
             audioPlayer.stop();
 
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-			if (sharedPreferences.getBoolean(Constants.PreferencesKeys.whatTakePicturePrompt, true) && !playedWhatDidTakePrompt)
-			{
-				audioPlayer.addAudio(R.raw.what_did_take);
-				audioPlayer.playAudio();
-				playedWhatDidTakePrompt = true;
-			}
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            if (sharedPreferences.getBoolean(Constants.PreferencesKeys.whatTakePicturePrompt, true) && !playedWhatDidTakePrompt) {
+                audioPlayer.addAudio(R.raw.what_did_take);
+                audioPlayer.playAudio();
+                playedWhatDidTakePrompt = true;
+            }
         }
     }
+
 
     @OnClick(R.id.camera_button)
     public void onClickPhoto() {
@@ -282,7 +277,8 @@ public class SessionActivity extends BaseActivity {
                         isReplaying = true;
                         Toast toast = Toast.makeText(globalHandler.appContext, "Replaying audio recorded.", Toast.LENGTH_SHORT);
                         toast.show();
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e) {
                         Log.e(Constants.LOG_TAG, e.toString());
                         Log.e(Constants.LOG_TAG, audioFile.getAbsolutePath());
                     }
@@ -334,6 +330,13 @@ public class SessionActivity extends BaseActivity {
                 dialog.show();
             }
         }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        globalHandler.sessionHandler.setMessageAudio(null);
+        super.onBackPressed();
     }
 
 

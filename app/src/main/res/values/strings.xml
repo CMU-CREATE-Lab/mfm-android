@@ -31,7 +31,8 @@
     <string name="select_users">Select Recipients</string>
 
     <string name="general_settings">General Settings</string>
-    <string name="drawing_image">Annotating the image</string>
+    <string name="drawing_image">Drawing on the image</string>
+    <string name="loading_image">Option to load an image</string>
     <string name="what_did_you_take_picture_of_voice_prompt">Play \"what did you take a picture of\" audio prompt</string>
     <string name="title_activity_settings">Settings</string>
 

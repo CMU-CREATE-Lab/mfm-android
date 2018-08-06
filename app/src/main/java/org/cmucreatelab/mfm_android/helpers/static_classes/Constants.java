@@ -31,6 +31,7 @@ public class Constants {
         public static final String kioskUid = "kiosk_uid";
         public static final String whatTakePicturePrompt = "what_take_picture_prompt";
         public static final String drawingImages = "drawing_images";
+        public static final String loadingImage = "loading_image";
     }
 
     public static final String[] HEADER_TITLES = {
@@ -45,6 +46,7 @@ public class Constants {
         put(PreferencesKeys.kioskUid, "");
         put(PreferencesKeys.whatTakePicturePrompt, true);
         put(PreferencesKeys.drawingImages, true);
+        put(PreferencesKeys.loadingImage, true);
     }};
 
 

@@ -49,7 +49,6 @@ public class ColorPickerDialogFragment extends DialogFragment {
     private ImageView closeButton;
     private ColorPickerDialogListener mListener;
     private SeekBar strokeWidthSeekBar;
-    private int strokeWidth;
     private TextView textViewStrokeWidth;
 
     public static ColorPickerDialogFragment newInstance(int dialogId, int initialColor) {
@@ -151,7 +150,7 @@ public class ColorPickerDialogFragment extends DialogFragment {
 
             @Override
             public void onClick(View v) {
-                mListener.onColorSelected(mDialogId, mColorPicker.getColor(), strokeWidthSeekBar.getProgress() + 10);
+                mListener.onColorSelected(mDialogId, mColorPicker.getColor(), strokeWidthSeekBar.getProgress() + 5);
                 getDialog().dismiss();
             }
 
@@ -172,7 +171,7 @@ public class ColorPickerDialogFragment extends DialogFragment {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int i, boolean b)
 			{
-				textViewStrokeWidth.setText("Thickness of the stroke: " + Integer.toString(i + 10));
+				textViewStrokeWidth.setText("Thickness of the stroke: " + Integer.toString(i + 5));
 			}
 
 			@Override
@@ -189,7 +188,7 @@ public class ColorPickerDialogFragment extends DialogFragment {
 		});
 
 		int strokeWidth = getArguments().getInt("stroke_width");
-		strokeWidthSeekBar.setProgress(strokeWidth - 10);
+		strokeWidthSeekBar.setProgress(strokeWidth - 5);
 		textViewStrokeWidth.setText("Thickness of the stroke: " + Integer.toString(strokeWidth));
 
 		if (savedInstanceState == null) {

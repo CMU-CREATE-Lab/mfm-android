@@ -16,7 +16,7 @@ public class Constants {
 
     public static final String APP_PACKAGE_NAME = "dev.org.cmucreatelab.mfm_android";
 
-    public static final String APP_VERSION = "2.0";
+    public static final String APP_VERSION = "2.1";
 
     public static final String MFM_API_URL = "http://messagefromme.org";
 

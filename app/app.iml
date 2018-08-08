@@ -97,14 +97,14 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 22 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="Gradle: com.squareup.picasso:picasso:2.5.2@jar" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: com.android.support:support-annotations:22.2.1@jar" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: com.android.support:design-22.2.1" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: com.jakewharton:butterknife-annotations:8.5.1@jar" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: com.android.support:support-v4-22.2.1" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: com.android.support:appcompat-v7-22.2.1" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: com.jakewharton:butterknife-8.5.1" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: commons-io:commons-io:2.6@jar" level="project" />
+    <orderEntry type="library" exported="" name="com.android.support:support-annotations:22.2.1@jar" level="project" />
+    <orderEntry type="library" exported="" name="com.jakewharton:butterknife-annotations:8.5.1@jar" level="project" />
+    <orderEntry type="library" exported="" name="com.android.support:support-v4-22.2.1" level="project" />
+    <orderEntry type="library" exported="" name="com.jakewharton:butterknife-8.5.1" level="project" />
+    <orderEntry type="library" exported="" name="com.squareup.picasso:picasso:2.5.2@jar" level="project" />
+    <orderEntry type="library" exported="" name="commons-io:commons-io:2.6@jar" level="project" />
+    <orderEntry type="library" exported="" name="com.android.support:appcompat-v7-22.2.1" level="project" />
+    <orderEntry type="library" exported="" name="com.android.support:design-22.2.1" level="project" />
     <orderEntry type="module" module-name="volley" exported="" />
     <orderEntry type="module" module-name="color-picker" exported="" />
   </component>

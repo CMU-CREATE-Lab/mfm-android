@@ -38,7 +38,6 @@ import butterknife.OnClick;
 
 public class SessionActivity extends BaseActivity {
 
-    private static final String AUDIO_RECORD_KEY = "audio_record";
     private static final String PLAYED_WHAT_DID_TAKE_PROMPT_KEY = "played_what_did_take_prompt";
 
     private GlobalHandler globalHandler;
@@ -55,8 +54,7 @@ public class SessionActivity extends BaseActivity {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putSerializable(AUDIO_RECORD_KEY, audioRecorder);
-        savedInstanceState.putSerializable(PLAYED_WHAT_DID_TAKE_PROMPT_KEY, playedWhatDidTakePrompt);
+        savedInstanceState.putBoolean(PLAYED_WHAT_DID_TAKE_PROMPT_KEY, playedWhatDidTakePrompt);
     }
 
 
@@ -73,12 +71,11 @@ public class SessionActivity extends BaseActivity {
         sendFlipper = (ViewFlipper) findViewById(R.id.send_flipper);
 
         if (bundle != null) {
-            audioRecorder = (AudioRecorder) bundle.getSerializable(AUDIO_RECORD_KEY);
             playedWhatDidTakePrompt = bundle.getBoolean(PLAYED_WHAT_DID_TAKE_PROMPT_KEY);
         } else {
-            audioRecorder = new AudioRecorder(this);
             playedWhatDidTakePrompt = false;
         }
+        audioRecorder = new AudioRecorder(this);
 
         if (globalHandler.sessionHandler.getMessageSender().getSenderType() == Sender.Type.student) {
             // From content

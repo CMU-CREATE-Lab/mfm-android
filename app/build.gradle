@@ -14,7 +14,7 @@ android {
     defaultConfig {
         applicationId "org.cmucreatelab.mfm_android"
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 26
         versionCode 21
         versionName "2.1"
         vectorDrawables.useSupportLibrary = true

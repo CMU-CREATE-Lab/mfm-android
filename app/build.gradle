@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 26
     buildToolsVersion "22.0.1"
 
     packagingOptions {
@@ -15,8 +15,8 @@ android {
         applicationId "org.cmucreatelab.mfm_android"
         minSdkVersion 14
         targetSdkVersion 26
-        versionCode 21
-        versionName "2.1"
+        versionCode 22
+        versionName "2.2"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {

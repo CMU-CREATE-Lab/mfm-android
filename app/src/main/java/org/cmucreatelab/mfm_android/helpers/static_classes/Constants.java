@@ -18,7 +18,7 @@ public class Constants {
 
     public static final String APP_VERSION = "2.1";
 
-    public static final String MFM_API_URL = "http://messagefromme.org";
+    public static final String MFM_API_URL = "https://api.messagefromme.org";
 
     public static final int DEFAULT_CAMERA_ID = 0;
 

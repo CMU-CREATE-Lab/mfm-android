@@ -15,8 +15,8 @@ android {
         applicationId "org.cmucreatelab.mfm_android"
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 24
-        versionName "2.4"
+        versionCode 25
+        versionName "2.5"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {

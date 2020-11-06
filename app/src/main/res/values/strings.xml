@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Msg From Me</string>
+    <string name="app_name">Message From Me</string>
 
     <string name="menu_log_out">Logout</string>
     <string name="title_mfm">Message from Me</string>

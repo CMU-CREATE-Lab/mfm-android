@@ -22,6 +22,13 @@
         android:icon="@drawable/app_icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+
+        <!-- https://developers.google.com/maps/documentation/android-sdk/config#specify_requirement_for_apache_http_legacy_library -->
+        <!-- https://www.freakyjolly.com/resolve-java-lang-classnotfoundexception-didnt-find-class-org-apache-http-protocolversion-volley-issue-with-targetsdkversion-26-to-28/ -->
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
         <activity android:name=".activities.StudentsGroupsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
